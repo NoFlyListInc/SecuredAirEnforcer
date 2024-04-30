@@ -3,25 +3,25 @@ public class Aeroport
     //#region Attributs
     private String code;
     private String ville;
-    private Coordonnee cordY;
-    private Coordonnee cordX;
+    private Coordonnee latitude;
+    private Coordonnee longitude;
     //#endregion
 
     //#region Constructeurs
-    public Aeroport(String code, String ville, Coordonnee cordY, Coordonnee cordX)
+    public Aeroport(String code, String ville, Coordonnee latitude, Coordonnee longitude)
     {
         this.code = code;
         this.ville = ville;
-        this.cordY = cordY;
-        this.cordX = cordX;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public Aeroport()
     {
         this.code = "";
         this.ville = "";
-        this.cordY = new Coordonnee();
-        this.cordX = new Coordonnee();
+        this.latitude = new Coordonnee();
+        this.longitude = new Coordonnee();
     }
     //#endregion
 
@@ -36,14 +36,14 @@ public class Aeroport
         return this.ville;
     }
 
-    public Coordonnee getcordY()
+    public Coordonnee getlatitude()
     {
-        return this.cordY;
+        return this.latitude;
     }
 
-    public Coordonnee getcordX()
+    public Coordonnee getlongitude()
     {
-        return this.cordX;
+        return this.longitude;
     }
     //#endregion
 
@@ -58,25 +58,33 @@ public class Aeroport
         this.ville = ville;
     }
 
-    public void setcordY(Coordonnee cordY)
+    public void setlatitude(Coordonnee latitude)
     {
-        this.cordY = cordY;
+        this.latitude = latitude;
     }
 
-    public void setcordX(Coordonnee cordX)
+    public void setlongitude(Coordonnee longitude)
     {
-        this.cordX = cordX;
+        this.longitude = longitude;
     }
     //#endregion
 
     //#region methodes
-    
+    public double getx()
+    {
+        return 6371 * Math.cos(this.latitude.getDegree()) * Math.sin(this.longitude.getDegree());
+    }
+
+    public double gety()
+    {
+        return 6371 * Math.cos(this.latitude.getDegree()) * Math.cos(this.longitude.getDegree());
+    }
     //#endregion
 
     //#region affichage
     public String toString()
     {
-        return "Code: " + this.code + "\nVille: " + this.ville + "\nCoordonnee 1: " + this.cordY.toString() + "\nCoordonnee 2: " + this.cordX.toString();
+        return "Code: " + this.code + "\nVille: " + this.ville + "\nCoordonnee 1: " + this.latitude.toString() + "\nCoordonnee 2: " + this.longitude.toString();
     }
     //#endregion
 } 

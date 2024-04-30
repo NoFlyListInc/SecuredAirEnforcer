@@ -76,6 +76,31 @@ public class Vol
         heureArrivee.ajouterMinutes(this.duree);
         return heureArrivee;
     }
+
+    public boolean collision(Vol other) {
+        double coefThis = (this.arrivee.gety() - this.depart.gety()) / (this.arrivee.getx() - this.depart.getx());
+        double coefOther = (other.arrivee.gety() - other.depart.gety()) / (other.arrivee.getx() - other.depart.getx());
+        if (coefThis != coefOther) {
+            double ordThis = coefThis * -(this.depart.getx()) + this.depart.gety();
+            double ordOther = coefOther * -(other.depart.getx()) + other.depart.gety();
+            double interx = (ordOther - ordThis) / (coefThis - coefOther);
+            double intery = coefThis * interx + ordThis;
+            if (interx >= Math.min(this.depart.getx(), this.arrivee.getx()) && interx <= Math.max(this.depart.getx(), this.arrivee.getx()) && interx >= Math.min(other.depart.getx(), other.arrivee.getx()) && interx <= Math.max(other.depart.getx(), other.arrivee.getx())) {
+                double longThis = Math.sqrt(Math.pow(this.arrivee.getx() - this.depart.getx(),2)+Math.pow(this.arrivee.gety() - this.depart.gety(),2));
+                double longOther = Math.sqrt(Math.pow(other.arrivee.getx() - other.depart.getx(),2)+Math.pow(other.arrivee.gety() - other.depart.gety(),2));
+                double distThis = Math.sqrt(Math.pow(intery - this.depart.gety(),2)+Math.pow(interx - this.depart.getx(),2));
+                double distOther = Math.sqrt(Math.pow(intery - other.depart.gety(),2)+Math.pow(interx - other.depart.getx(),2));
+                double tempsThis = distThis * this.duree / longThis;
+                double tempsOther = distOther * other.duree / longOther;
+                double heureThis = this.heureDepart.getHeure()*60+this.heureDepart.getMinute()+tempsThis;
+                double heureOther = other.heureDepart.getHeure()*60+other.heureDepart.getMinute()+tempsOther;
+                if (Math.abs(heureThis-heureOther) <= 15) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     //#endregion
 
     //#region affichage

@@ -70,6 +70,15 @@ public class Coordonnee
     //#endregion
 
     //#region methodes
+    public double getDecimal()
+    {
+        double decimal = this.degree + (this.minute / 60.0) + (this.seconde / 3600.0);
+        if (this.direction == 'S' || this.direction == 'W')
+        {
+            decimal = -decimal;
+        }
+        return Math.toRadians(decimal);
+    }
     //#endregion
 
     //#region affichage
