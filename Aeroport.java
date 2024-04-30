@@ -72,12 +72,12 @@ public class Aeroport
     //#region methodes
     public double getx()
     {
-        return 6371 * Math.cos(this.latitude.getDegree()) * Math.sin(this.longitude.getDegree());
+        return 6371 * Math.cos(this.latitude.getDecimal()) * Math.sin(this.longitude.getDecimal());
     }
 
     public double gety()
     {
-        return 6371 * Math.cos(this.latitude.getDegree()) * Math.cos(this.longitude.getDegree());
+        return 6371 * Math.cos(this.latitude.getDecimal()) * Math.cos(this.longitude.getDecimal());
     }
     //#endregion
 

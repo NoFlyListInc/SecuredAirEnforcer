@@ -18,13 +18,14 @@ public class Main
     public static void main(String[] args) {
         aeroports.fill("./Data/aeroports.txt");
         System.out.println(aeroports);
-        vols.fill("./Data/vol-test9.csv", aeroports);
+        vols.fill("./Data/vol-test4.csv", aeroports);
         System.out.println(vols);
 
         System.out.println(v1.collision(v2));
 
-        graph.fill("./Data/graph-test0.txt");
-        graph.coloration();
+        //graph.fillFile("./Data/graph-test0.txt");
+        //graph.coloration();
+        graph.fillVol(vols);
         graph.display();
     }
     //#endregion

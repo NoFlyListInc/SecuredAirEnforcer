@@ -73,7 +73,7 @@ public class Coordonnee
     public double getDecimal()
     {
         double decimal = this.degree + (this.minute / 60.0) + (this.seconde / 3600.0);
-        if (this.direction == 'S' || this.direction == 'W')
+        if (this.direction == 'S' || this.direction == 'O')
         {
             decimal = -decimal;
         }
