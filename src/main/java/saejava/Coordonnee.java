@@ -1,3 +1,5 @@
+package saejava;
+
 public class Coordonnee 
 {
     //#region Attributs
