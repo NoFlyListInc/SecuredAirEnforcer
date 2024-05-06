@@ -55,13 +55,12 @@ public class Horaire
         int totalMinutes = this.getHeureEnMinute() + minutes;
         int nouvelleHeure = totalMinutes / 60;
         int nouvelleMinute = totalMinutes % 60;
-        
-        if (nouvelleHeure < 0 || nouvelleHeure > 23 || nouvelleMinute < 0 || nouvelleMinute > 59) {
-            throw new IllegalArgumentException("Heure non valide.");
-        }
-        
         this.heure = nouvelleHeure;
         this.minute = nouvelleMinute;
+    }
+
+    public int compareTo(Horaire other) {
+        return Integer.compare(this.getHeureEnMinute(), other.getHeureEnMinute());
     }
     //#endregion
 

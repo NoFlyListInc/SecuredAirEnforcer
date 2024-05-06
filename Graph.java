@@ -61,13 +61,30 @@ public class Graph extends SingleGraph
     //#region fill with listVol
     public void fillVol(ListVol listVol) {
         for (Vol vol : listVol.getVols()) {
-            this.addNode(vol.getCode());
+            this.addNode(vol.getCode()).addAttribute("ui.label", vol.getCode());
         }
         for (int i = 0; i < listVol.getVols().size(); i++) {
             for (int j = i+1; j < listVol.getVols().size(); j++) {
                 if (listVol.getVol(i).collision(listVol.getVol(j))) {
                     this.addEdge(listVol.getVol(i).getCode()+","+listVol.getVol(j).getCode(), listVol.getVol(i).getCode(), listVol.getVol(j).getCode());
                 }
+            }
+        }
+    }
+    //#endregion
+
+    //#region carte de la France
+    public void fillMap(ListAeroport listAeroport, ListVol listVol) {
+        for (Aeroport aeroport : listAeroport.getList()) {
+            this.addNode(aeroport.getCode()).addAttribute("ui.label", aeroport.getCode());
+            this.getNode(aeroport.getCode()).setAttribute("xyz", aeroport.getx(), -aeroport.gety(), 0);
+            //this.getNode(aeroport.getCode()).addAttribute("ui.style", "visibility-mode: hidden;");
+        }
+        for (Vol vol : listVol.getVols()) {
+            if (this.getEdge(vol.getDepart().getCode()+","+vol.getArrivee().getCode())==null && this.getEdge(vol.getArrivee().getCode()+","+vol.getDepart().getCode())==null) {
+                //this.getNode(vol.getDepart().getCode()).addAttribute("ui.style", "visibility-mode: normal;");
+                //this.getNode(vol.getArrivee().getCode()).addAttribute("ui.style", "visibility-mode: normal;");
+                this.addEdge(vol.getDepart().getCode()+","+vol.getArrivee().getCode(), vol.getDepart().getCode(), vol.getArrivee().getCode());
             }
         }
     }

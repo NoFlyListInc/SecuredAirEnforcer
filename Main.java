@@ -1,3 +1,5 @@
+import org.graphstream.ui.swingViewer.Viewer;
+
 public class Main 
 {
     //#region creation
@@ -18,15 +20,19 @@ public class Main
     public static void main(String[] args) {
         aeroports.fill("./Data/aeroports.txt");
         System.out.println(aeroports);
-        vols.fill("./Data/vol-test4.csv", aeroports);
+        vols.fill("./Data/vol-test3.csv", aeroports);
         System.out.println(vols);
 
         System.out.println(v1.collision(v2));
 
         //graph.fillFile("./Data/graph-test0.txt");
         //graph.coloration();
-        graph.fillVol(vols);
-        graph.display();
+        //graph.fillVol(vols);
+        graph.fillMap(aeroports, vols);
+        System.out.println(graph.getEdgeCount());
+        Viewer viewer = graph.display();
+        viewer.disableAutoLayout();
+        //graph.display();
     }
     //#endregion
 }
