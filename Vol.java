@@ -71,33 +71,72 @@ public class Vol
     //#endregion
 
     //#region méthodes
+
+    /**
+     * Retourne l'heure d'arrivée du vol
+     * @return un horaire
+     */
     public Horaire getHeureArrivee() {
         Horaire heureArrivee = new Horaire(this.heureDepart.getHeure(), this.heureDepart.getMinute());
         heureArrivee.ajouterMinutes(this.duree);
         return heureArrivee;
     }
 
-    public boolean collision(Vol other) {
+    /**
+     * Vérifie si le vol rendre en collision avec un autre dans un intervalle données
+     * @param other l'autre vol
+     * @param ecart l'intervalle en minute
+     * @return true si il y a une collision, sinon non
+     */
+    public boolean collision(Vol other, int ecart) {
         //*si les deux vols arrive au meme aeroport
-        if (this.getArrivee()==other.getArrivee()) {
-            if (Math.abs(this.getHeureArrivee().getHeureEnMinute()-other.getHeureArrivee().getHeureEnMinute()) <= 15) {
+        if (this.arrivee==other.arrivee) {
+            if (Math.abs(this.getHeureArrivee().getEnMinute()-other.getHeureArrivee().getEnMinute()) <= 15) {
                 return true;
             }
         }
 
         //*si les deux vols parte du meme aeroport
-        else if (this.getDepart()==other.getDepart()) {
-            if (Math.abs(this.getHeureDepart().getHeureEnMinute()-other.getHeureDepart().getHeureEnMinute()) <= 15) {
+        else if (this.depart==other.depart) {
+            if (Math.abs(this.heureDepart.getEnMinute()-other.heureDepart.getEnMinute()) <= 15) {
+                return true;
+            }
+        }
+
+        //*si le vol this arrive au depart de vol other
+        else if (this.arrivee==other.depart) {
+            if (Math.abs(this.getHeureArrivee().getEnMinute()-other.heureDepart.getEnMinute()) <= 15) {
+                return true;
+            }
+        }
+
+        //*si le vol this part de l'arrivee de vol other
+        else if (this.depart==other.arrivee) {
+            if (Math.abs(this.heureDepart.getEnMinute()-other.getHeureArrivee().getEnMinute()) <= 15) {
+                return true;
+            }
+        }
+        
+        //*se croise sur la meme ligne à contre sens
+        else if (this.arrivee==other.depart && this.depart==other.arrivee) {
+            if (this.getHeureArrivee().getEnMinute() >= other.heureDepart.getEnMinute()  && other.getHeureArrivee().getEnMinute() >= this.heureDepart.getEnMinute()) {
+                return true;
+            }
+        }
+
+        //*utilise la meme ligne dans le meme sens
+        else if (this.depart==other.depart && this.arrivee==other.arrivee) {
+            if ((this.heureDepart.getEnMinute() >= other.heureDepart.getEnMinute() && this.getHeureArrivee().getEnMinute() <= other.getHeureArrivee().getEnMinute()) || (other.heureDepart.getEnMinute() >= this.heureDepart.getEnMinute() && other.heureDepart.getEnMinute() <= this.getHeureArrivee().getEnMinute())) {
                 return true;
             }
         } 
 
+        //*si les droites se croises
         else {
             //coeficient directeur
             double coefThis = (this.arrivee.gety() - this.depart.gety()) / (this.arrivee.getx() - this.depart.getx());
             double coefOther = (other.arrivee.gety() - other.depart.gety()) / (other.arrivee.getx() - other.depart.getx());
 
-        //*si les droites se croises
             if (coefThis != coefOther) {
                 //ordonnée à l'origine
                 double ordThis = coefThis * -(this.depart.getx()) + this.depart.gety();
@@ -118,54 +157,24 @@ public class Vol
                     double tempsThis = distThis * this.duree / longThis;
                     double tempsOther = distOther * other.duree / longOther;
                     //heure d'arrivée au point d'intersection (en minute)
-                    double heureThis = this.heureDepart.getHeureEnMinute()+tempsThis;
-                    double heureOther = other.heureDepart.getHeureEnMinute()+tempsOther;
+                    double heureThis = this.heureDepart.getEnMinute()+tempsThis;
+                    double heureOther = other.heureDepart.getEnMinute()+tempsOther;
 
                     //si les vols se croisent dans les 15 minutes
                     if (Math.abs(heureThis-heureOther) <= 15) {                       
                         return true;
                     }
                 }
-            }
-
-        //*se croise sur la meme ligne à contre sens
-            else if (this.arrivee==other.depart && this.depart==other.arrivee) {
-                if (this.heureDepart.compareTo(other.getHeureArrivee()) <= 0 && this.getHeureArrivee().compareTo(other.heureDepart) >= 0) {
-                    return true;
-                }
-            }
-
-        //*utilise la meme ligne dans le meme sens
-            else if (this.depart==other.depart && this.arrivee==other.arrivee) {
-                //this part en premier
-                if (this.heureDepart.compareTo(other.heureDepart) < 0) {
-                    //si other arrive avant this => collision
-                    if (other.getHeureArrivee().compareTo(this.getHeureArrivee()) < 0) {
-                        return true;
-                    }
-                }
-
-                //other part en premier
-                else if (this.heureDepart.compareTo(other.heureDepart) > 0) {
-                    //si this arrive avant other => collision
-                    if (this.getHeureArrivee().compareTo(other.getHeureArrivee()) < 0) {
-                        return true;
-                    }
-                }
-                
-                //les deux vols partent en meme temps
-                else {
-                    return true;
-                }
-            } 
-            //sinon return false            
+            }             
         }
+        //*sinon return false  
         return false;    
     }
     //#endregion
 
     //#region affichage
     public String toString() {
+        //AF030218 : [LYS] Lyon -> [BOD] Bordeaux : 8h58 - 9h58 (60 minutes)
         return this.code + " : " + "[" + this.depart.getCode() + "]" + " " + this.depart.getVille() + " -> " + "[" + this.arrivee.getCode() + "]" + " " + this.arrivee.getVille() + " : " + this.heureDepart + " - " + this.getHeureArrivee() + " (" + this.duree + " minutes)";
     }
     //#endregion

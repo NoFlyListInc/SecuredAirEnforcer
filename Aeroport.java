@@ -70,11 +70,20 @@ public class Aeroport
     //#endregion
 
     //#region methodes
+
+    /**
+     * renvoie la coordonnee x de l'aeroport
+     * @return une coordonnée x
+     */
     public double getx()
     {
         return 6371 * Math.cos(this.latitude.getDecimal()) * Math.sin(this.longitude.getDecimal());
     }
 
+    /**
+     * renvoie la coordonnee y de l'aeroport
+     * @return une coordonnée y
+     */
     public double gety()
     {
         return 6371 * Math.cos(this.latitude.getDecimal()) * Math.cos(this.longitude.getDecimal());
@@ -84,7 +93,11 @@ public class Aeroport
     //#region affichage
     public String toString()
     {
-        return "Code: " + this.code + "\nVille: " + this.ville + "\nCoordonnee 1: " + this.latitude.toString() + "\nCoordonnee 2: " + this.longitude.toString();
+        //Code : LYS
+        //Ville : Lyon
+        //Latitude : 45° 43' 35'' N
+        //Longitude : 5° 5' 27'' E
+        return "Code : " + this.code + "\nVille : " + this.ville + "\nLatitude : " + this.latitude.toString() + "\nLongitude : " + this.longitude.toString();
     }
     //#endregion
 } 

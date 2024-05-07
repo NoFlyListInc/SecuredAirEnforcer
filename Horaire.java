@@ -6,10 +6,11 @@ public class Horaire
     //#endregion
 
     //#region constructeur
+
+    /**
+     * Dans notre cas il est possible de créer une horaire négative ou supérieure à 23h59
+     */
     public Horaire(int heure, int minute) {
-        if (heure < 0 || heure > 23 || minute < 0 || minute > 59) {
-            throw new IllegalArgumentException("Heure non valide.");
-        }
         this.heure = heure;
         this.minute = minute;
     }
@@ -32,40 +33,38 @@ public class Horaire
 
     //#region mutateurs
     public void setHeure(int heure) {
-        if (heure < 0 || heure > 23) {
-            throw new IllegalArgumentException("Heure non valide.");
-        }
         this.heure = heure;
     }
 
     public void setMinute(int minute) {
-        if (minute < 0 || minute > 59) {
-            throw new IllegalArgumentException("Minute non valide.");
-        }
         this.minute = minute;
     }
     //#endregion
 
     //#region méthodes
-    public int getHeureEnMinute() {
+
+    /**
+     * Retourne l'heure en minute
+     * @return des minutes
+     */
+    public int getEnMinute() {
         return this.heure * 60 + this.minute;
     }
 
+    /**
+     * Ajoute des minutes à l'heure
+     * @param minutes Si négatif, on enlève des minutes
+     */
     public void ajouterMinutes(int minutes) {
-        int totalMinutes = this.getHeureEnMinute() + minutes;
-        int nouvelleHeure = totalMinutes / 60;
-        int nouvelleMinute = totalMinutes % 60;
-        this.heure = nouvelleHeure;
-        this.minute = nouvelleMinute;
-    }
-
-    public int compareTo(Horaire other) {
-        return Integer.compare(this.getHeureEnMinute(), other.getHeureEnMinute());
+        int totalMinutes = this.getEnMinute() + minutes;
+        this.heure = totalMinutes / 60;
+        this.minute = totalMinutes % 60;
     }
     //#endregion
 
     //#region affichage
     public String toString() {
+        //21h02
         String heureString = (this.heure < 10) ? "0" + this.heure : String.valueOf(this.heure);
         String minuteString = (this.minute < 10) ? "0" + this.minute : String.valueOf(this.minute);
         return heureString + "h" + minuteString;

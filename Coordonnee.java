@@ -70,20 +70,30 @@ public class Coordonnee
     //#endregion
 
     //#region methodes
+
+    /**
+     * Convertit les coordonnées en degrés décimaux (radians)
+     * @return degrés décimaux (radians)
+     */
     public double getDecimal()
     {
+        // Conversion en degrés décimaux
         double decimal = this.degree + (this.minute / 60.0) + (this.seconde / 3600.0);
+        // Si la direction est Sud ou Ouest, on inverse le signe
         if (this.direction == 'S' || this.direction == 'O')
         {
             decimal = -decimal;
         }
+        //return en radians
         return Math.toRadians(decimal);
     }
     //#endregion
 
     //#region affichage
+    
     public String toString()
     {
+        //45° 43' 35'' N
         return this.degree + "° " + this.minute + "' " + this.seconde + "'' " + this.direction;
     }
     //#endregion
