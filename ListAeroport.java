@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+//import GeoPosition object
+import org.jxmapviewer.viewer.GeoPosition;
+
+
 
 public class ListAeroport 
 {
@@ -76,6 +80,22 @@ public class ListAeroport
         for (Aeroport aeroport : this.list) {
             //si le code est trouvé
             if (aeroport.getCode().equals(code)) {
+                return aeroport;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Retourne un aeroport de la liste à partir de sa position
+     * @param position position de l'aeroport
+     * @return l'aeroport recherché si la position est valide, sinon null
+     */
+    public Aeroport getAeroportByPosition(GeoPosition position) {
+        //parcours de la liste
+        for (Aeroport aeroport : this.list) {
+            //si la position est trouvée
+            if (aeroport.getLatitude().getDecimal()==position.getLatitude() && aeroport.getLongitude().getDecimal()==position.getLongitude()) {
                 return aeroport;
             }
         }

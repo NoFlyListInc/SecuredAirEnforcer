@@ -1,4 +1,5 @@
-import org.graphstream.ui.swingViewer.Viewer;
+import javax.swing.*;
+import java.awt.*;
 
 public class Main 
 {
@@ -14,6 +15,8 @@ public class Main
 
     private static Vol v1 = new Vol("AF001", a1, a2, new Horaire(7, 33), 81);
     private static Vol v2 = new Vol("AF002", a3, a4, new Horaire(7, 34), 47);
+
+    private static Map map = new Map();
     //#endregion
     
     //#region main
@@ -27,14 +30,20 @@ public class Main
 
         //graph.fillFile("./Data/graph-test0.txt");
         //graph.coloration();
-        graph.fillVol(vols);
-        //graph.fillMap(aeroports, vols);
+        //graph.fillVol(vols);
+        graph.fillMap(aeroports, vols);
         System.out.println(graph.getNodeCount());
         System.out.println(graph.getEdgeCount());
         //graph.hideSoloNode();
-        //Viewer viewer = graph.display();
-        //viewer.disableAutoLayout();
         //graph.display();
+
+        map.addGraph(graph, aeroports);
+
+        Frame frame = new JFrame("JXMapViewer Test");
+        frame.setLayout(new BorderLayout());
+        frame.add(new JScrollPane(map));
+        frame.setSize(800, 600);
+        frame.setVisible(true);
     }
     //#endregion
 }

@@ -53,7 +53,7 @@ public class Graph extends SingleGraph
             int nbr_noeuds = Integer.parseInt(reader.readLine());
             //creation des noeuds
             for (int i = 1; i <= nbr_noeuds; i++) {
-                this.addNode(Integer.toString(i));
+                this.addNode(Integer.toString(i)).addAttribute("ui.label", i); //ajout du label
             }
             //creations des arretes
             while ((line = reader.readLine()) != null) {
@@ -72,10 +72,8 @@ public class Graph extends SingleGraph
      */
     public void fillVol(ListVol listVol) {
         //creation des noeuds
-        int n=0;
         for (Vol vol : listVol.getList()) {
-            this.addNode(vol.getCode()).addAttribute("ui.label", n); //ajout du label
-            n++;
+            this.addNode(vol.getCode()).addAttribute("ui.label", vol.getCode()); //ajout du label
         }
         //creation des arretes
         for (int i = 0; i < listVol.getList().size(); i++) {
@@ -98,7 +96,6 @@ public class Graph extends SingleGraph
         for (Aeroport aeroport : listAeroport.getList()) {
             Node noeud=this.addNode(aeroport.getCode());
             noeud.addAttribute("ui.label", aeroport.getCode()); //ajout du label
-            noeud.setAttribute("xyz", aeroport.getx(), -aeroport.gety(), 0); //ajout des coordonnées
         }
         //creation des arretes
         for (Vol vol : listVol.getList()) {

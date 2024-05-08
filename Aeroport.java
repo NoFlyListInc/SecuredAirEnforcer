@@ -36,12 +36,12 @@ public class Aeroport
         return this.ville;
     }
 
-    public Coordonnee getlatitude()
+    public Coordonnee getLatitude()
     {
         return this.latitude;
     }
 
-    public Coordonnee getlongitude()
+    public Coordonnee getLongitude()
     {
         return this.longitude;
     }
@@ -77,7 +77,7 @@ public class Aeroport
      */
     public double getx()
     {
-        return 6371 * Math.cos(this.latitude.getDecimal()) * Math.sin(this.longitude.getDecimal());
+        return 6371 * Math.cos(this.latitude.getDecimalRadians()) * Math.sin(this.longitude.getDecimalRadians());
     }
 
     /**
@@ -86,7 +86,7 @@ public class Aeroport
      */
     public double gety()
     {
-        return 6371 * Math.cos(this.latitude.getDecimal()) * Math.cos(this.longitude.getDecimal());
+        return 6371 * Math.cos(this.latitude.getDecimalRadians()) * Math.cos(this.longitude.getDecimalRadians());
     }
     //#endregion
 

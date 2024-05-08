@@ -72,8 +72,8 @@ public class Coordonnee
     //#region methodes
 
     /**
-     * Convertit les coordonnées en degrés décimaux (radians)
-     * @return degrés décimaux (radians)
+     * Convertit les coordonnées en degrés décimaux
+     * @return degrés décimaux
      */
     public double getDecimal()
     {
@@ -84,9 +84,15 @@ public class Coordonnee
         {
             decimal = -decimal;
         }
-        //return en radians
-        return Math.toRadians(decimal);
+        return decimal;
     }
+
+    public double getDecimalRadians()
+    {
+        return Math.toRadians(this.getDecimal());
+    }
+
+
     //#endregion
 
     //#region affichage
