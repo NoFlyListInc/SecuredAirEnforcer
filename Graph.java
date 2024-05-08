@@ -1,8 +1,10 @@
+//import graphstream tools
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.graph.Node;
+//import reader files tools 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import org.graphstream.graph.Node;
 
 
 public class Graph extends SingleGraph
@@ -70,8 +72,10 @@ public class Graph extends SingleGraph
      */
     public void fillVol(ListVol listVol) {
         //creation des noeuds
+        int n=0;
         for (Vol vol : listVol.getList()) {
-            this.addNode(vol.getCode()).addAttribute("ui.label", vol.getCode()); //ajout du label
+            this.addNode(vol.getCode()).addAttribute("ui.label", n); //ajout du label
+            n++;
         }
         //creation des arretes
         for (int i = 0; i < listVol.getList().size(); i++) {

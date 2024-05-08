@@ -19,20 +19,22 @@ public class Main
     //#region main
     public static void main(String[] args) {
         aeroports.fill("./Data/aeroports.txt");
-        System.out.println(aeroports);
-        vols.fill("./Data/vol-test3.csv", aeroports);
-        System.out.println(vols);
+        //System.out.println(aeroports);
+        vols.fill("./Data/vol-test9.csv", aeroports);
+        //System.out.println(vols);
 
-        System.out.println(v1.collision(v2, 15));
+        System.out.println(vols.getVol(6).collision(vols.getVol(2), 15));
 
         //graph.fillFile("./Data/graph-test0.txt");
         //graph.coloration();
         graph.fillVol(vols);
         //graph.fillMap(aeroports, vols);
+        System.out.println(graph.getNodeCount());
         System.out.println(graph.getEdgeCount());
+        //graph.hideSoloNode();
         //Viewer viewer = graph.display();
         //viewer.disableAutoLayout();
-        graph.display();
+        //graph.display();
     }
     //#endregion
 }

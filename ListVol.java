@@ -1,4 +1,6 @@
+//import ArrayList object
 import java.util.ArrayList;
+//import reader files tools
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -107,6 +109,7 @@ public class ListVol
 
     //#region affichage
     public String toString() {
+        //[affiche un vol] saut de ligne .....
         String str = "";
         for (Vol vol : this.vols) {
             str += vol.toString() + "\n\n";

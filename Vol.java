@@ -89,36 +89,9 @@ public class Vol
      * @return true si il y a une collision, sinon non
      */
     public boolean collision(Vol other, int ecart) {
-        //*si les deux vols arrive au meme aeroport
-        if (this.arrivee==other.arrivee) {
-            if (Math.abs(this.getHeureArrivee().getEnMinute()-other.getHeureArrivee().getEnMinute()) <= 15) {
-                return true;
-            }
-        }
 
-        //*si les deux vols parte du meme aeroport
-        else if (this.depart==other.depart) {
-            if (Math.abs(this.heureDepart.getEnMinute()-other.heureDepart.getEnMinute()) <= 15) {
-                return true;
-            }
-        }
-
-        //*si le vol this arrive au depart de vol other
-        else if (this.arrivee==other.depart) {
-            if (Math.abs(this.getHeureArrivee().getEnMinute()-other.heureDepart.getEnMinute()) <= 15) {
-                return true;
-            }
-        }
-
-        //*si le vol this part de l'arrivee de vol other
-        else if (this.depart==other.arrivee) {
-            if (Math.abs(this.heureDepart.getEnMinute()-other.getHeureArrivee().getEnMinute()) <= 15) {
-                return true;
-            }
-        }
-        
         //*se croise sur la meme ligne à contre sens
-        else if (this.arrivee==other.depart && this.depart==other.arrivee) {
+        if (this.arrivee==other.depart && this.depart==other.arrivee) {
             if (this.getHeureArrivee().getEnMinute() >= other.heureDepart.getEnMinute()  && other.getHeureArrivee().getEnMinute() >= this.heureDepart.getEnMinute()) {
                 return true;
             }
@@ -127,6 +100,34 @@ public class Vol
         //*utilise la meme ligne dans le meme sens
         else if (this.depart==other.depart && this.arrivee==other.arrivee) {
             if ((this.heureDepart.getEnMinute() >= other.heureDepart.getEnMinute() && this.getHeureArrivee().getEnMinute() <= other.getHeureArrivee().getEnMinute()) || (other.heureDepart.getEnMinute() >= this.heureDepart.getEnMinute() && other.heureDepart.getEnMinute() <= this.getHeureArrivee().getEnMinute())) {
+                return true;
+            }
+        }
+
+        //*si les deux vols arrive au meme aeroport
+        else if (this.arrivee==other.arrivee) {
+            if (Math.abs(this.getHeureArrivee().getEnMinute()-other.getHeureArrivee().getEnMinute()) <= ecart) {
+                return true;
+            }
+        }
+
+        //*si les deux vols parte du meme aeroport
+        else if (this.depart==other.depart) {
+            if (Math.abs(this.heureDepart.getEnMinute()-other.heureDepart.getEnMinute()) <= ecart) {
+                return true;
+            }
+        }
+
+        //*si le vol this arrive au depart de vol other
+        else if (this.arrivee==other.depart) {
+            if (Math.abs(this.getHeureArrivee().getEnMinute()-other.heureDepart.getEnMinute()) <= ecart) {
+                return true;
+            }
+        }
+
+        //*si le vol this part de l'arrivee de vol other
+        else if (this.depart==other.arrivee) {
+            if (Math.abs(this.heureDepart.getEnMinute()-other.getHeureArrivee().getEnMinute()) <= ecart) {
                 return true;
             }
         } 
@@ -160,8 +161,8 @@ public class Vol
                     double heureThis = this.heureDepart.getEnMinute()+tempsThis;
                     double heureOther = other.heureDepart.getEnMinute()+tempsOther;
 
-                    //si les vols se croisent dans les 15 minutes
-                    if (Math.abs(heureThis-heureOther) <= 15) {                       
+                    //si les vols se croisent dans les [ecart] minutes
+                    if (Math.abs(heureThis-heureOther) <= ecart) {                       
                         return true;
                     }
                 }
