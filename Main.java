@@ -23,7 +23,7 @@ public class Main
     public static void main(String[] args) {
         aeroports.fill("./Data/aeroports.txt");
         //System.out.println(aeroports);
-        vols.fill("./Data/vol-test9.csv", aeroports);
+        vols.fill("./Data/vol-test4.csv", aeroports);
         //System.out.println(vols);
 
         System.out.println(vols.getVol(6).collision(vols.getVol(2), 15));
@@ -34,10 +34,10 @@ public class Main
         graph.fillMap(aeroports, vols);
         System.out.println(graph.getNodeCount());
         System.out.println(graph.getEdgeCount());
-        //graph.hideSoloNode();
+        graph.hideSoloNode();
         //graph.display();
 
-        map.addGraph(graph, aeroports);
+        map.addInformation(aeroports, vols);
 
         Frame frame = new JFrame("JXMapViewer Test");
         frame.setLayout(new BorderLayout());

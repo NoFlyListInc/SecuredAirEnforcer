@@ -44,6 +44,7 @@ public class Graph extends SingleGraph
      * @param file adresse du fichier
      */
     public void fillFile(String file) {
+        this.clear();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
@@ -71,6 +72,7 @@ public class Graph extends SingleGraph
      * @param listVol objet ListVol
      */
     public void fillVol(ListVol listVol) {
+        this.clear();
         //creation des noeuds
         for (Vol vol : listVol.getList()) {
             this.addNode(vol.getCode()).addAttribute("ui.label", vol.getCode()); //ajout du label
@@ -79,7 +81,7 @@ public class Graph extends SingleGraph
         for (int i = 0; i < listVol.getList().size(); i++) {
             for (int j = i+1; j < listVol.getList().size(); j++) {
                 //si les vols i et j sont en collision
-                if (listVol.getVol(i).collision(listVol.getVol(j), 15)) {
+                if ((listVol.getVol(i).collision(listVol.getVol(j), 15))!=null) {
                     this.addEdge(listVol.getVol(i).getCode()+","+listVol.getVol(j).getCode(), listVol.getVol(i).getCode(), listVol.getVol(j).getCode()); //code de l'arrete = "codei,codej"
                 }
             }
@@ -92,6 +94,7 @@ public class Graph extends SingleGraph
      * @param listVol objet ListVol
      */
     public void fillMap(ListAeroport listAeroport, ListVol listVol) {
+        this.clear();
         //creation des noeuds
         for (Aeroport aeroport : listAeroport.getList()) {
             Node noeud=this.addNode(aeroport.getCode());
@@ -100,8 +103,8 @@ public class Graph extends SingleGraph
         //creation des arretes
         for (Vol vol : listVol.getList()) {
             //si l'arrete n'existe pas on l'ajoute
-            if (this.getEdge(vol.getDepart().getCode()+","+vol.getArrivee().getCode())==null && this.getEdge(vol.getArrivee().getCode()+","+vol.getDepart().getCode())==null) {
-                this.addEdge(vol.getDepart().getCode()+","+vol.getArrivee().getCode(), vol.getDepart().getCode(), vol.getArrivee().getCode()); //code de l'arrete = "codedepart,codearrivee"
+            if (this.getNode(vol.getDepart().getCode()).getEdgeBetween(vol.getArrivee().getCode()) == null){
+                this.addEdge(vol.getCode(), vol.getDepart().getCode(), vol.getArrivee().getCode()); //code de l'arrete = code du vol
             }
         }
     }
