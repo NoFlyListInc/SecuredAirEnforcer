@@ -1,3 +1,4 @@
+//#region import
 //import graphstream tools
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.graph.Node;
@@ -5,8 +6,15 @@ import org.graphstream.graph.Node;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+//#endregion
 
-
+/**
+ * Classe Graph héritant de SingleGraph, permet de gérer un graph
+ * @attribut kmax
+ * @methodes fillFile, fillVol, fillMap, hideSoloNode, coloration
+ * @extends SingleGraph
+ * @autor NOUVEL Armand et LACROIX Xavier
+ */
 public class Graph extends SingleGraph
 {
     //#region attribut
@@ -14,34 +22,55 @@ public class Graph extends SingleGraph
     //#endregion
 
     //#region constructeur
+
+    /**
+     * Constructeur de Graph
+     * @param id String
+     */
     public Graph(String id) {
         super(id);
     }
+
     //#endregion
 
     //#region accesseurs
+
+    /**
+     * Renvoie la valeur de kmax
+     * @return int
+     */
     public int getKmax() {
         return this.kmax;
     }
+
     //#endregion
 
     //#region mutateurs
+
+    /**
+     * Modifie la valeur de kmax
+     * @param kmax int
+     */
     public void setKmax(int kmax) {
         this.kmax = kmax;
     }
+
     //#endregion
 
     //#region coloration
+
     public void coloration() {
-        this.getNode("1").setAttribute("ui.style", "fill-color: red;");
+        this.getNode(1).setAttribute("ui.style", "fill-color: red;");
     }
+
     //#endregion
 
     //#region fill the graph
 
     /**
-     * Rempli le graph depuis un fichier graph-testx.txt
-     * @param file adresse du fichier
+     * Remplit le graph depuis un fichier graph-testx.txt
+     * @param file String, adresse du fichier
+     * @throws IOException si le fichier n'existe pas
      */
     public void fillFile(String file) {
         this.clear();
@@ -68,8 +97,8 @@ public class Graph extends SingleGraph
     }
 
     /**
-     * Rempli le graph des collisions depuis une liste de vol
-     * @param listVol objet ListVol
+     * Remplit le graph des collisions depuis une liste de vol
+     * @param listVol ListVol
      */
     public void fillVol(ListVol listVol) {
         this.clear();
@@ -89,9 +118,9 @@ public class Graph extends SingleGraph
     }
 
     /**
-     * Rempli le graph des aeroports et des vols pour une représentation géographique
-     * @param listAeroport objet ListAeroport
-     * @param listVol objet ListVol
+     * Remplit le graph des aeroports reliés par des vols pour une représentation sur une carte
+     * @param listAeroport ListAeroport
+     * @param listVol ListVol
      */
     public void fillMap(ListAeroport listAeroport, ListVol listVol) {
         this.clear();
@@ -108,6 +137,7 @@ public class Graph extends SingleGraph
             }
         }
     }
+
     //#endregion
 
     //#region methode
@@ -124,5 +154,6 @@ public class Graph extends SingleGraph
             }
         }
     }
+    
     //#endregion
 }

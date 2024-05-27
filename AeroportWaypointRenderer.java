@@ -1,13 +1,21 @@
+//#region import
+//import JXMapViwer objects
 import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.viewer.WaypointRenderer;
+import org.jxmapviewer.JXMapViewer;
+//import awt objects
 import java.awt.Color;
 import java.awt.Graphics2D;
-import org.jxmapviewer.JXMapViewer;
 import java.awt.Polygon;
 import java.awt.geom.Point2D;
+//#endregion
 
+/**
+ * Un waypoint painter en forme de triangle pour les aéroports         
+ */
 public class AeroportWaypointRenderer implements WaypointRenderer<DefaultWaypoint>
 {
+    //#region methodes
     @Override
     public void paintWaypoint(Graphics2D g, JXMapViewer map, DefaultWaypoint waypoint) {
         // Convertir les coordonnées du waypoint en coordonnées de pixel
@@ -29,4 +37,5 @@ public class AeroportWaypointRenderer implements WaypointRenderer<DefaultWaypoin
         // Réinitialiser la translation
         g.translate(-(int)point.getX(), -(int)point.getY());
     }
+    //#endregion
 }

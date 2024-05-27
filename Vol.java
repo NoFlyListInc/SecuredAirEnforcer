@@ -1,4 +1,6 @@
+//#region import
 import org.jxmapviewer.viewer.GeoPosition;
+//#endregion
 
 public class Vol 
 {
@@ -95,8 +97,9 @@ public class Vol
         //*se croise sur la meme ligne à contre sens
         if (this.arrivee==other.depart && this.depart==other.arrivee) {
             if (this.getHeureArrivee().getEnMinute() >= other.heureDepart.getEnMinute()  && other.getHeureArrivee().getEnMinute() >= this.heureDepart.getEnMinute()) {
-                Double midLatitude = (this.depart.getLatitude().getDecimal() + this.arrivee.getLatitude().getDecimal()) / 2;
-                Double midLongitude = (this.depart.getLongitude().getDecimal() + this.arrivee.getLongitude().getDecimal()) / 2;
+                //on renvoie les coordonnées du milieu des deux vols 
+                double midLatitude = (this.depart.getLatitude().getDecimal() + this.arrivee.getLatitude().getDecimal()) / 2;
+                double midLongitude = (this.depart.getLongitude().getDecimal() + this.arrivee.getLongitude().getDecimal()) / 2;
                 return new GeoPosition(midLatitude, midLongitude);
             }
         }
@@ -104,8 +107,9 @@ public class Vol
         //*utilise la meme ligne dans le meme sens
         else if (this.depart==other.depart && this.arrivee==other.arrivee) {
             if ((this.heureDepart.getEnMinute() >= other.heureDepart.getEnMinute() && this.getHeureArrivee().getEnMinute() <= other.getHeureArrivee().getEnMinute()) || (other.heureDepart.getEnMinute() >= this.heureDepart.getEnMinute() && other.heureDepart.getEnMinute() <= this.getHeureArrivee().getEnMinute())) {
-                Double midLatitude = (this.depart.getLatitude().getDecimal() + this.arrivee.getLatitude().getDecimal()) / 2;
-                Double midLongitude = (this.depart.getLongitude().getDecimal() + this.arrivee.getLongitude().getDecimal()) / 2;
+                //on renvoie les coordonnées du milieu des deux vols 
+                double midLatitude = (this.depart.getLatitude().getDecimal() + this.arrivee.getLatitude().getDecimal()) / 2;
+                double midLongitude = (this.depart.getLongitude().getDecimal() + this.arrivee.getLongitude().getDecimal()) / 2;
                 return new GeoPosition(midLatitude, midLongitude);
             }
         }
@@ -113,6 +117,7 @@ public class Vol
         //*si les deux vols arrive au meme aeroport
         else if (this.arrivee==other.arrivee) {
             if (Math.abs(this.getHeureArrivee().getEnMinute()-other.getHeureArrivee().getEnMinute()) <= ecart) {
+                //on renvoie les coordonnées de l'arrivée
                 return new GeoPosition(this.arrivee.getLatitude().getDecimal(), this.arrivee.getLongitude().getDecimal());
             }
         }
@@ -120,6 +125,7 @@ public class Vol
         //*si les deux vols parte du meme aeroport
         else if (this.depart==other.depart) {
             if (Math.abs(this.heureDepart.getEnMinute()-other.heureDepart.getEnMinute()) <= ecart) {
+                //on renvoie les coordonnées du depart
                 return new GeoPosition(this.depart.getLatitude().getDecimal(), this.depart.getLongitude().getDecimal());
             }
         }
@@ -127,6 +133,7 @@ public class Vol
         //*si le vol this arrive au depart de vol other
         else if (this.arrivee==other.depart) {
             if (Math.abs(this.getHeureArrivee().getEnMinute()-other.heureDepart.getEnMinute()) <= ecart) {
+                //on renvoie les coordonnées de l'arrivee de this
                 return new GeoPosition(this.arrivee.getLatitude().getDecimal(), this.arrivee.getLongitude().getDecimal());
             }
         }
@@ -134,6 +141,7 @@ public class Vol
         //*si le vol this part de l'arrivee de vol other
         else if (this.depart==other.arrivee) {
             if (Math.abs(this.heureDepart.getEnMinute()-other.getHeureArrivee().getEnMinute()) <= ecart) {
+                //on renvoie les coordonnées du depart de this
                 return new GeoPosition(this.depart.getLatitude().getDecimal(), this.depart.getLongitude().getDecimal());
             }
         } 
@@ -169,18 +177,22 @@ public class Vol
 
                     //si les vols se croisent dans les [ecart] minutes
                     if (Math.abs(heureThis-heureOther) <= ecart) {
-                        Double difLatCord = this.arrivee.getLatitude().getDecimal()-this.depart.getLatitude().getDecimal();
-                        Double difLongCord = this.arrivee.getLongitude().getDecimal()-this.depart.getLongitude().getDecimal();
-                        Double difxCord = this.arrivee.getx()-this.depart.getx();
-                        Double difyCord = this.arrivee.gety()-this.depart.gety();
-                        Double scaleX = difxCord/difLongCord;
-                        Double scaleY = difyCord/difLatCord;
-                        Double refLat = this.depart.getLatitude().getDecimal();
-                        Double refLong = this.depart.getLongitude().getDecimal();
-                        Double refx = this.depart.getx();
-                        Double refy = this.depart.gety();
-                        Double lat = refLat+(intery-refy)/scaleY;
-                        Double lon = refLong+(interx-refx)/scaleX;
+                        //transforme interx et intery en latitude et longitude
+                        //on utilise l'arrivee et le depart de this pour déterminer le scale     
+                        double difLatCord = this.arrivee.getLatitude().getDecimal()-this.depart.getLatitude().getDecimal();
+                        double difLongCord = this.arrivee.getLongitude().getDecimal()-this.depart.getLongitude().getDecimal();
+                        double difxCord = this.arrivee.getx()-this.depart.getx();
+                        double difyCord = this.arrivee.gety()-this.depart.gety();
+                        double scaleX = difxCord/difLongCord;
+                        double scaleY = difyCord/difLatCord;
+                        //on utilise le depart de this comme point de reference
+                        double refLat = this.depart.getLatitude().getDecimal();
+                        double refLong = this.depart.getLongitude().getDecimal();
+                        double refx = this.depart.getx();
+                        double refy = this.depart.gety();
+                        //on calcule les coordonnées géographique du point de collision 
+                        double lat = refLat+(intery-refy)/scaleY;
+                        double lon = refLong+(interx-refx)/scaleX;
                         return new GeoPosition(lat, lon);
                     }
                 }

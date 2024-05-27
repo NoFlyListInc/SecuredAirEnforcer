@@ -1,5 +1,7 @@
+//#region import
 import javax.swing.*;
 import java.awt.*;
+//#endregion
 
 public class Main 
 {
@@ -17,10 +19,13 @@ public class Main
     private static Vol v2 = new Vol("AF002", a3, a4, new Horaire(7, 34), 47);
 
     private static Map map = new Map();
+
+    private static FenetreMap fen = new FenetreMap();
     //#endregion
     
     //#region main
     public static void main(String[] args) {
+        /*
         aeroports.fill("./Data/aeroports.txt");
         //System.out.println(aeroports);
         vols.fill("./Data/vol-test4.csv", aeroports);
@@ -28,9 +33,9 @@ public class Main
 
         System.out.println(vols.getVol(6).collision(vols.getVol(2), 15));
 
-        //graph.fillFile("./Data/graph-test0.txt");
-        //graph.coloration();
+        //graph.fillFile("./Data/graph-test0.txt");        
         //graph.fillVol(vols);
+        //graph.coloration();
         graph.fillMap(aeroports, vols);
         System.out.println(graph.getNodeCount());
         System.out.println(graph.getEdgeCount());
@@ -44,6 +49,9 @@ public class Main
         frame.add(new JScrollPane(map));
         frame.setSize(800, 600);
         frame.setVisible(true);
+        */
+
+        fen.setVisible(true);
     }
     //#endregion
 }

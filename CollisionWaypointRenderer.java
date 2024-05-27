@@ -1,16 +1,24 @@
+//#region import
+//import JXMapViewer objects
 import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.viewer.WaypointRenderer;
+import org.jxmapviewer.JXMapViewer;
+//import awt objects
 import java.awt.Color;
 import java.awt.Graphics2D;
-import org.jxmapviewer.JXMapViewer;
 import java.awt.Polygon;
 import java.awt.geom.Point2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
+//#endregion
 
+/**
+ * Un waypoint painter en forme d'explosion pour les collisions
+ */
 public class CollisionWaypointRenderer implements WaypointRenderer<DefaultWaypoint>
 {
+    //#region methodes
     @Override
     public void paintWaypoint(Graphics2D g, JXMapViewer map, DefaultWaypoint waypoint) {
         // Convertir les coordonnées du waypoint en coordonnées de pixel
@@ -21,17 +29,17 @@ public class CollisionWaypointRenderer implements WaypointRenderer<DefaultWaypoi
 
         // Crée un carré
         Polygon square1 = new Polygon();
-        square1.addPoint(-5, -5);
-        square1.addPoint(5, -5);
-        square1.addPoint(5, 5);
-        square1.addPoint(-5, 5);
+        square1.addPoint(-5, -5); // Coin supérieur gauche
+        square1.addPoint(5, -5); // Coin supérieur droit
+        square1.addPoint(5, 5); // Coin inférieur droit
+        square1.addPoint(-5, 5); // Coin inférieur gauche
 
         // Crée un deuxième carré et le tourne de 45 degrés
         Polygon square2 = new Polygon();
-        square2.addPoint(-5, -5);
-        square2.addPoint(5, -5);
-        square2.addPoint(5, 5);
-        square2.addPoint(-5, 5);
+        square2.addPoint(-5, -5); // Coin supérieur gauche
+        square2.addPoint(5, -5); // Coin supérieur droit
+        square2.addPoint(5, 5); // Coin inférieur droit
+        square2.addPoint(-5, 5); // Coin inférieur gauche
         AffineTransform transform = new AffineTransform();
         transform.rotate(Math.toRadians(45), 0, 0);
         Path2D rotatedSquare = (Path2D) transform.createTransformedShape(square2);
@@ -53,4 +61,5 @@ public class CollisionWaypointRenderer implements WaypointRenderer<DefaultWaypoi
         // Réinitialiser la translation
         g.translate(-(int)point.getX(), -(int)point.getY());
     }
+    //#endregion
 }

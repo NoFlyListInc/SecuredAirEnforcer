@@ -1,3 +1,4 @@
+//#region import
 //import ArrayList object
 import java.util.ArrayList;
 //import reader files tools
@@ -6,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 //import GeoPosition object
 import org.jxmapviewer.viewer.GeoPosition;
+//#endregion
 
 
 
@@ -108,6 +110,7 @@ public class ListAeroport
     /**
      * Rempli la liste des aeroports depuis un fichier
      * @param file adresse du fichier
+     * @throws IOException erreur de lecture du fichier
      */
     public void fill(String file) {
         try {
