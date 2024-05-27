@@ -1,17 +1,7 @@
-//#region imports
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-//#endregion
 
-/**
- * Fenêtre pour choisir un graphe à charger
- * @param cheminFichier Chemin du fichier CSV contenant les données du graphe
- * @return Fenêtre pour choisir un graphe
- * @see FenetreGraphe
- * @author FERNANDES Thomas
- */
-//#region Base de la fenêtre
 public class FenetreGraphChoose extends JFrame {
     public FenetreGraphChoose() {
         // Base de la fenêtre
@@ -19,15 +9,13 @@ public class FenetreGraphChoose extends JFrame {
         this.setSize(800, 600);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
-//#endregion
 
-//#region Panneau principal
+        // Panneau
         JPanel panneau = new JPanel(new GridBagLayout());
         panneau.setBackground(new Color(84, 172, 238));
         GridBagConstraints gbc = new GridBagConstraints();
-//#endregion
 
-//#region Chargement de l'image
+        // Image de l'avion
         ImageIcon imageIcon = new ImageIcon("images/avion.png");
         Image image = imageIcon.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
         imageIcon = new ImageIcon(image);
@@ -39,9 +27,8 @@ public class FenetreGraphChoose extends JFrame {
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.insets = new Insets(10, 10, 10, 10);
         panneau.add(imageAvion, gbc);
-//#endregion
 
-//#region Titre
+        // Contrainte pour le titre
         JLabel titre = new JLabel("Charger un graphe pré-enregistré");
         titre.setFont(titre.getFont().deriveFont(Font.PLAIN, 24)); 
         gbc.gridx = 1;
@@ -50,9 +37,8 @@ public class FenetreGraphChoose extends JFrame {
         gbc.fill = GridBagConstraints.VERTICAL;
         gbc.insets = new Insets(10, 10, 10, 10);
         panneau.add(titre, gbc);
-//#endregion
 
-//#region Instruction
+        // Contrainte pour l'instruction
         JLabel instruction = new JLabel("Veuillez sélectionner un fichier en format .csv");
         instruction.setFont(instruction.getFont().deriveFont(Font.PLAIN, 20));
         gbc.gridx = 0;
@@ -61,9 +47,8 @@ public class FenetreGraphChoose extends JFrame {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(20, 10, 20, 10);
         panneau.add(instruction, gbc);
-//#endregion
 
-//#region Bouton pour charger un graphe
+        // Contrainte pour le bouton
         JButton boutonCharger = new JButton("Parcourir...");
         boutonCharger.setFont(boutonCharger.getFont().deriveFont(Font.PLAIN, 20));
         gbc.gridx = 0;
@@ -90,9 +75,7 @@ public class FenetreGraphChoose extends JFrame {
                 }
             }
         });
-//#endregion
 
-        // 12
         // Ajouter le panneau à la fenêtre
         add(panneau);
     }
