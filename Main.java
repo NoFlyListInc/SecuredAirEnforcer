@@ -31,24 +31,14 @@ public class Main
         vols.fill("./Data/vol-test4.csv", aeroports);
         //System.out.println(vols);
 
-        System.out.println(vols.getVol(6).collision(vols.getVol(2), 15));
-
         //graph.fillFile("./Data/graph-test0.txt");        
-        //graph.fillVol(vols);
+        graph.fillVol(vols);
         //graph.coloration();
-        graph.fillMap(aeroports, vols);
+        //graph.fillMap(aeroports, vols);
         System.out.println(graph.getNodeCount());
         System.out.println(graph.getEdgeCount());
-        graph.hideSoloNode();
-        //graph.display();
-
-        map.addInformation(aeroports, vols);
-
-        Frame frame = new JFrame("JXMapViewer Test");
-        frame.setLayout(new BorderLayout());
-        frame.add(new JScrollPane(map));
-        frame.setSize(800, 600);
-        frame.setVisible(true);
+        //graph.hideSoloNode();
+        graph.display();
         */
 
         fen.setVisible(true);

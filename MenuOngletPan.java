@@ -3,18 +3,17 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 //#endregion
-import javax.swing.border.Border;
 
 public class MenuOngletPan extends JPanel
 {
     //#region attributs
-    private JLayeredPane superposePan;
+    private SuperposedFenetre fen;
     //#endregion
 
     //#region constructeur
-    public MenuOngletPan(JLayeredPane superposePan) {
+    public MenuOngletPan(SuperposedFenetre fen) {
         super();
-        this.superposePan=superposePan;
+        this.fen=fen;
         this.constrPan();
     }
     //#endregion
@@ -43,26 +42,41 @@ public class MenuOngletPan extends JPanel
 
         JButton retour = new JButton("retour");
         retour.addActionListener((ActionListener) -> {
-            superposePan.remove(this);
-            superposePan.revalidate();
-            superposePan.repaint();
+            fen.getSuperposePan().remove(this);
+            fen.getSuperposePan().revalidate();
+            fen.getSuperposePan().repaint();
         });
         pan.add(retour);
         pan.add(Box.createRigidArea(new Dimension(0,10)));
 
         JButton home = new JButton("home");
+        home.addActionListener((ActionListener) -> {
+            FenetrePrincipale fenetre = new FenetrePrincipale();
+            fenetre.setVisible(true);
+            fen.dispose();
+        });
         pan.add(home);
         pan.add(Box.createRigidArea(new Dimension(0,10)));
 
         JButton map = new JButton("map");
+        map.addActionListener((ActionListener) -> {
+            FenetreMap fenetre = new FenetreMap();
+            fenetre.setVisible(true);
+            fen.dispose();
+        });
         pan.add(map);
         pan.add(Box.createRigidArea(new Dimension(0,10)));
 
-        JButton constrGraphe = new JButton("constr");
+        JButton constrGraphe = new JButton("entree");
+        constrGraphe.addActionListener((ActionListener) -> {
+            FenetreImportGraph fenetre = new FenetreImportGraph();
+            fenetre.setVisible(true);
+            fen.dispose();
+        });
         pan.add(constrGraphe);
         pan.add(Box.createRigidArea(new Dimension(0,10)));
 
-        JButton entreeGraphe = new JButton("entree");
+        JButton entreeGraphe = new JButton("constr");
         pan.add(entreeGraphe);
         pan.add(Box.createRigidArea(new Dimension(0,10)));
 

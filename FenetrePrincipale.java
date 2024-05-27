@@ -86,7 +86,7 @@ public class FenetrePrincipale extends JFrame
         ouvrirGraphe.setHorizontalTextPosition(SwingConstants.CENTER);
 
         ouvrirGraphe.addActionListener(e -> {
-            FenetreGraphChoose fen = new FenetreGraphChoose();
+            FenetreImportGraph fen = new FenetreImportGraph();
             fen.setVisible(true);
             this.dispose();
         });
@@ -96,7 +96,7 @@ public class FenetrePrincipale extends JFrame
         construireGraphe.setHorizontalTextPosition(SwingConstants.CENTER);
 
         construireGraphe.addActionListener(e -> {
-            FenetreConstruction fen = new FenetreConstruction();
+            FenetreConstr fen = new FenetreConstr();
             fen.setVisible(true);
             this.dispose();
         });

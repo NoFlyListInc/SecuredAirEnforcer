@@ -5,12 +5,17 @@ import javax.swing.*;
 import java.io.File;
 //#endregion
 
-public class FenetreMap extends JFrame
+public class FenetreMap extends SuperposedFenetre
 {
     //#region Attributs
     private Map map;
     private JLayeredPane superposePan = new JLayeredPane();
-    private MenuOngletPan menu = new MenuOngletPan(superposePan);
+    //#endregion
+
+    //#region accesseurs
+    public JLayeredPane getSuperposePan() {
+        return superposePan;
+    }
     //#endregion
 
     //#region Constructeur

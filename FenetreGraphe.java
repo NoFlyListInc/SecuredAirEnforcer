@@ -1,17 +1,38 @@
-import javax.swing.*;
+//#region imports
 import org.graphstream.ui.swingViewer.Viewer;
-import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.Box;
+import javax.swing.JFrame;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+//#endregion
 
-public class FenetreGraphe extends JFrame {
+
+public class FenetreGraphe extends SuperposedFenetre {
 
     //#region attributes
     private JLayeredPane superposePan = new JLayeredPane();
-    private MenuOngletPan menu = new MenuOngletPan(superposePan);
     //#endregion
 
-    public FenetreGraphe(String cheminFichierCSV) {
+    //#region accesseurs
+    public JLayeredPane getSuperposePan() {
+        return superposePan;
+    }
+    //#endregion
+
+    /**
+     * Constructeur de la classe FenetreGraphe
+     * @param cheminFichier String
+     * @param format String, {"txt", "csv"}
+     */
+    public FenetreGraphe(String cheminFichier, String format) {
         // Base de la fenêtre
         this.setTitle("Graphe");
         this.setSize(800, 600);
@@ -21,7 +42,15 @@ public class FenetreGraphe extends JFrame {
         
         // creation du graph
         Graph graph = new Graph("graph");
-        graph.fillFile(cheminFichierCSV);
+        if (format.equals("txt")) {
+            graph.fillFile(cheminFichier);
+        } else if (format.equals("csv")) {
+            ListVol listVol = new ListVol();
+            ListAeroport listAeroport = new ListAeroport();
+            listAeroport.fill("./Data/aeroports.txt");
+            listVol.fill(cheminFichier, listAeroport);
+            graph.fillVol(listVol);
+        }
         Viewer viewerGraphe = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         viewerGraphe.enableAutoLayout();
 
@@ -33,7 +62,7 @@ public class FenetreGraphe extends JFrame {
         panPrincipale.setLayout(new BorderLayout());
         panPrincipale.setOpaque(true);
         panPrincipale.setBounds(0, 0, 800, 600);
-        JLabel labelCheminFichier = new JLabel("Chemin du fichier TXT sélectionné : " + cheminFichierCSV);
+        JLabel labelCheminFichier = new JLabel("Chemin du fichier TXT sélectionné : " + cheminFichier);
         labelCheminFichier.setHorizontalAlignment(SwingConstants.CENTER);
         panPrincipale.add(labelCheminFichier, BorderLayout.NORTH);
         panPrincipale.add(viewerGraphe.addDefaultView(false), BorderLayout.CENTER);

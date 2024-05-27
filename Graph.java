@@ -107,7 +107,7 @@ public class Graph extends SingleGraph
             this.addNode(vol.getCode()).addAttribute("ui.label", vol.getCode()); //ajout du label
         }
         //creation des arretes
-        for (int i = 0; i < listVol.getList().size(); i++) {
+        for (int i = 0; i < listVol.getList().size()-1; i++) {
             for (int j = i+1; j < listVol.getList().size(); j++) {
                 //si les vols i et j sont en collision
                 if ((listVol.getVol(i).collision(listVol.getVol(j), 15))!=null) {
