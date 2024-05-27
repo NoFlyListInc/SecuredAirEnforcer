@@ -1,15 +1,16 @@
+//#region imports
 import javax.swing.*;
 import java.awt.*;
+//#endregion
 
 public class FenetreConstruction extends JFrame {
 
     public FenetreConstruction() {
         // Base de la fenêtre
-        JFrame fenetre = new JFrame();
-        fenetre.setTitle("Construction Window");
-        fenetre.setSize(800, 600);
-        fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        fenetre.setLocationRelativeTo(null);
+        this.setTitle("Construction Window");
+        this.setSize(800, 600);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null);
 
         // Création du panneau principal avec GridBagLayout
         JPanel panneau = new JPanel(new GridBagLayout());
@@ -74,15 +75,9 @@ public class FenetreConstruction extends JFrame {
 
 
         // Ajout du panneau à la fenêtre
-        fenetre.add(panneau);
-        fenetre.add(panneauBlanc, BorderLayout.EAST);
+        this.add(panneau);
+        this.add(panneauBlanc, BorderLayout.EAST);
         
 
-
-        fenetre.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new FenetreConstruction());
     }
 }

@@ -4,25 +4,25 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.Color;
 
-/*
- * Cette classe crée une fenêtre principale pour l'application Secured Air Enforcer.
- * La fenêtre contient un panneau bleu à gauche et un panneau blanc à droite.
- * Le panneau bleu contient le titre de l'application et une image d'un avion.
- * Le panneau blanc contient trois boutons: "Afficher la carte", "Entrer un graphe préfait" et "Construire un graphe".
- * Lorsque l'utilisateur clique sur le bouton "Afficher la carte", une carte de l'aéroport s'affiche.
- * Lorsque l'utilisateur clique sur le bouton "Entrer un graphe préfait", un graphe préfait s'affiche.
- * Lorsque l'utilisateur clique sur le bouton "Construire un graphe", il peut construire un graphe en entrant les données.
- * La fenêtre est de taille 800x600 pixels.
+/**
+ * <h3>Cette classe crée une fenêtre principale pour l'application Secured Air Enforcer.</h3>
+ * <p>La fenêtre contient un panneau bleu à gauche et un panneau blanc à droite.</p>
+ * <p>Le panneau bleu contient le titre de l'application et une image d'un avion.</p>
+ * <p>Le panneau blanc contient trois boutons: "Afficher la carte", "Entrer un graphe préfait" et "Construire un graphe".</p>
+ * <p>Lorsque l'utilisateur clique sur le bouton "Afficher la carte", une carte de l'aéroport s'affiche.</p>
+ * <p>Lorsque l'utilisateur clique sur le bouton "Entrer un graphe préfait", un graphe préfait s'affiche.</p>
+ * <p>Lorsque l'utilisateur clique sur le bouton "Construire un graphe", il peut construire un graphe en entrant les données.</p>
+ * <p>La fenêtre est de taille 800x600 pixels.</p>
  */
-public class FenetrePrincipale 
+public class FenetrePrincipale extends JFrame
 {
-    public static void main(String[] args)
+    public FenetrePrincipale()
     {
         // Création de la fenêtre
-        JFrame fenetre = new JFrame();
-        fenetre.setSize(800, 600);
-        fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        fenetre.setLocationRelativeTo(null);
+        this.setSize(800, 600);
+        this.setTitle("home sweat home");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null);
 
         JPanel panneauBleu = new JPanel(new GridBagLayout());
         panneauBleu.setBackground(new Color(84, 172, 238));
@@ -51,7 +51,7 @@ public class FenetrePrincipale
         JLabel description = new JLabel("Un projet de NFL Group, sous license Apache 2.0");
         panneauBleu.add(description, gbcBleu);
 
-        fenetre.add(panneauBleu);
+        this.add(panneauBleu);
         
         // Création du panneau blanc
         JPanel panneauBlanc = new JPanel(new GridBagLayout());
@@ -76,8 +76,9 @@ public class FenetrePrincipale
         ouvrirCarte.setHorizontalTextPosition(SwingConstants.CENTER);
 
         ouvrirCarte.addActionListener(e -> {
-            
-            fenetre.dispose();
+            FenetreMap fen = new FenetreMap();
+            fen.setVisible(true);
+            this.dispose();
         });
 
         JButton ouvrirGraphe = new JButton("Entrer un graphe préfait", imageGraphe);
@@ -85,8 +86,9 @@ public class FenetrePrincipale
         ouvrirGraphe.setHorizontalTextPosition(SwingConstants.CENTER);
 
         ouvrirGraphe.addActionListener(e -> {
-            new FenetreGraphChoose();
-            fenetre.dispose();
+            FenetreGraphChoose fen = new FenetreGraphChoose();
+            fen.setVisible(true);
+            this.dispose();
         });
 
         JButton construireGraphe = new JButton("Construire un graphe", imageConstruire);
@@ -94,8 +96,9 @@ public class FenetrePrincipale
         construireGraphe.setHorizontalTextPosition(SwingConstants.CENTER);
 
         construireGraphe.addActionListener(e -> {
-            new FenetreConstruction();
-            fenetre.dispose();
+            FenetreConstruction fen = new FenetreConstruction();
+            fen.setVisible(true);
+            this.dispose();
         });
 
 
@@ -112,12 +115,11 @@ public class FenetrePrincipale
         // Créer un panneau principal et y ajouter les deux panneaux
         JPanel panneauPrincipal = new JPanel();
         panneauPrincipal.setLayout(new BoxLayout(panneauPrincipal, BoxLayout.X_AXIS));
-        panneauBleu.setPreferredSize(new Dimension((int) (fenetre.getWidth() * 0.7), (int) (fenetre.getHeight())));
-        panneauBlanc.setPreferredSize(new Dimension((int) (fenetre.getWidth() * 0.3), (int) (fenetre.getHeight())));
+        panneauBleu.setPreferredSize(new Dimension((int) (this.getWidth() * 0.7), (int) (this.getHeight())));
+        panneauBlanc.setPreferredSize(new Dimension((int) (this.getWidth() * 0.3), (int) (this.getHeight())));
         panneauPrincipal.add(panneauBleu);
         panneauPrincipal.add(panneauBlanc);
 
-        fenetre.add(panneauPrincipal);
-        fenetre.setVisible(true);
+        this.add(panneauPrincipal);
     }
 }

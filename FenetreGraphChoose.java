@@ -5,10 +5,10 @@ import java.awt.event.*;
 public class FenetreGraphChoose extends JFrame {
     public FenetreGraphChoose() {
         // Base de la fenêtre
-        setTitle("Choose Graph");
-        setSize(800, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        this.setTitle("Choose Graph");
+        this.setSize(800, 600);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null);
 
         // Panneau
         JPanel panneau = new JPanel(new GridBagLayout());
@@ -64,22 +64,19 @@ public class FenetreGraphChoose extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Fichiers CSV", "csv"));
+                fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Fichiers TXT", "txt"));
                 int returnValue = fileChooser.showOpenDialog(null);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     String cheminFichier = fileChooser.getSelectedFile().getPath();
                     // Créer une nouvelle fenêtre FenetreGraphe en passant le chemin du fichier CSV
-                    new FenetreGraphe(cheminFichier);
+                    FenetreGraphe fen = new FenetreGraphe(cheminFichier);
+                    fen.setVisible(true);
+                    dispose();
                 }
             }
         });
 
         // Ajouter le panneau à la fenêtre
         add(panneau);
-        setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new FenetreGraphChoose());
     }
 }

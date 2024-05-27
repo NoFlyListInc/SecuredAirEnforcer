@@ -20,7 +20,7 @@ public class Main
 
     private static Map map = new Map();
 
-    private static FenetreMap fen = new FenetreMap();
+    private static FenetrePrincipale fen = new FenetrePrincipale();
     //#endregion
     
     //#region main
