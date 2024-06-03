@@ -1,11 +1,11 @@
-package Src.Interface;
-//#region import
-//core objects
-import Src.Core.ListAeroport;
-import Src.Core.ListVol;
-import Src.Core.Map;
+package src.ihm;
 //swing objects
 import javax.swing.*;
+
+import src.core.ListAeroport;
+import src.core.ListVol;
+import src.core.Map;
+
 //awt objects
 import java.awt.*;
 import java.awt.event.*;

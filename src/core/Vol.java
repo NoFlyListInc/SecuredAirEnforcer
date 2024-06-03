@@ -1,4 +1,4 @@
-package Src.Core;
+package src.core;
 //#region import
 import org.jxmapviewer.viewer.GeoPosition;
 //#endregion

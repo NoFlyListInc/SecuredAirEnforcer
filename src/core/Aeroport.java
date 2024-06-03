@@ -1,4 +1,4 @@
-package Src.Core;
+package src.core;
 /**
  * Classe qui défini un Aeroport
  * @attributs code, ville, latitude, longitude

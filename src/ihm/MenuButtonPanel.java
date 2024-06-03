@@ -1,4 +1,4 @@
-package Src.Interface;
+package src.ihm;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Dimension;

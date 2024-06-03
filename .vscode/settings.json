@@ -1,7 +1,7 @@
 {
     "java.project.referencedLibraries": [
-        "Lib/GraphStream/*.jar",
-        "Lib/JXMapViewer/*.jar",
-        "Lib/JXMapViewer/commons-logging-1.3.1/*.jar",
+        "lib/GraphStream/*.jar",
+        "lib/JXMapViewer/*.jar",
+        "lib/JXMapViewer/commons-logging-1.3.1/*.jar",
     ]
 }

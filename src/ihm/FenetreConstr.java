@@ -1,4 +1,4 @@
-package Src.Interface;
+package src.ihm;
 //#region imports
 import javax.swing.*;
 import java.awt.*;

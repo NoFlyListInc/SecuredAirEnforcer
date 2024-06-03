@@ -1,4 +1,4 @@
-package Src.Core;
+package src.core;
 //#region import
 //import ArrayList object
 import java.util.ArrayList;

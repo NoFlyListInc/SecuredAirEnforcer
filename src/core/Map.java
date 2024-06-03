@@ -1,4 +1,4 @@
-package Src.Core;
+package src.core;
 //import JXMapViewer objects
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
@@ -9,9 +9,9 @@ import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import Src.Interface.AeroportWaypointRenderer;
-import Src.Interface.CollisionWaypointRenderer;
-import Src.Interface.LineOverlayPainter;
+import src.ihm.AeroportWaypointRenderer;
+import src.ihm.CollisionWaypointRenderer;
+import src.ihm.LineOverlayPainter;
 
 import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.painter.Painter;

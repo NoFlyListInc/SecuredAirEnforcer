@@ -1,4 +1,4 @@
-package Src.Interface;
+package src.ihm;
 // Purpose: Créer une fenêtre principale pour l'application Secured Air Enforcer.
 import javax.swing.*;
 import java.io.File;

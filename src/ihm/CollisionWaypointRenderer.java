@@ -1,4 +1,4 @@
-package Src.Interface;
+package src.ihm;
 //#region import
 //import JXMapViewer objects
 import org.jxmapviewer.viewer.DefaultWaypoint;

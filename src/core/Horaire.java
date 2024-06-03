@@ -1,4 +1,4 @@
-package Src.Core;
+package src.core;
 /**
  * Classe qui définit un Horaire
  * @attributs heure, minute

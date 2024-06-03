@@ -1,13 +1,13 @@
-package Src;
-import Src.Core.Aeroport;
-import Src.Core.Coordonnee;
-import Src.Core.Graph;
-import Src.Core.Horaire;
-import Src.Core.ListAeroport;
-import Src.Core.ListVol;
-import Src.Core.Map;
-import Src.Core.Vol;
-import Src.Interface.FenetrePrincipale;
+package src;
+import src.ihm.FenetrePrincipale;
+import src.core.Aeroport;
+import src.core.Coordonnee;
+import src.core.Graph;
+import src.core.Horaire;
+import src.core.ListAeroport;
+import src.core.ListVol;
+import src.core.Map;
+import src.core.Vol;
 
 public class Main 
 {

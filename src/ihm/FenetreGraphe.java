@@ -1,11 +1,11 @@
-package Src.Interface;
-//#region import
-//core objects
-import Src.Core.Graph;
-import Src.Core.ListAeroport;
-import Src.Core.ListVol;
+package src.ihm;
 //graphstream objects
 import org.graphstream.ui.swingViewer.Viewer;
+
+import src.core.Graph;
+import src.core.ListAeroport;
+import src.core.ListVol;
+
 //swing objects
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;

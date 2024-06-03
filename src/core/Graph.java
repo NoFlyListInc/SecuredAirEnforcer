@@ -1,4 +1,4 @@
-package Src.Core;
+package src.core;
 //#region import
 //import graphstream tools
 import org.graphstream.graph.implementations.SingleGraph;

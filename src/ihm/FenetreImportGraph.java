@@ -1,4 +1,4 @@
-package Src.Interface;
+package src.ihm;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;

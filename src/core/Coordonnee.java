@@ -1,4 +1,4 @@
-package Src.Core;
+package src.core;
 /**
  * Classe qui défini une Coordonnee géophraphique
  * @attributs degree, minute, seconde, direction
