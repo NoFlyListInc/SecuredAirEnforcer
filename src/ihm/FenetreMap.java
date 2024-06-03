@@ -36,7 +36,7 @@ public class FenetreMap extends SuperposedFenetre
     public FenetreMap() {
         this.map = new Map(infoLabel);
         ListAeroport listAeroport = new ListAeroport();
-        listAeroport.fill("Data/aeroports.txt");
+        listAeroport.fill("data/aeroports.txt");
         map.setListAeroport(listAeroport);
         this.constrFen();
     }
@@ -51,7 +51,8 @@ public class FenetreMap extends SuperposedFenetre
         this.setTitle("Map");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.constrPan();
-        this.setContentPane(this.superposePan);        
+        this.setContentPane(this.superposePan);
+        this.setMinimumSize(new Dimension(400,300));        
         this.setSize(800, 600);        
         this.setLocationRelativeTo(null);
     }

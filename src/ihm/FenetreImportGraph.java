@@ -7,6 +7,7 @@ public class FenetreImportGraph extends SuperposedFenetre {
     public FenetreImportGraph() {
         // Base de la fenêtre
         this.setTitle("Import a graph");
+        this.setMinimumSize(new Dimension(400,300));  
         this.setSize(800, 600);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);

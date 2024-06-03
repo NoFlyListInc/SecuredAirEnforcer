@@ -3,7 +3,6 @@ package src.ihm;
 import javax.swing.*;
 import java.io.File;
 import java.awt.*;
-import java.awt.Color;
 
 /**
  * <h3>Cette classe crée une fenêtre principale pour l'application Secured Air Enforcer.</h3>
@@ -20,6 +19,7 @@ public class FenetrePrincipale extends JFrame
     public FenetrePrincipale()
     {
         // Création de la fenêtre
+        this.setMinimumSize(new Dimension(400,300));  
         this.setSize(800, 600);
         this.setTitle("home sweat home");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

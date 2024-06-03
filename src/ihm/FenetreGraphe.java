@@ -40,6 +40,7 @@ public class FenetreGraphe extends SuperposedFenetre {
     public FenetreGraphe(String cheminFichier, String format) {
         // Base de la fenêtre
         this.setTitle("Graphe");
+        this.setMinimumSize(new Dimension(400,300));  
         this.setSize(800, 600);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
