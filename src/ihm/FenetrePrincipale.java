@@ -1,7 +1,6 @@
 package src.ihm;
 // Purpose: Créer une fenêtre principale pour l'application Secured Air Enforcer.
 import javax.swing.*;
-import java.io.File;
 import java.awt.*;
 
 /**
@@ -19,40 +18,48 @@ public class FenetrePrincipale extends JFrame
     public FenetrePrincipale()
     {
         // Création de la fenêtre
-        this.setMinimumSize(new Dimension(400,300));  
+        this.setMinimumSize(new Dimension(400,300)); 
         this.setSize(800, 600);
         this.setTitle("home sweat home");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
 
-        JPanel panneauBleu = new JPanel(new GridBagLayout());
-        panneauBleu.setBackground(new Color(84, 172, 238));
 
-        GridBagConstraints gbcBleu = new GridBagConstraints();
-        gbcBleu.gridwidth = GridBagConstraints.REMAINDER;
-        gbcBleu.fill = GridBagConstraints.HORIZONTAL;
+        // Création du panneau bleu
+        JPanel panneauBleu = new JPanel();
+        panneauBleu.setBackground(new Color(84, 172, 238));
+        panneauBleu.setLayout(new BoxLayout(panneauBleu, BoxLayout.PAGE_AXIS));
+        panneauBleu.add(Box.createVerticalGlue());
+
+        JPanel panneauTitle = new JPanel();
+        panneauTitle.setOpaque(false);
+        panneauTitle.setLayout(new BoxLayout(panneauTitle, BoxLayout.LINE_AXIS));
 
         // Création du titre
-        JLabel titre = new JLabel("<html><h1><font color='black'>S</font><font color='white'>ecured</font><br><font color='black'>A</font><font color='white'>ir</font><br><font color='black'>E</font><font color='white'>nforcer</font></h1></html>");
+        JLabel titre = new JLabel("<html><h1 style='font-size:24px'><font color='black'>S</font><font color='white'>ecured</font><br><font color='black'>A</font><font color='white'>ir</font><br><font color='black'>E</font><font color='white'>nforcer</font></h1></html>");
+        titre.setHorizontalAlignment(SwingConstants.CENTER);
+        titre.setSize(titre.getWidth()*2, titre.getHeight()*2);
+        panneauTitle.add(titre);
+        panneauBleu.add(panneauTitle);
 
+        JPanel panneauImage = new JPanel();
+        panneauImage.setOpaque(false);
+        panneauImage.setLayout(new BoxLayout(panneauImage, BoxLayout.LINE_AXIS));
+        //creation de l'image
+        Image image = new ImageIcon("Image/avion.png").getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT);
+        ImageIcon imageIcon = new ImageIcon(image);
+        panneauImage.add(new JLabel(imageIcon));
+        panneauBleu.add(panneauImage);
+        panneauBleu.add(Box.createVerticalGlue());
         
-        panneauBleu.add(titre, gbcBleu);
 
-        // Charger l'image de l'avion et la redimensionner
-        ImageIcon imageIcon = new ImageIcon("image/avion.png");
-        Image image = imageIcon.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
-        
-        imageIcon = new ImageIcon(image);
+        JPanel panneauBleuBas = new JPanel();
+        panneauBleuBas.setOpaque(false);
+        panneauBleuBas.setLayout(new BoxLayout(panneauBleuBas, BoxLayout.LINE_AXIS));
+        panneauBleuBas.add(Box.createHorizontalGlue());
+        panneauBleuBas.add(new JLabel("Un projet de NFL Group, sous license Apache 2.0"));
+        panneauBleu.add(panneauBleuBas);
 
-        // Création de l'image de l'avion
-        JLabel imageAvion = new JLabel(imageIcon);
-        panneauBleu.add(imageAvion, gbcBleu);
-
-        // Création de la description
-        JLabel description = new JLabel("Un projet de NFL Group, sous license Apache 2.0");
-        panneauBleu.add(description, gbcBleu);
-
-        this.add(panneauBleu);
         
         // Création du panneau blanc
         JPanel panneauBlanc = new JPanel(new GridBagLayout());

@@ -3,6 +3,13 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
+/**
+ * <h3>Cette classe crée une fenêtre pour importer un graphe.</h3>
+ * <p>La fenêtre contient deux panneaux: un pour charger une liste de vol et un pour charger une liste d'aéroports.</p>
+ * <p>Chaque panneau contient un titre, une instruction et un bouton pour parcourir les fichiers.</p>
+ * <p>Les fichiers doivent être en format .csv pour la liste de vol et en format .txt pour la liste d'aéroports.</p>
+ * @author FERNANDES Thomas & NOUVEL Armand
+ */
 public class FenetreImportGraph extends SuperposedFenetre {
     public FenetreImportGraph() {
         // Base de la fenêtre
@@ -12,75 +19,91 @@ public class FenetreImportGraph extends SuperposedFenetre {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
 
-        // Panneau
-        JPanel panneau = new JPanel();
-        panneau.setBounds(0, 0, 800, 600);
-        panneau.setLayout(new BoxLayout(panneau, BoxLayout.PAGE_AXIS));
+        // Panneau principal
+        JPanel panneau = new JPanel(new GridBagLayout());
         panneau.setBackground(new Color(84, 172, 238));
+        GridBagConstraints gbc = new GridBagConstraints();
 
-        panneau.add(Box.createVerticalGlue());
+        // Contraintes
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.CENTER;
 
-        // pan image + titre
-        JPanel panTitre = new JPanel();
-        panTitre.setLayout(new BoxLayout(panTitre, BoxLayout.LINE_AXIS));
-        panTitre.setOpaque(false);
+        // Panneau Liste de vol
+        JPanel panVol = new JPanel();
+        panVol.setLayout(new BoxLayout(panVol, BoxLayout.Y_AXIS));
+        panVol.setBackground(new Color(45, 40, 63));
+        panVol.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        panVol.setPreferredSize(new Dimension(220, 280)); // Taille préférée du panneau de vol
 
-        // Image de l'avion
-        ImageIcon imageIcon = new ImageIcon("image/avion.png");
-        Image image = imageIcon.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
-        imageIcon = new ImageIcon(image);
-        JLabel imageAvion = new JLabel(imageIcon);
-        panTitre.add(imageAvion);
 
-        panTitre.add(Box.createRigidArea(new Dimension(20, 0)));
+        JLabel titreVol = new JLabel("<html><center>Charger une<br>liste de vol</center></html>");
+        titreVol.setForeground(Color.WHITE);
+        titreVol.setFont(titreVol.getFont().deriveFont(Font.PLAIN, 25));
+        titreVol.setHorizontalAlignment(SwingConstants.CENTER);
+        titreVol.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // titre
-        JLabel titre = new JLabel("Importer un graphe à partir d'un fichier");
-        titre.setFont(titre.getFont().deriveFont(Font.PLAIN, 24)); 
-        panTitre.add(titre);
+        JLabel instructionVol = new JLabel("<html>Veuillez sélectionner un<br><center>fichier en format .csv</center></html>");
+        instructionVol.setForeground(Color.WHITE);
+        instructionVol.setFont(instructionVol.getFont().deriveFont(Font.PLAIN, 15));
+        instructionVol.setHorizontalAlignment(SwingConstants.CENTER);
+        instructionVol.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Ajouter le panneau titre à la fenêtre
-        panneau.add(panTitre);
-        panneau.add(Box.createRigidArea(new Dimension(0, 30)));
+        RoundedButton boutonVol = new RoundedButton("Parcourir...");
+        boutonVol.setBackground(new Color(176, 226, 255));
+        boutonVol.setContentAreaFilled(false);
+        boutonVol.setFont(boutonVol.getFont().deriveFont(Font.PLAIN, 25));
+        boutonVol.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // pan boutons
-        JPanel panBoutons = new JPanel();
-        panBoutons.setLayout(new BoxLayout(panBoutons, BoxLayout.LINE_AXIS));
-        panBoutons.setOpaque(false);
+        // Ajouter les composants au panneau de vol
+        panVol.add(titreVol);
+        panVol.add(Box.createVerticalStrut(70));
+        panVol.add(instructionVol);
+        panVol.add(Box.createRigidArea(new Dimension(0, 10)));
+        panVol.add(boutonVol);
+        panVol.add(Box.createVerticalGlue());
 
-        // bouton graph-test.txt
-        JButton boutonGraph = new JButton("Importer graph-test.txt");
-        boutonGraph.setFont(boutonGraph.getFont().deriveFont(Font.PLAIN, 20));
-        panBoutons.add(boutonGraph);
+        // Panneau Liste d'aéroports
+        JPanel panPrefait = new JPanel();
+        panPrefait.setLayout(new BoxLayout(panPrefait, BoxLayout.Y_AXIS));
+        panPrefait.setBackground(new Color(45, 40, 63));
+        panPrefait.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        panPrefait.setPreferredSize(new Dimension(220, 280)); // Taille préférée du panneau des aéroports
 
-        panBoutons.add(Box.createRigidArea(new Dimension(30, 0)));
+        JLabel titrePrefait = new JLabel("<html><center>Charger un graphe préfait</center></html>");
+        titrePrefait.setForeground(Color.WHITE);
+        titrePrefait.setFont(titrePrefait.getFont().deriveFont(Font.PLAIN, 25));
+        titrePrefait.setHorizontalAlignment(SwingConstants.CENTER);
+        titrePrefait.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // bouton vol-test.csv
-        JButton boutonVol = new JButton("Importer vol-test.csv");
-        boutonVol.setFont(boutonVol.getFont().deriveFont(Font.PLAIN, 20));
-        panBoutons.add(boutonVol);
+        JLabel instructionPrefait = new JLabel("<html>Veuillez sélectionner un<br><center> fichier en format .txt</center></html>");
+        instructionPrefait.setForeground(Color.WHITE);
+        instructionPrefait.setFont(instructionPrefait.getFont().deriveFont(Font.PLAIN, 15));
+        instructionPrefait.setHorizontalAlignment(SwingConstants.CENTER);
+        instructionPrefait.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Ajouter le panneau boutons à la fenêtre
-        panneau.add(panBoutons);
-        panneau.add(Box.createVerticalGlue());
+        RoundedButton boutonPrefait = new RoundedButton("Parcourir...");
+        boutonPrefait.setBackground(new Color(176, 226, 255));
+        boutonPrefait.setContentAreaFilled(false);
+        boutonPrefait.setFont(boutonPrefait.getFont().deriveFont(Font.PLAIN, 25));
+        boutonPrefait.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Action bouton graph-test.txt
-        boutonGraph.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Fichiers TXT", "txt"));
-                int returnValue = fileChooser.showOpenDialog(null);
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    String cheminFichier = fileChooser.getSelectedFile().getPath();
-                    // Créer une nouvelle fenêtre FenetreGraphe en passant le chemin du fichier CSV
-                    FenetreGraphe fen = new FenetreGraphe(cheminFichier, "txt");
-                    fen.setVisible(true);
-                    dispose();
-                }
-            }
-        });
+        // Ajouter les composants au panneau des aéroports
+        panPrefait.add(titrePrefait);
+        panPrefait.add(Box.createVerticalStrut(70));
+        panPrefait.add(instructionPrefait);
+        panPrefait.add(Box.createRigidArea(new Dimension(0, 10)));
+        panPrefait.add(boutonPrefait);
+        panPrefait.add(Box.createVerticalGlue());
+
+        // Ajouter les panneaux à la grille
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.insets = new Insets(5, 10, 5, 50); // Augmenter l'espace à droite du premier panneau
+        panneau.add(panVol, gbc);
+
+        gbc.gridx = 3;
+        gbc.insets = new Insets(5, 50, 5, 10); // Augmenter l'espace à gauche du second panneau
+        panneau.add(panPrefait, gbc);
 
         // Action bouton vol-test.csv
         boutonVol.addActionListener(new ActionListener() {
@@ -100,8 +123,27 @@ public class FenetreImportGraph extends SuperposedFenetre {
             }
         });
 
+        // Action bouton graph-test.txt
+        boutonPrefait.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Fichiers TXT", "txt"));
+                int returnValue = fileChooser.showOpenDialog(null);
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    String cheminFichier = fileChooser.getSelectedFile().getPath();
+                    // Créer une nouvelle fenêtre FenetreGraphe en passant le chemin du fichier TXT
+                    FenetreGraphe fen = new FenetreGraphe(cheminFichier, "txt");
+                    fen.setVisible(true);
+                    dispose();
+                }
+            }
+        });
+
         // Ajouter le panneau à la fenêtre
         this.superposePan.add(panneau, JLayeredPane.DEFAULT_LAYER);
+
 
         //menu
         JPanel buttonPan = new JPanel();
