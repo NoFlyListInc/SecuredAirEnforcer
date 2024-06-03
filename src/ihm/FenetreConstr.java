@@ -18,7 +18,7 @@ public class FenetreConstr extends JFrame {
         panneau.setBackground(new Color(84, 172, 238));
 
         // Chargement de l'image depuis le fichier
-        ImageIcon icon = new ImageIcon("Image/parametre.png");
+        ImageIcon icon = new ImageIcon("image/parametre.png");
         Image image = icon.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
         icon = new ImageIcon(image);
 

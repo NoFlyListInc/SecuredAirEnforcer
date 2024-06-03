@@ -25,7 +25,7 @@ public class FenetreImportGraph extends SuperposedFenetre {
         panTitre.setOpaque(false);
 
         // Image de l'avion
-        ImageIcon imageIcon = new ImageIcon("Image/avion.png");
+        ImageIcon imageIcon = new ImageIcon("image/avion.png");
         Image image = imageIcon.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
         imageIcon = new ImageIcon(image);
         JLabel imageAvion = new JLabel(imageIcon);

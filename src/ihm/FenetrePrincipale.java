@@ -39,7 +39,7 @@ public class FenetrePrincipale extends JFrame
         panneauBleu.add(titre, gbcBleu);
 
         // Charger l'image de l'avion et la redimensionner
-        ImageIcon imageIcon = new ImageIcon("Image/avion.png");
+        ImageIcon imageIcon = new ImageIcon("image/avion.png");
         Image image = imageIcon.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
         
         imageIcon = new ImageIcon(image);
@@ -59,15 +59,15 @@ public class FenetrePrincipale extends JFrame
         panneauBlanc.setBackground(Color.WHITE);
         
         // Charger les images pour les boutons et les redimensionner
-        ImageIcon imageCarteIcon = new ImageIcon("Image/map.png");
+        ImageIcon imageCarteIcon = new ImageIcon("image/map.png");
         Image imageCarte = imageCarteIcon.getImage().getScaledInstance(100, 80, Image.SCALE_SMOOTH);
         imageCarteIcon = new ImageIcon(imageCarte);
 
-        ImageIcon imageGraphe = new ImageIcon("Image/graph.png");
+        ImageIcon imageGraphe = new ImageIcon("image/graph.png");
         Image imageGrapheImage = imageGraphe.getImage().getScaledInstance(100, 80, Image.SCALE_SMOOTH);
         imageGraphe = new ImageIcon(imageGrapheImage);
 
-        ImageIcon imageConstruire = new ImageIcon("Image/plan.png");
+        ImageIcon imageConstruire = new ImageIcon("image/plan.png");
         Image imageConstruireImage = imageConstruire.getImage().getScaledInstance(100, 80, Image.SCALE_SMOOTH);
         imageConstruire = new ImageIcon(imageConstruireImage);
         

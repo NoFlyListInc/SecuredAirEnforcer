@@ -41,7 +41,7 @@ public class MenuOngletPan extends JPanel
         JPanel retourPan = new JPanel();
         retourPan.setOpaque(false);
         retourPan.setLayout(new BoxLayout(retourPan, BoxLayout.LINE_AXIS));
-        Image retourImage = new ImageIcon("Image/botArrow.png").getImage().getScaledInstance(25, 20, Image.SCALE_SMOOTH);
+        Image retourImage = new ImageIcon("image/botArrow.png").getImage().getScaledInstance(25, 20, Image.SCALE_SMOOTH);
         JButton retour = new JButton(new ImageIcon(retourImage));
         retour.setBorderPainted(false);
         retour.setContentAreaFilled(false);
@@ -62,7 +62,7 @@ public class MenuOngletPan extends JPanel
         JPanel homePan = new JPanel();
         homePan.setOpaque(false);
         homePan.setLayout(new BoxLayout(homePan, BoxLayout.LINE_AXIS));
-        Image imageHome = new ImageIcon("Image/homeLogo.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        Image imageHome = new ImageIcon("image/homeLogo.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         RoundedButton home = new RoundedButton(new ImageIcon(imageHome));
         home.addActionListener((ActionListener) -> {
             FenetrePrincipale fenetre = new FenetrePrincipale();
@@ -79,7 +79,7 @@ public class MenuOngletPan extends JPanel
         JPanel mapPan = new JPanel();
         mapPan.setOpaque(false);
         mapPan.setLayout(new BoxLayout(mapPan, BoxLayout.LINE_AXIS));
-        Image imageMap = new ImageIcon("Image/map.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        Image imageMap = new ImageIcon("image/map.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         RoundedButton map = new RoundedButton(new ImageIcon(imageMap));
         map.addActionListener((ActionListener) -> {
             FenetreMap fenetre = new FenetreMap();
@@ -96,7 +96,7 @@ public class MenuOngletPan extends JPanel
         JPanel importGraphPan = new JPanel();
         importGraphPan.setOpaque(false);
         importGraphPan.setLayout(new BoxLayout(importGraphPan, BoxLayout.LINE_AXIS));
-        Image imageGraph = new ImageIcon("Image/graph.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        Image imageGraph = new ImageIcon("image/graph.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         RoundedButton importGraph = new RoundedButton(new ImageIcon(imageGraph));
         importGraph.addActionListener((ActionListener) -> {
             FenetreImportGraph fenetre = new FenetreImportGraph();

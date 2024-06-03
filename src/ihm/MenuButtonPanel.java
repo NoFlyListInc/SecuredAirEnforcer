@@ -17,7 +17,7 @@ public class MenuButtonPanel extends RoundedPanel {
         this.setBackground(new Color(45, 40, 63));
         this.add(Box.createRigidArea(new Dimension(25,0)));
         this.add(new JLabel("<html><font color='white'>MENU</font></html>"));
-        Image buttonImage = new ImageIcon("Image/topArrow.png").getImage().getScaledInstance(25, 20, Image.SCALE_SMOOTH);
+        Image buttonImage = new ImageIcon("image/topArrow.png").getImage().getScaledInstance(25, 20, Image.SCALE_SMOOTH);
         JButton button = new JButton(new ImageIcon(buttonImage));
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);

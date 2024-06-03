@@ -82,7 +82,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         JPanel settingPan = new JPanel();
         settingPan.setOpaque(false);
         settingPan.setLayout(new BoxLayout(settingPan, BoxLayout.PAGE_AXIS));
-        Image settingImage = new ImageIcon("Image/parametre.png").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+        Image settingImage = new ImageIcon("image/parametre.png").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
         JButton settingButton = new JButton(new ImageIcon(settingImage));
         settingButton.setBorderPainted(false);
         settingButton.setContentAreaFilled(false);

@@ -73,7 +73,7 @@ public class FenetreMap extends SuperposedFenetre
         settingPan.setLayout(new BoxLayout(settingPan, BoxLayout.PAGE_AXIS));
 
         //button setting
-        Image settingImage = new ImageIcon("Image/parametre.png").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+        Image settingImage = new ImageIcon("image/parametre.png").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
         this.settingButton.setIcon(new ImageIcon(settingImage));
         this.settingButton.setBorderPainted(false);
         this.settingButton.setContentAreaFilled(false);
@@ -146,7 +146,7 @@ public class FenetreMap extends SuperposedFenetre
         retourPan.setOpaque(false);
         retourPan.setLayout(new BoxLayout(retourPan, BoxLayout.LINE_AXIS));
         //button retour
-        Image retourImage = new ImageIcon("Image/rightArrow.png").getImage().getScaledInstance(25, 20, Image.SCALE_SMOOTH);
+        Image retourImage = new ImageIcon("image/rightArrow.png").getImage().getScaledInstance(25, 20, Image.SCALE_SMOOTH);
         JButton retour = new JButton(new ImageIcon(retourImage));
         retour.setBorderPainted(false);
         retour.setContentAreaFilled(false);
