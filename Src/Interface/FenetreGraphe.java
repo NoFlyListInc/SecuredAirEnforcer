@@ -1,12 +1,12 @@
 package Src.Interface;
-import org.graphstream.ui.swingViewer.Viewer;
-
+//#region import
+//core objects
 import Src.Core.Graph;
 import Src.Core.ListAeroport;
 import Src.Core.ListVol;
-
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+//graphstream objects
+import org.graphstream.ui.swingViewer.Viewer;
+//swing objects
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -16,22 +16,21 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.Box;
 import javax.swing.JFrame;
+//awt objects
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Image;
 //#endregion
 
-
+/**
+ * Classe FenetreGraphe
+ * Fenêtre pour afficher un graph
+ * @extends SuperposedFenetre
+ * @autor NOUVEL Armand et Thomas FERNANDES
+ */
 public class FenetreGraphe extends SuperposedFenetre {
-
-    //#region attributes
-    private JLayeredPane superposePan = new JLayeredPane();
-    //#endregion
-
-    //#region accesseurs
-    public JLayeredPane getSuperposePan() {
-        return superposePan;
-    }
-    //#endregion
 
     /**
      * Constructeur de la classe FenetreGraphe
@@ -83,7 +82,11 @@ public class FenetreGraphe extends SuperposedFenetre {
         JPanel settingPan = new JPanel();
         settingPan.setOpaque(false);
         settingPan.setLayout(new BoxLayout(settingPan, BoxLayout.PAGE_AXIS));
-        JButton settingButton = new JButton("setting");
+        Image settingImage = new ImageIcon("Image/parametre.png").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+        JButton settingButton = new JButton(new ImageIcon(settingImage));
+        settingButton.setBorderPainted(false);
+        settingButton.setContentAreaFilled(false);
+        settingButton.setFocusPainted(false);
         settingButton.addActionListener((ActionListener) -> {
             
         });
@@ -94,14 +97,8 @@ public class FenetreGraphe extends SuperposedFenetre {
         JPanel menuPan = new JPanel();
         menuPan.setOpaque(false);
         menuPan.setLayout(new BoxLayout(menuPan, BoxLayout.PAGE_AXIS));
-        JButton menuButton = new JButton("menu");
-        menuButton.addActionListener((ActionListner) -> {
-            Dimension size = getContentPane().getSize();
-            menu.setBounds(0, 0, size.width, size.height);
-            superposePan.add(menu, JLayeredPane.MODAL_LAYER);
-        });
         menuPan.add(Box.createVerticalGlue());
-        menuPan.add(menuButton);
+        menuPan.add(this.menuButton);
         buttonPan.add(menuPan, BorderLayout.WEST);
 
         superposePan.add(buttonPan, JLayeredPane.PALETTE_LAYER);

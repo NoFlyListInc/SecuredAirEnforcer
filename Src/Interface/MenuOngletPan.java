@@ -41,17 +41,19 @@ public class MenuOngletPan extends JPanel
         JPanel retourPan = new JPanel();
         retourPan.setOpaque(false);
         retourPan.setLayout(new BoxLayout(retourPan, BoxLayout.LINE_AXIS));
-        Image retourImage = new ImageIcon("Image/leftArrow.png").getImage().getScaledInstance(25, 20, Image.SCALE_SMOOTH);
+        Image retourImage = new ImageIcon("Image/botArrow.png").getImage().getScaledInstance(25, 20, Image.SCALE_SMOOTH);
         JButton retour = new JButton(new ImageIcon(retourImage));
         retour.setBorderPainted(false);
         retour.setContentAreaFilled(false);
         retour.setFocusPainted(false);
         retour.addActionListener((ActionListener) -> {
             fen.getSuperposePan().remove(this);
+            fen.menuButton.setVisible(true);
             fen.getSuperposePan().revalidate();
             fen.getSuperposePan().repaint();
         });
-        retourPan.add(Box.createHorizontalGlue());
+        retourPan.add(Box.createRigidArea(new Dimension(25, 0)));
+        retourPan.add(new JLabel("<html><font color='white'>MENU</font></html>"));
         retourPan.add(retour);
         pan.add(retourPan);
         pan.add(Box.createRigidArea(new Dimension(0,10)));

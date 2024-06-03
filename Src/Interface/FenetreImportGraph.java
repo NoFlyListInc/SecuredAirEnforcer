@@ -103,7 +103,6 @@ public class FenetreImportGraph extends SuperposedFenetre {
         this.superposePan.add(panneau, JLayeredPane.DEFAULT_LAYER);
 
         //menu
-        MenuOngletPan menu = new MenuOngletPan(this);
         JPanel buttonPan = new JPanel();
         buttonPan.setBounds(0, 0, 800, 600);
         buttonPan.setOpaque(false);
@@ -112,14 +111,8 @@ public class FenetreImportGraph extends SuperposedFenetre {
         JPanel menuPan = new JPanel();
         menuPan.setOpaque(false);
         menuPan.setLayout(new BoxLayout(menuPan, BoxLayout.PAGE_AXIS));
-        JButton menuButton = new JButton("menu");
-        menuButton.addActionListener((ActionListner) -> {
-            Dimension size = getContentPane().getSize();
-            menu.setBounds(0, 0, size.width, size.height);
-            superposePan.add(menu, JLayeredPane.MODAL_LAYER);
-        });
         menuPan.add(Box.createVerticalGlue());
-        menuPan.add(menuButton);
+        menuPan.add(this.menuButton);
         buttonPan.add(menuPan, BorderLayout.WEST);
 
         superposePan.add(buttonPan, JLayeredPane.PALETTE_LAYER);

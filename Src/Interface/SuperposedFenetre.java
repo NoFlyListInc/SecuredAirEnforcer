@@ -7,6 +7,7 @@ public abstract class SuperposedFenetre extends JFrame
     //#region attributes
     protected JLayeredPane superposePan = new JLayeredPane();
     protected MenuOngletPan menu = new MenuOngletPan(this);
+    protected MenuButtonPanel menuButton = new MenuButtonPanel(12, this);
     //#endregion
 
     //#region accesseurs

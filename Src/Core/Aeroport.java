@@ -163,7 +163,14 @@ public class Aeroport
         Latitude : 45° 43' 35'' N
         Longitude : 5° 5' 27'' E
         */
-        return "Code : " + this.code + "\nVille : " + this.ville + "\nLatitude : " + this.latitude.toString() + "\nLongitude : " + this.longitude.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append("<html>");
+        sb.append(this.code + "<br>");
+        sb.append(this.ville + "<br>");
+        sb.append(this.latitude.toString() + "<br>");
+        sb.append(this.longitude.toString() + "<br>");
+        sb.append("</html>");
+        return sb.toString();
     }
     
     //#endregion

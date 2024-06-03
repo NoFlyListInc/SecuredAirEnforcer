@@ -89,7 +89,10 @@ public class Graph extends SingleGraph
             //creations des arretes
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(" ");
-                this.addEdge(parts[0]+","+parts[1], parts[0], parts[1]);
+                if(this.getEdge(parts[0]+","+parts[1]) == null && this.getEdge(parts[1]+","+parts[0])
+                 == null) { //si l'arrete n'existe pas on l'ajoute
+                    this.addEdge(parts[0]+","+parts[1], parts[0], parts[1]);
+                }
             }
             reader.close();
         } catch (IOException e) { //erreur de lecture du fichier

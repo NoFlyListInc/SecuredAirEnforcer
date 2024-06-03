@@ -24,6 +24,8 @@ import java.awt.event.MouseMotionListener;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+//import swing objects
+import javax.swing.JLabel;
 //import graphstream objects
 import org.graphstream.graph.Node;
 import org.graphstream.graph.Edge;
@@ -42,11 +44,13 @@ public class Map extends JXMapViewer
     private Set<DefaultWaypoint> ListCollisionWaypoint = new HashSet<>();
     private ListAeroport listAeroport;
     private ListVol listVols;
+    private JLabel label;
     //#endregion
 
     //#region constructeur
-    public Map() {
+    public Map(JLabel label) {
         super();
+        this.label = label;
 
         //connection à OpenStreetMap
         TileFactoryInfo info = new OSMTileFactoryInfo();
@@ -104,7 +108,7 @@ public class Map extends JXMapViewer
      * @param listAeroport
      * @param listVol
      */
-    public void addInformation(ListAeroport listAeroport, ListVol listVol) {
+    public void addInformation(ListAeroport listAeroport, ListVol listVol, int marge) {
         //on met à jour les attributs
         this.listAeroport = listAeroport;
         this.listVols = listVol;
@@ -154,7 +158,7 @@ public class Map extends JXMapViewer
         for (int i = 0; i < listVol.getList().size(); i++) {
             for (int j = i+1; j < listVol.getList().size(); j++) {
                 //si les vols i et j sont en collision
-                GeoPosition collisionPoint=(listVol.getVol(i).collision(listVol.getVol(j), 15));
+                GeoPosition collisionPoint=(listVol.getVol(i).collision(listVol.getVol(j), marge));
                 if (collisionPoint!=null) {
                     DefaultWaypoint waypoint = new DefaultWaypoint(collisionPoint);
                     ListCollisionWaypoint.add(waypoint);
@@ -192,7 +196,7 @@ public class Map extends JXMapViewer
                     Aeroport aeroport = listAeroport.getAeroportByPosition(waypoint.getPosition());
                     if (aeroport != null) {
                         // Afficher les informations sur l'aéroport
-                        System.out.println("Aéroport cliqué : " + aeroport);
+                        label.setText(aeroport.toString());
                     }
                     break;
                 }
@@ -218,12 +222,13 @@ public class Map extends JXMapViewer
                             GeoPosition collisionPoint=(listVols.getVol(i).collision(listVols.getVol(j), 15));
                             if(collisionPoint!=null && collisionPoint.equals(waypoint.getPosition())){
                                 // Afficher les informations sur la collision
-                                System.out.println("Collision entre les vols : \n" + listVols.getVol(i) + "\n et \n" + listVols.getVol(j));
+                                label.setText(listVols.getVol(i).getCode() + " <=> " + listVols.getVol(j).getCode());
                             }
                         }
                     }
+                    break;
                 }
-                break;
+                
             }
         }
     }

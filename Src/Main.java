@@ -24,8 +24,6 @@ public class Main
     private static Vol v1 = new Vol("AF001", a1, a2, new Horaire(7, 33), 81);
     private static Vol v2 = new Vol("AF002", a3, a4, new Horaire(7, 34), 47);
 
-    private static Map map = new Map();
-
     private static FenetrePrincipale fen = new FenetrePrincipale();
     //#endregion
     
