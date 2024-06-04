@@ -1,5 +1,10 @@
 package src.ihm;
+
+//#region imports
+//swing imports
 import javax.swing.*;
+
+
 import java.awt.*;
 
 public class RoundedPanel extends JPanel {

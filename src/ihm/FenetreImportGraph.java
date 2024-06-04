@@ -21,7 +21,7 @@ public class FenetreImportGraph extends SuperposedFenetre {
 
         // Panneau principal
         JPanel panneau = new JPanel(new GridBagLayout());
-        panneau.setBackground(new Color(84, 172, 238));
+        panneau.setBackground(new Color(98, 142, 255));
         GridBagConstraints gbc = new GridBagConstraints();
 
         // Contraintes
