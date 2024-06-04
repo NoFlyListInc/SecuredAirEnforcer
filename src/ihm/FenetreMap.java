@@ -1,14 +1,31 @@
 package src.ihm;
+//#region import
 //swing objects
-import javax.swing.*;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JLayeredPane;
+import javax.swing.Box;
+import javax.swing.JSlider;
+import javax.swing.JFileChooser;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.BoxLayout;
+import javax.swing.JScrollPane;
 
+//src objects
 import src.core.ListAeroport;
 import src.core.ListVol;
 import src.core.Map;
 
 //awt objects
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.Dimension;
+import java.awt.BorderLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 //File object
 import java.io.File;
 //#endregion

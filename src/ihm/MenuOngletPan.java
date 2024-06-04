@@ -1,9 +1,26 @@
 package src.ihm;
 //#region imports
-import java.awt.*;
-import javax.swing.*;
+//swing imports
+import javax.swing.JPanel;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+
+//awt imports
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.BorderLayout;
 //#endregion
 
+/**
+ * <h3>Cette classe crée un panneau pour les onglets du menu.</h3>
+ * <p>Le panneau contient des boutons pour retourner au menu principal, afficher la carte, importer un graphe et construire un graphe.</p>
+ * <p>Chaque bouton est représenté par une image et un texte.</p>
+ * @author NOUVEL Armand
+ */
 public class MenuOngletPan extends JPanel
 {
     //#region attributs
