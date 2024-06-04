@@ -81,8 +81,8 @@ public class FenetreMap extends SuperposedFenetre
         this.settingButton.setFocusPainted(false);
         this.settingButton.addActionListener((ActionListener) -> {
             Dimension size = getContentPane().getSize();
-            this.settingMenuPosition.setBounds(0, 0, size.width, size.height);
-            getSuperposePan().add(this.settingMenuPosition, JLayeredPane.MODAL_LAYER);
+            settingMenuPosition.setBounds(0, 0, size.width, size.height);
+            getSuperposePan().add(settingMenuPosition, JLayeredPane.MODAL_LAYER);
             settingButton.setVisible(false);
             getSuperposePan().revalidate();
             getSuperposePan().repaint();
@@ -153,7 +153,7 @@ public class FenetreMap extends SuperposedFenetre
         retour.setContentAreaFilled(false);
         retour.setFocusPainted(false);
         retour.addActionListener((ActionListener) -> {
-            getSuperposePan().remove(this.settingMenuPosition);
+            getSuperposePan().remove(settingMenuPosition);
             settingButton.setVisible(true);
             getSuperposePan().revalidate();
             getSuperposePan().repaint();
