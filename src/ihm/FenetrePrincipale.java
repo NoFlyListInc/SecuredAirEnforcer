@@ -46,7 +46,7 @@ public class FenetrePrincipale extends JFrame
         panneauImage.setOpaque(false);
         panneauImage.setLayout(new BoxLayout(panneauImage, BoxLayout.LINE_AXIS));
         //creation de l'image
-        Image image = new ImageIcon("Image/avion.png").getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT);
+        Image image = new ImageIcon("image/avion.png").getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT);
         ImageIcon imageIcon = new ImageIcon(image);
         panneauImage.add(new JLabel(imageIcon));
         panneauBleu.add(panneauImage);

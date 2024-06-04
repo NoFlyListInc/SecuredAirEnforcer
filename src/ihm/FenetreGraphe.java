@@ -53,7 +53,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         } else if (format.equals("csv")) {
             ListVol listVol = new ListVol();
             ListAeroport listAeroport = new ListAeroport();
-            listAeroport.fill("./Data/aeroports.txt");
+            listAeroport.fill("./data/aeroports.txt");
             listVol.fill(cheminFichier, listAeroport);
             graph.fillVol(listVol);
         }
