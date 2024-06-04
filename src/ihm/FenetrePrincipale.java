@@ -22,10 +22,10 @@ import java.awt.GridBagConstraints;
  * <h3>Cette classe crée une fenêtre principale pour l'application Secured Air Enforcer.</h3>
  * <p>La fenêtre contient un panneau bleu à gauche et un panneau blanc à droite.</p>
  * <p>Le panneau bleu contient le titre de l'application et une image d'un avion.</p>
- * <p>Le panneau blanc contient trois boutons: "Afficher la carte", "Entrer un graphe préfait" et "Colorisation d'un graphe".</p>
+ * <p>Le panneau blanc contient trois boutons: "Afficher la carte", "Entrer un graphe préfait" et "Coloration à la chaîne".</p>
  * <p>Lorsque l'utilisateur clique sur le bouton "Afficher la carte", une carte de l'aéroport s'affiche.</p>
  * <p>Lorsque l'utilisateur clique sur le bouton "Entrer un graphe préfait", un graphe préfait s'affiche.</p>
- * <p>Lorsque l'utilisateur clique sur le bouton "Colorisation d'un graphe", une fenêtre s'ouvre pour coloriser un graphe.</p>
+ * <p>Lorsque l'utilisateur clique sur le bouton "Coloration à la chaîne", une fenêtre s'ouvre pour coloriser un graphe.</p>
  * <p>La fenêtre est de taille 800x600 pixels.</p>
  */
 public class FenetrePrincipale extends JFrame
@@ -34,7 +34,7 @@ public class FenetrePrincipale extends JFrame
      * Constructeur de la fenêtre principale.
      * <p>Crée une fenêtre principale avec un panneau bleu à gauche et un panneau blanc à droite.</p>
      * <p>Le panneau bleu contient le titre de l'application et une image d'un avion.</p>
-     * <p>Le panneau blanc contient trois boutons: "Afficher la carte", "Entrer un graphe préfait" et "Colorisation d'un graphe".</p>
+     * <p>Le panneau blanc contient trois boutons: "Afficher la carte", "Entrer un graphe préfait" et "Coloration à la chaîne".</p>
      * @autor FERNANDES Thomas
      */
     public FenetrePrincipale()
@@ -68,7 +68,6 @@ public class FenetrePrincipale extends JFrame
         JPanel panneauImage = new JPanel();
         panneauImage.setOpaque(false);
         panneauImage.setLayout(new BoxLayout(panneauImage, BoxLayout.LINE_AXIS));
-        
         //creation de l'image
         Image image = new ImageIcon("image/avion.png").getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT);
         ImageIcon imageIcon = new ImageIcon(image);
@@ -125,7 +124,7 @@ public class FenetrePrincipale extends JFrame
             this.dispose();
         });
 
-        RoundedButton foldGraphe = new RoundedButton(imagefold, "Colorisation d'un graphe");
+        RoundedButton foldGraphe = new RoundedButton(imagefold, "Coloration à la chaine");
         foldGraphe.setBackground(new Color(176, 226, 255));
         foldGraphe.setVerticalTextPosition(SwingConstants.BOTTOM);
         foldGraphe.setHorizontalTextPosition(SwingConstants.CENTER);

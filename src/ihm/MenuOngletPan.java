@@ -126,11 +126,17 @@ public class MenuOngletPan extends JPanel
         pan.add(importGraphPan);
         pan.add(Box.createRigidArea(new Dimension(0,10)));
 
-        //button graph
+        //bouton coloration d'un graphe
         JPanel graphePan = new JPanel();
         graphePan.setOpaque(false);
         graphePan.setLayout(new BoxLayout(graphePan, BoxLayout.LINE_AXIS));
-        JButton entreeGraphe = new JButton("constr");
+        Image imageColor = new ImageIcon("image/plan.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        RoundedButton entreeGraphe = new RoundedButton(new ImageIcon(imageColor));
+        entreeGraphe.addActionListener((ActionListener) -> {
+            FenetreImportFolder fenetre = new FenetreImportFolder();
+            fenetre.setVisible(true);
+            fen.dispose();
+        });
         graphePan.add(Box.createRigidArea(new Dimension(20,0)));
         graphePan.add(entreeGraphe);
         graphePan.add(Box.createRigidArea(new Dimension(20,0)));
