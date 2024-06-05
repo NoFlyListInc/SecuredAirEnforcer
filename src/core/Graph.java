@@ -1,4 +1,5 @@
 package src.core;
+
 //import graphstream tools
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.graph.Node;
@@ -13,7 +14,6 @@ import java.util.HashSet; //pour DSature
 import java.util.PriorityQueue; //pour DSature
 import java.util.Iterator; // pour DSature
 
-
 public class Graph extends SingleGraph {
     // #region attribut
     private int kmax;
@@ -25,8 +25,8 @@ public class Graph extends SingleGraph {
     // #region constructeur
     public Graph(String id) {
         super(id);
-        this.kmax = 0;
-        this.koptimal = 0;
+        this.kmax = 20; // nombre max de niveaux de vols possibles par défaut
+        this.koptimal = 1;
         this.volsMemesNiveaux = new ArrayList<HashMap<Vol, Vol>>();
 
     }
@@ -40,7 +40,8 @@ public class Graph extends SingleGraph {
     public int getKoptimal() {
         return this.koptimal;
     }
-    public ArrayList<HashMap<Vol, Vol>> getVolsMemesNiveaux(){
+
+    public ArrayList<HashMap<Vol, Vol>> getVolsMemesNiveaux() {
         return this.volsMemesNiveaux;
     }
     // #endregion
@@ -87,10 +88,11 @@ public class Graph extends SingleGraph {
         }
     }
 
-    
-    /** 
-     * La fonction ajoute à volsMemeNiveaux une paire de vol si elle est en risque de collision
+    /**
+     * La fonction ajoute à volsMemeNiveaux une paire de vol si elle est en risque
+     * de collision
      * et que kmax à été atteint
+     * 
      * @param vol1 premier vol
      * @param vol2 deuxième vol, qui est en risque de collision avec le premier
      */
@@ -116,27 +118,29 @@ public class Graph extends SingleGraph {
      * 
      * @param kdonne niveau.x de vol.s à utiliser au maximum
      * 
-     * Après l'exécution de cette méthode, chaque nœud du graphe sera
-     * coloré et le niveau de vol correspondant sera affiché.
-     * Le nombre de coloration optimal est stocké dans la variable
-     * koptimal
+     *               Après l'exécution de cette méthode, chaque nœud du graphe sera
+     *               coloré et le niveau de vol correspondant sera affiché.
+     *               Le nombre de coloration optimal est stocké dans la variable
+     *               koptimal
      */
     public void dSature(int kdonne) {
-
         int n = this.getNodeCount(); // Nombre de nœuds dans le graphe
         boolean[] couleursVoisins = new boolean[n]; // Tableau pour vérifier les couleurs utilisées par les voisins
         int[] couleurs = new int[n]; // Tableau pour les couleurs des nœuds
+        String[] couleursHex = {
+            "#e6194b", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#46f0f0", "#f032e6", 
+            "#bcf60c", "#fabebe", "#008080", "#e6beff", "#9a6324", "#fffac8", "#800000", "#aaffc3", 
+            "#808000", "#ffd8b1", "#000075", "#808080", "#ffffff", "#000000"
+        }; // Tableau de couleurs pour les nœuds
         int[] degreNoeud = new int[n]; // Tableau pour les degrés des nœuds
         HashSet<Integer>[] adjCols = new HashSet[n]; // Tableau de sets pour les couleurs adjacentes
         PriorityQueue<NodeInfo> queueDePriorite = new PriorityQueue<>(new MaxSat()); // File de priorité pour les nœuds
         HashMap<Node, Integer> nodeIndexMap = new HashMap<>(); // Map pour associer les nœuds à leurs indices
         Node[] indexNoeudMap = new Node[n]; // Tableau pour associer les indices aux nœuds
-
+    
         int idx = 0;
-
-        /**
-         * instancier tous les noeuds à une couleur nulle (-1)
-         */
+    
+        // Instancier tous les noeuds à une couleur nulle (-1)
         for (Node node : this) {
             couleurs[idx] = -1;
             degreNoeud[idx] = node.getDegree();
@@ -146,79 +150,91 @@ public class Graph extends SingleGraph {
             queueDePriorite.add(new NodeInfo(0, degreNoeud[idx], node));
             idx++;
         }
-
-        if (!queueDePriorite.isEmpty()) {
+    
+        while (!queueDePriorite.isEmpty()) {
             NodeInfo maxPtr = queueDePriorite.poll();
+            int u = nodeIndexMap.get(maxPtr.node);
+    
+            // Réinitialiser le tableau couleursVoisins pour chaque nœud
+            // Arrays.fill(couleursVoisins, false);
+    
+            // Utilisation de l'itérateur pour les voisins
             Iterator<Node> neighborIterator = maxPtr.node.getNeighborNodeIterator();
-            Node neighbor = null;
-            int i;
-
-            while (!queueDePriorite.isEmpty()) {
-                maxPtr = queueDePriorite.poll();
-                int u = nodeIndexMap.get(maxPtr.node);
-
-                // Utilisation de l'itérateur pour les voisins
-                neighborIterator = maxPtr.node.getNeighborNodeIterator();
-                while (neighborIterator.hasNext()) {
-                    neighbor = neighborIterator.next();
-                    int v = nodeIndexMap.get(neighbor);
-                    if (couleurs[v] != -1) {
-                        couleursVoisins[couleurs[v]] = true;
-                    }
+            while (neighborIterator.hasNext()) {
+                Node neighbor = neighborIterator.next();
+                int v = nodeIndexMap.get(neighbor);
+                if (couleurs[v] != -1) {
+                    couleursVoisins[couleurs[v]] = true;
                 }
-
-                i = 0;
-                while (i < couleursVoisins.length) {
-                    
-                        if (!couleursVoisins[i]) {
-                            if (i + 1 > this.getKoptimal()) {
-                                this.setKoptimal(i + 1);
-                            }
-
-                            if (i > kdonne){
-                                gestionNiveauMaxAtteint((Vol) maxPtr.node.getAttribute("vol"), (Vol) neighbor.getAttribute("vol"));
-                                i++;
-                            }
-                            break;
+            }
+    
+            int i = 0;
+            while (i < couleursVoisins.length) {
+                if (!couleursVoisins[i]) {
+                    break;
+                }
+                i++;
+            }
+    
+            if (i >= kdonne) {
+                // Si la couleur choisie dépasse kdonne, chercher la couleur avec le moins de collisions
+                int minCollisions = Integer.MAX_VALUE;
+                int bestColor = -1;
+                for (int j = 0; j < kdonne; j++) {
+                    int collisions = 0;
+                    neighborIterator = maxPtr.node.getNeighborNodeIterator();
+                    while (neighborIterator.hasNext()) {
+                        Node neighbor = neighborIterator.next();
+                        int v = nodeIndexMap.get(neighbor);
+                        if (couleurs[v] == j) {
+                            collisions++;
                         }
-                        i++;
-                    
-                }
-
-                // Réinitialisation de l'itérateur pour les voisins
-                neighborIterator = maxPtr.node.getNeighborNodeIterator();
-                while (neighborIterator.hasNext()) {
-                    neighbor = neighborIterator.next();
-                    int v = nodeIndexMap.get(neighbor);
-                    if (couleurs[v] != -1) {
-                        couleursVoisins[couleurs[v]] = false;
+                    }
+                    if (collisions < minCollisions) {
+                        minCollisions = collisions;
+                        bestColor = j;
                     }
                 }
-
-                couleurs[u] = i;
-                maxPtr.node.setAttribute("ui.style",
-                        "fill-color: rgb(" + (i * 50) % 255 + ", " + (i * 80) % 255 + ", " + (i * 120) % 255 + ");");
-
-                // Réinitialisation de l'itérateur pour les voisins
-                neighborIterator = maxPtr.node.getNeighborNodeIterator();
-                while (neighborIterator.hasNext()) {
-                    neighbor = neighborIterator.next();
-                    int v = nodeIndexMap.get(neighbor);
-                    if (couleurs[v] == -1) {
-                        queueDePriorite.remove(new NodeInfo(adjCols[v].size(), degreNoeud[v], neighbor));
-                        adjCols[v].add(i);
-                        degreNoeud[v]--;
-                        queueDePriorite.add(new NodeInfo(adjCols[v].size(), degreNoeud[v], neighbor));
-                    }
+                i = bestColor;
+            }
+    
+            couleurs[u] = i;
+            maxPtr.node.setAttribute("ui.style", "fill-color: " + couleursHex[i] + ";");
+    
+            // Réinitialisation de l'itérateur pour les voisins
+            neighborIterator = maxPtr.node.getNeighborNodeIterator();
+            while (neighborIterator.hasNext()) {
+                Node neighbor = neighborIterator.next();
+                int v = nodeIndexMap.get(neighbor);
+                if (couleurs[v] != -1) {
+                    couleursVoisins[couleurs[v]] = false;
+                }
+            }
+    
+            // Mise à jour des informations de saturation et de degré pour les voisins
+            neighborIterator = maxPtr.node.getNeighborNodeIterator();
+            while (neighborIterator.hasNext()) {
+                Node neighbor = neighborIterator.next();
+                int v = nodeIndexMap.get(neighbor);
+                if (couleurs[v] == -1) {
+                    queueDePriorite.remove(new NodeInfo(adjCols[v].size(), degreNoeud[v], neighbor));
+                    adjCols[v].add(couleurs[u]);
+                    degreNoeud[v]--;
+                    queueDePriorite.add(new NodeInfo(adjCols[v].size(), degreNoeud[v], neighbor));
                 }
             }
         }
-
+    
         for (int u = 0; u < n; u++) {
-            System.out.println("Vol " + indexNoeudMap[u].getId() + " ---> Niveau de vol : " + couleurs[u]);
+            if (couleurs[u] != -1) {
+                System.out.println("Vol " + indexNoeudMap[u].getId() + " ---> Niveau de vol : " + couleurs[u]);
+            } else {
+                System.out.println("Vol " + indexNoeudMap[u].getId() + " n'a pas pu être coloré avec les " + kdonne + " couleurs disponibles.");
+            }
         }
-
     }
+    
+    
 
     // #endregion
 
