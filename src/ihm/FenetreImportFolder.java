@@ -5,8 +5,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 //#endregion
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
-public class FenetreImportFolder extends JFrame {
+
+public class FenetreImportFolder extends SuperposedFenetre {
 
     public FenetreImportFolder() {
         // Base de la fenêtre
@@ -66,10 +72,24 @@ public class FenetreImportFolder extends JFrame {
                 fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 int returnValue = fileChooser.showOpenDialog(null);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    String cheminFichier = fileChooser.getSelectedFile().getPath();
-                    FenetreGraphe fen = new FenetreGraphe(cheminFichier);
-                    fen.setVisible(true);
-                    dispose();
+                    File selectedFile = fileChooser.getSelectedFile();
+                    File[] files = selectedFile.listFiles();
+                        for (File file : files) {
+                            if (file.getName().matches("graph-test\\d+.txt")) {
+                                System.out.println(file.getName());
+                                try {Scanner scanner = new Scanner(file);
+                                    while (scanner.hasNextLine()) {
+                                        String line = scanner.nextLine();
+                                        System.out.println(line);
+                                    }
+                                    scanner.close();
+                                    panFold.setBackground(new Color(21, 105, 19));
+                                } catch (FileNotFoundException ex) {
+                                    System.out.println("An error occurred.");
+                                    ex.printStackTrace();
+                                }
+                        }
+                    }                        
                 }
             }
         });
@@ -77,5 +97,36 @@ public class FenetreImportFolder extends JFrame {
         
         panneau.add(panFold, gbc);
         this.add(panneau);
+
+        
+        // Ajouter le panneau à la fenêtre
+        this.superposePan.add(panneau, JLayeredPane.DEFAULT_LAYER);
+
+
+        //menu
+        JPanel buttonPan = new JPanel();
+        buttonPan.setBounds(0, 0, 800, 600);
+        buttonPan.setOpaque(false);
+        buttonPan.setLayout(new BorderLayout());
+
+        JPanel menuPan = new JPanel();
+        menuPan.setOpaque(false);
+        menuPan.setLayout(new BoxLayout(menuPan, BoxLayout.PAGE_AXIS));
+        menuPan.add(Box.createVerticalGlue());
+        menuPan.add(this.menuButton);
+        buttonPan.add(menuPan, BorderLayout.WEST);
+
+        superposePan.add(buttonPan, JLayeredPane.PALETTE_LAYER);
+
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                Dimension size = getContentPane().getSize();
+                panneau.setBounds(0, 0, size.width, size.height);
+                buttonPan.setBounds(0, 0, size.width, size.height);
+            }
+        });
+
+        this.setContentPane(superposePan);
     }
 }
