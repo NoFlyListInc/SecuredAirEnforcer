@@ -116,7 +116,7 @@ public class FenetreImportGraph extends SuperposedFenetre {
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     String cheminFichier = fileChooser.getSelectedFile().getPath();
                     // Créer une nouvelle fenêtre FenetreGraphe en passant le chemin du fichier CSV
-                    FenetreGraphe fen = new FenetreGraphe(cheminFichier, "csv");
+                    FenetreGraphe fen = new FenetreGraphe(cheminFichier);
                     fen.setVisible(true);
                     dispose();
                 }
@@ -134,7 +134,7 @@ public class FenetreImportGraph extends SuperposedFenetre {
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     String cheminFichier = fileChooser.getSelectedFile().getPath();
                     // Créer une nouvelle fenêtre FenetreGraphe en passant le chemin du fichier TXT
-                    FenetreGraphe fen = new FenetreGraphe(cheminFichier, "txt");
+                    FenetreGraphe fen = new FenetreGraphe(cheminFichier);
                     fen.setVisible(true);
                     dispose();
                 }
