@@ -67,7 +67,7 @@ public class FenetreImportFolder extends JFrame {
                 int returnValue = fileChooser.showOpenDialog(null);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     String cheminFichier = fileChooser.getSelectedFile().getPath();
-                    FenetreGraphe fen = new FenetreGraphe(cheminFichier, "");
+                    FenetreGraphe fen = new FenetreGraphe(cheminFichier);
                     fen.setVisible(true);
                     dispose();
                 }

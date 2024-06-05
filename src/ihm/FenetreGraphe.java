@@ -1,10 +1,12 @@
 package src.ihm;
-//graphstream objects
-import org.graphstream.ui.swingViewer.Viewer;
-
+//#region import
 import src.core.Graph;
 import src.core.ListAeroport;
 import src.core.ListVol;
+//graphstream objects
+import org.graphstream.ui.swingViewer.Viewer;
+import java.io.File;
+
 
 //swing objects
 import javax.swing.BoxLayout;
@@ -15,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.SwingConstants;
 import javax.swing.Box;
 import javax.swing.JFrame;
 //awt objects
@@ -35,16 +36,18 @@ import java.awt.Color;
  */
 public class FenetreGraphe extends SuperposedFenetre {
 
+    //#region Attributs
     JPanel settingMenuPosition = new JPanel();
     JButton settingButton;
-    Graph graph = new Graph("graph");
+    Graph graph;
+    JPanel infoLabel;
+    //#endregion
 
     /**
      * Constructeur de la classe FenetreGraphe
      * @param cheminFichier String
-     * @param format String, {"txt", "csv"}
      */
-    public FenetreGraphe(String cheminFichier, String format) {
+    public FenetreGraphe(String cheminFichier) {
         // Base de la fenêtre
         this.setTitle("Graphe");
         this.setMinimumSize(new Dimension(400,300));  
@@ -54,9 +57,11 @@ public class FenetreGraphe extends SuperposedFenetre {
         this.setLayout(new BorderLayout());
         
         // creation du graph
-        if (format.equals("txt")) {
+        File file = new File(cheminFichier);
+        this.graph = new Graph(file.getName());
+        if (file.getName().endsWith(".txt")) {
             this.graph.fillFile(cheminFichier);
-        } else if (format.equals("csv")) {
+        } else if (file.getName().endsWith(".csv")) {
             ListVol listVol = new ListVol();
             ListAeroport listAeroport = new ListAeroport();
             listAeroport.fill("./data/aeroports.txt");
@@ -74,9 +79,6 @@ public class FenetreGraphe extends SuperposedFenetre {
         panPrincipale.setLayout(new BorderLayout());
         panPrincipale.setOpaque(true);
         panPrincipale.setBounds(0, 0, 800, 600);
-        JLabel labelCheminFichier = new JLabel("Chemin du fichier TXT sélectionné : " + cheminFichier);
-        labelCheminFichier.setHorizontalAlignment(SwingConstants.CENTER);
-        panPrincipale.add(labelCheminFichier, BorderLayout.NORTH);
         panPrincipale.add(viewerGraphe.addDefaultView(false), BorderLayout.CENTER);
         this.superposePan.add(panPrincipale, JLayeredPane.DEFAULT_LAYER);
 
@@ -109,8 +111,18 @@ public class FenetreGraphe extends SuperposedFenetre {
         JPanel menuPan = new JPanel();
         menuPan.setOpaque(false);
         menuPan.setLayout(new BoxLayout(menuPan, BoxLayout.PAGE_AXIS));
+        this.infoLabel = this.createInfoPan();
+        menuPan.add(infoLabel);
         menuPan.add(Box.createVerticalGlue());
-        menuPan.add(this.menuButton);
+
+        JPanel menuButtonPan = new JPanel();
+        menuButtonPan.setOpaque(false);
+        menuButtonPan.setLayout(new BoxLayout(menuButtonPan, BoxLayout.LINE_AXIS));
+        this.menuButton.setMaximumSize(new Dimension(121, 30));
+        menuButtonPan.add(this.menuButton);
+        menuButtonPan.add(Box.createHorizontalGlue());
+        menuPan.add(menuButtonPan);
+
         buttonPan.add(menuPan, BorderLayout.WEST);
 
         superposePan.add(buttonPan, JLayeredPane.PALETTE_LAYER);
@@ -186,7 +198,7 @@ public class FenetreGraphe extends SuperposedFenetre {
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     String cheminFichier = fileChooser.getSelectedFile().getPath();
                     // Créer une nouvelle fenêtre FenetreGraphe en passant le chemin du fichier CSV
-                    FenetreGraphe fen = new FenetreGraphe(cheminFichier, "csv");
+                    FenetreGraphe fen = new FenetreGraphe(cheminFichier);
                     fen.setVisible(true);
                     dispose();
                 }
@@ -212,7 +224,7 @@ public class FenetreGraphe extends SuperposedFenetre {
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 String cheminFichier = fileChooser.getSelectedFile().getPath();
                 // Créer une nouvelle fenêtre FenetreGraphe en passant le chemin du fichier TXT
-                FenetreGraphe fen = new FenetreGraphe(cheminFichier, "txt");
+                FenetreGraphe fen = new FenetreGraphe(cheminFichier);
                 fen.setVisible(true);
                 dispose();
             }
@@ -226,7 +238,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         settingPopUp.add(Box.createRigidArea(new Dimension(0,15)));
 
 
-        // hauteur setting (hmax)
+        // coloration (kmax)
         //slider Pan
         JPanel sliderCouleurPan = new JPanel();
         sliderCouleurPan.setMaximumSize(new Dimension(200, 50));
@@ -258,6 +270,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         couleurButton.addActionListener((ActionListener) -> {
             graph.dSature(sliderCouleur.getValue());
             retour.doClick();
+            infoLabel = createInfoPan();
         });
         couleurPan.add(Box.createHorizontalGlue());
         couleurPan.add(couleurButton);
@@ -275,5 +288,21 @@ public class FenetreGraphe extends SuperposedFenetre {
         settingMenuPan.add(Box.createVerticalGlue());
 
         this.settingMenuPosition.add(settingMenuPan, BorderLayout.EAST);
+    }
+
+    private JPanel createInfoPan() {
+        StringBuilder info = new StringBuilder();
+        info.append("<html>");
+        info.append("file : ").append(this.graph.getId()).append("<br>");
+        info.append("nbr noeuds : ").append(this.graph.getNodeCount()).append("<br>");
+        info.append("nbr arêtes : ").append(this.graph.getEdgeCount()).append("<br>");
+        info.append("nbr couleurs : ").append(this.graph.getKoptimal()).append("<br>");
+        info.append("</html>");
+        JPanel infoPan = new JPanel();
+        infoPan.setOpaque(false);
+        infoPan.setLayout(new BoxLayout(infoPan, BoxLayout.LINE_AXIS));
+        infoPan.add(Box.createHorizontalGlue());
+        infoPan.add(new JLabel(info.toString()));
+        return infoPan;
     }
 }
