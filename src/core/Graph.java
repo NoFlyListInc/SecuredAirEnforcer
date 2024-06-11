@@ -274,7 +274,7 @@ public class Graph extends SingleGraph {
      * 
      * @param listVol objet ListVol
      */
-    public void fillVol(ListVol listVol) {
+    public void fillVol(ListVol listVol, int marge) {
         this.clear();
         // creation des noeuds
         for (Vol vol : listVol.getList()) {
@@ -284,7 +284,7 @@ public class Graph extends SingleGraph {
         for (int i = 0; i < listVol.getList().size(); i++) {
             for (int j = i + 1; j < listVol.getList().size(); j++) {
                 // si les vols i et j sont en collision
-                if ((listVol.getVol(i).collision(listVol.getVol(j), 15)) != null) {
+                if ((listVol.getVol(i).collision(listVol.getVol(j), marge)) != null) {
                     this.addEdge(listVol.getVol(i).getCode() + "," + listVol.getVol(j).getCode(),
                             listVol.getVol(i).getCode(), listVol.getVol(j).getCode()); // code de l'arrete =
                                                                                        // "codei,codej"

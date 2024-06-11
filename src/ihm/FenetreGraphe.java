@@ -66,7 +66,7 @@ public class FenetreGraphe extends SuperposedFenetre {
             ListAeroport listAeroport = new ListAeroport();
             listAeroport.fill("./data/aeroports.txt");
             listVol.fill(cheminFichier, listAeroport);
-            this.graph.fillVol(listVol);
+            this.graph.fillVol(listVol, 15);
         }
         Viewer viewerGraphe = new Viewer(this.graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         viewerGraphe.enableAutoLayout();

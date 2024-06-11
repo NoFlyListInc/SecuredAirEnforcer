@@ -179,7 +179,7 @@ public class FenetreMap extends SuperposedFenetre
         retourPan.add(retour);
         retourPan.add(Box.createHorizontalGlue());
         //label SETTING
-        JLabel settingLabel = new JLabel("SETTING");
+        JLabel settingLabel = new JLabel("PARAMETRE");
         settingLabel.setForeground(Color.BLACK);
         retourPan.add(settingLabel);
         retourPan.add(Box.createHorizontalGlue());
@@ -213,11 +213,12 @@ public class FenetreMap extends SuperposedFenetre
         sliderHauteurPan.add(new JLabel("hmax : "));
         sliderHauteurPan.add(Box.createRigidArea(new Dimension(10,0)));
         //slider
-        JSlider sliderHauteur = new JSlider(JSlider.HORIZONTAL, 1, 20, 12);
+        JSlider sliderHauteur = new JSlider(JSlider.HORIZONTAL, 1, 20, 1);
+        sliderHauteur.setEnabled(false);
         sliderHauteurPan.add(sliderHauteur);
         sliderHauteurPan.add(Box.createRigidArea(new Dimension(10,0)));
         //JLabel int
-        JLabel HauteurIntLabel = new JLabel("12");
+        JLabel HauteurIntLabel = new JLabel("1");
         sliderHauteur.addChangeListener((ChangeEvent) -> {
             HauteurIntLabel.setText(Integer.toString(sliderHauteur.getValue()));
         });
@@ -225,22 +226,7 @@ public class FenetreMap extends SuperposedFenetre
         sliderHauteurPan.add(HauteurIntLabel);
         sliderHauteurPan.add(Box.createHorizontalGlue());
         settingPopUp.add(sliderHauteurPan);
-        //button
-        JPanel HauteurPan = new JPanel();
-        HauteurPan.setOpaque(false);
-        HauteurPan.setLayout(new BoxLayout(HauteurPan, BoxLayout.LINE_AXIS));
-        RoundedButton HauteurButton = new RoundedButton("Appliquer les hauteurs de vols");
-        HauteurButton.setBackground(new Color(176, 226, 255));
-        HauteurButton.setEnabled(false);
-        HauteurButton.addActionListener((ActionListener) -> {
-            
-        });
-        HauteurPan.add(Box.createHorizontalGlue());
-        HauteurPan.add(HauteurButton);
-        HauteurPan.add(Box.createHorizontalGlue());
-        //ajout du button dans le settingPopUp
-        settingPopUp.add(HauteurPan);
-        settingPopUp.add(Box.createRigidArea(new Dimension(0,15)));
+        settingPopUp.add(Box.createRigidArea(new Dimension(0,8)));
 
         //marge setting
         //slider Pan
@@ -254,6 +240,7 @@ public class FenetreMap extends SuperposedFenetre
         sliderMargePan.add(Box.createRigidArea(new Dimension(10,0)));
         //slider
         JSlider sliderMarge = new JSlider(JSlider.HORIZONTAL, 1, 60, 15);
+        sliderMarge.setEnabled(false);
         sliderMargePan.add(sliderMarge);
         sliderMargePan.add(Box.createRigidArea(new Dimension(10,0)));
         //JLabel int
@@ -265,21 +252,24 @@ public class FenetreMap extends SuperposedFenetre
         sliderMargePan.add(Box.createHorizontalGlue());
         //ajout du slider et du label dans le settingPopUp
         settingPopUp.add(sliderMargePan);
+        settingPopUp.add(Box.createRigidArea(new Dimension(0,8)));
+
+
         //button
-        JPanel margePan = new JPanel();
-        margePan.setOpaque(false);
-        margePan.setLayout(new BoxLayout(margePan, BoxLayout.LINE_AXIS));
-        RoundedButton margeButton = new RoundedButton("Appliquer la marge de sécurité");
-        margeButton.setBackground(new Color(176, 226, 255));
-        margeButton.setEnabled(false);
-        margeButton.addActionListener((ActionListener) -> {
-            map.addInformation(map.getListAeroport(), map.getListVols(), sliderMarge.getValue());
+        JPanel buttonPan = new JPanel();
+        buttonPan.setOpaque(false);
+        buttonPan.setLayout(new BoxLayout(buttonPan, BoxLayout.LINE_AXIS));
+        RoundedButton button = new RoundedButton("Appliquer les paramètres");
+        button.setBackground(new Color(176, 226, 255));
+        button.setEnabled(false);
+        button.addActionListener((ActionListener) -> {
+            map.addInformation(map.getListAeroport(), map.getListVols(), sliderMarge.getValue(), sliderHauteur.getValue());
         });
-        margePan.add(Box.createHorizontalGlue());
-        margePan.add(margeButton);
-        margePan.add(Box.createHorizontalGlue());
+        buttonPan.add(Box.createHorizontalGlue());
+        buttonPan.add(button);
+        buttonPan.add(Box.createHorizontalGlue());
         //ajout du button dans le settingPopUp
-        settingPopUp.add(margePan);
+        settingPopUp.add(buttonPan);
         settingPopUp.add(Box.createRigidArea(new Dimension(0,15)));
 
         //panel du settingPopUp
@@ -302,11 +292,14 @@ public class FenetreMap extends SuperposedFenetre
                 String filePath = selectedFile.getAbsolutePath();
                 ListVol listVols = new ListVol();
                 listVols.fill(filePath, map.getListAeroport());
-                map.addInformation(map.getListAeroport(), listVols, 15);
+                map.addInformation(map.getListAeroport(), listVols, 15, 1);
+                sliderHauteur.setEnabled(true);
+                sliderMarge.setEnabled(true);
+                sliderHauteur.setValue(1);
+                HauteurIntLabel.setText("1");
                 sliderMarge.setValue(15);
                 margeIntLabel.setText("15");
-                margeButton.setEnabled(true);
-                HauteurButton.setEnabled(true);
+                button.setEnabled(true);
                 retour.doClick();
             } else {
                 

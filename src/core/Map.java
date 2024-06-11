@@ -108,14 +108,18 @@ public class Map extends JXMapViewer
      * @param listAeroport
      * @param listVol
      */
-    public void addInformation(ListAeroport listAeroport, ListVol listVol, int marge) {
+    public void addInformation(ListAeroport listAeroport, ListVol listVol, int marge, int kmax) {
         //on met à jour les attributs
         this.listAeroport = listAeroport;
         this.listVols = listVol;
         //on crée le graph des aeroports
-        Graph graph = new Graph("graph");
-        graph.fillMap(listAeroport, listVol);
-        graph.hideSoloNode();
+        Graph graphMap = new Graph("graphMap");
+        graphMap.fillMap(listAeroport, listVol);
+        graphMap.hideSoloNode();
+        //on créée le graph des collisions
+        Graph graphCollision = new Graph("graphCollision");
+        graphCollision.fillVol(listVol, marge);
+        graphCollision.dSature(kmax);
         // vide les listes de waypoint
         ListAeroportWaypoint.clear();
         ListCollisionWaypoint.clear();
@@ -124,7 +128,7 @@ public class Map extends JXMapViewer
         List<Painter<JXMapViewer>> painters = new ArrayList<>();
 
         //créer les waypoint pour les aeroports
-        for (Node node : graph) {
+        for (Node node : graphMap) {
             if (!node.hasAttribute("ui.hide")) {
                 Double latitude=this.listAeroport.getAeroportByCode(node.getId()).getLatitude().getDecimal();
                 Double longitude=this.listAeroport.getAeroportByCode(node.getId()).getLongitude().getDecimal();
@@ -141,7 +145,7 @@ public class Map extends JXMapViewer
         painters.add(waypointAeoroportPainter);
 
         //créer des droites pour les vols
-        for (Edge edge : graph.getEachEdge()) {
+        for (Edge edge : graphMap.getEachEdge()) {
                 Node node1 = edge.getNode0();
                 Node node2 = edge.getNode1();
                 Double latitude1=this.listAeroport.getAeroportByCode(node1.getId()).getLatitude().getDecimal();
@@ -157,9 +161,9 @@ public class Map extends JXMapViewer
         //créer les waypoint pour les collisions
         for (int i = 0; i < listVol.getList().size(); i++) {
             for (int j = i+1; j < listVol.getList().size(); j++) {
-                //si les vols i et j sont en collision
+                //si les vols i et j sont en collision et de meme couleur
                 GeoPosition collisionPoint=(listVol.getVol(i).collision(listVol.getVol(j), marge));
-                if (collisionPoint!=null) {
+                if (collisionPoint!=null && graphCollision.getNode(listVol.getVol(i).getCode()).getAttribute("ui.style").equals(graphCollision.getNode(listVol.getVol(j).getCode()).getAttribute("ui.style"))) {
                     DefaultWaypoint waypoint = new DefaultWaypoint(collisionPoint);
                     ListCollisionWaypoint.add(waypoint);
                 }

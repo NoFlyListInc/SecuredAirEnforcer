@@ -152,7 +152,7 @@ public class Aeroport
     //#region affichage
 
     /**
-     * renvoie une chaine de caractere representant l'aeroport
+     * renvoie une chaine de caractere representant les informations de l'aeroport
      * @return String
      */
     public String toString()
