@@ -3,8 +3,6 @@ package src.tests;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import src.core.Coordonnee;
-import src.core.ListAeroport;
-import src.core.Aeroport;
 
 
 public class CoordonneeTest {
@@ -13,42 +11,42 @@ public class CoordonneeTest {
     @Test
     public void testCreationCoordonnee() {
         Coordonnee coordonnee = new Coordonnee(48, 2, 30, 'N');
-        assertEquals(48, coordonnee.getDegreLatitude());
-        assertEquals(2, coordonnee.getDegreLongitude());
-        assertEquals(30, coordonnee.getMinuteLatitude());
-        assertEquals('N', coordonnee.getDirectionLatitude());
+        assertEquals(48, coordonnee.getDegree());
+        assertEquals(2, coordonnee.getMinute());
+        assertEquals(30, coordonnee.getSeconde());
+        assertEquals('N', coordonnee.getDirection());
     }
 
     // Test de modification des degrés de latitude
     @Test
     public void testModificationDegreLatitude() {
         Coordonnee coordonnee = new Coordonnee(48, 2, 30, 'N');
-        coordonnee.setDegreLatitude(50);
-        assertEquals(50, coordonnee.getDegreLatitude());
+        coordonnee.setDegree(50);
+        assertEquals(50, coordonnee.getDegree());
     }
 
-    // Test de modification des degrés de longitude
+    // Test de modification des degrés
     @Test
-    public void testModificationDegreLongitude() {
+    public void testModificationDegre() {
         Coordonnee coordonnee = new Coordonnee(48, 2, 30, 'N');
-        coordonnee.setDegreLongitude(3);
-        assertEquals(3, coordonnee.getDegreLongitude());
+        coordonnee.setDegree(3);
+        assertEquals(3, coordonnee.getDegree());
     }
 
-    // Test de modification des minutes de latitude
+    // Test de modification des minutes
     @Test
     public void testModificationMinuteLatitude() {
         Coordonnee coordonnee = new Coordonnee(48, 2, 30, 'N');
-        coordonnee.setMinuteLatitude(15);
-        assertEquals(15, coordonnee.getMinuteLatitude());
+        coordonnee.setMinute(15);
+        assertEquals(15, coordonnee.getMinute());
     }
 
-    // Test de modification de la direction de latitude
+    // Test de modification de la direction
     @Test
     public void testModificationDirectionLatitude() {
         Coordonnee coordonnee = new Coordonnee(48, 2, 30, 'N');
-        coordonnee.setDirectionLatitude('S');
-        assertEquals('S', coordonnee.getDirectionLatitude());
+        coordonnee.setDirection('S');
+        assertEquals('S', coordonnee.getDirection());
     }
 
     // Test de la représentation sous forme de chaîne de caractères
@@ -58,5 +56,4 @@ public class CoordonneeTest {
         assertEquals("48°2'30\"N", coordonnee.toString());
     }
 
-    // Ajoutez d'autres tests selon les fonctionnalités que vous souhaitez tester
 }

@@ -7,7 +7,12 @@ import org.graphstream.graph.Node;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import src.core.Aeroport;
+import src.core.Coordonnee;
 import src.core.Graph;
+import src.core.Horaire;
+import src.core.ListAeroport;
+import src.core.ListVol;
 import src.core.Vol;
 
 import static org.junit.Assert.*;
@@ -18,6 +23,7 @@ public class GraphTest {
     @Before
     public void setUp() {
         graph = new Graph("testGraph");
+
     }
 
     @Test
@@ -49,8 +55,26 @@ public class GraphTest {
 
     @Test
     public void testGestionNiveauMaxAtteint() {
-        Vol vol1 = new Vol("Vol1");
-        Vol vol2 = new Vol("Vol2");
+        //Set up aéroport
+        Coordonnee lattitude1 = new Coordonnee(50, 3, 30, 'N');
+        Coordonnee longitude1 = new Coordonnee(2, 30, 30, 'E');
+        Aeroport aeroport1 = new Aeroport("CDG", "Charles de Gaulle", lattitude1, longitude1);
+        Coordonnee lattitude2 = new Coordonnee(48, 2, 30, 'N');
+        Coordonnee longitude2 = new Coordonnee(2, 30, 30, 'E');
+        Aeroport aeroport2 = new Aeroport("ORY", "Orly", lattitude2, longitude2);
+        
+        //Set up listVol
+        ListVol listVol = new ListVol();
+        Horaire horaire1 = new Horaire(12, 0);
+        Horaire horaire2 = new Horaire(12, 2);
+        Vol vol1 = new Vol("Vol1", aeroport1, aeroport2, horaire1, 5);
+        Vol vol2 = new Vol("Vol2", aeroport2, aeroport1, horaire2, 6);
+        listVol.addVol(vol1);
+        listVol.addVol(vol2);
+        
+        //Set up graph
+        graph.fillVol(listVol, 5);
+
         graph.gestionNiveauMaxAtteint(vol1, vol2);
         ArrayList<HashMap<Vol, Vol>> volsMemesNiveaux = graph.getVolsMemesNiveaux();
         assertEquals(1, volsMemesNiveaux.size());

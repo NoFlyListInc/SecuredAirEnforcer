@@ -96,7 +96,7 @@ public class Graph extends SingleGraph {
      * @param vol1 premier vol
      * @param vol2 deuxième vol, qui est en risque de collision avec le premier
      */
-    private void gestionNiveauMaxAtteint(Vol vol1, Vol vol2) {
+    public void gestionNiveauMaxAtteint(Vol vol1, Vol vol2) {
         HashMap<Vol, Vol> paireCollision = new HashMap<Vol, Vol>();
         paireCollision.put(vol1, vol2);
         this.volsMemesNiveaux.add(paireCollision);
