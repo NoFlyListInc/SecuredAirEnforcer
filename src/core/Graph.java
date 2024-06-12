@@ -233,6 +233,15 @@ public class Graph extends SingleGraph {
             }
         }
     }
+
+    public String getColoredGraph() {
+        String graphInfo = "";
+        for (Node node : this) {
+            graphInfo += node.getId() + node.getAttribute("ui.style") + "\n";
+        }
+
+        return graphInfo;
+    }
     
     
 

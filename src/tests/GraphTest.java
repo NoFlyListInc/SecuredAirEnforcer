@@ -73,4 +73,15 @@ public class GraphTest {
     }
 
     // Ajoutez d'autres tests pour les méthodes restantes
+    public static void main(String args[]) {
+        GraphTest test = new GraphTest();
+        test.setUp();
+        test.testGetKmax();
+        test.testSetKmax();
+        test.testGetKoptimal();
+        test.testSetKoptimal();
+        test.testGetVolsMemesNiveaux();
+        test.testGestionNiveauMaxAtteint();
+        test.testHideSoloNode();
+    }
 }
