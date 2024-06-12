@@ -5,6 +5,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import org.junit.Test;
+import src.core.Aeroport;
+import src.core.Coordonnee;
+import src.core.ListAeroport;
+
 
 public class AeroportTest {
 

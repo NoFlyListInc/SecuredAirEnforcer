@@ -7,6 +7,9 @@ import org.graphstream.graph.Node;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import src.core.Graph;
+import src.core.Vol;
+
 import static org.junit.Assert.*;
 
 public class GraphTest {

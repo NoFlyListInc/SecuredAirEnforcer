@@ -3,6 +3,8 @@ package src.tests;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import src.core.Coordonnee;
+import src.core.ListAeroport;
+import src.core.Aeroport;
 
 
 public class CoordonneeTest {

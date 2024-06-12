@@ -93,27 +93,43 @@ public class FenetreImportFolder extends SuperposedFenetre {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                fileChooser.setMultiSelectionEnabled(true);
+                fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Text files", "txt"));
                 int returnValue = fileChooser.showOpenDialog(null);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile[] = fileChooser.getSelectedFiles();
-                    File[] files = selectedFile.listFiles();
+                    if (fileChooser.getSelectedFile().isDirectory()) {
+                        File[] files = fileChooser.getSelectedFile().listFiles();
                         for (File file : files) {
-                            if (file.getName().matches("graph-test\\d+.txt")) {
-                                System.out.println(file.getName());
-                                try {Scanner scanner = new Scanner(file);
-                                    while (scanner.hasNextLine()) {
-                                        String line = scanner.nextLine();
-                                        System.out.println(line);
-                                    }
-                                    scanner.close();
-                                    panFold.setBackground(new Color(21, 105, 19));
-                                } catch (FileNotFoundException ex) {
-                                    System.out.println("An error occurred.");
-                                    ex.printStackTrace();
+                            if (!file.getName().endsWith(".txt")) {
+                                continue;
+                            }
+                            try {
+                                Scanner scanner = new Scanner(file);
+                                while (scanner.hasNextLine()) {
+                                    System.out.println(scanner.nextLine());
                                 }
+                                scanner.close();
+                            } catch (FileNotFoundException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    } else {
+                        
+                    File[] selectedFiles = fileChooser.getSelectedFiles();
+                    for (File files : selectedFiles) {
+                        try {
+                            Scanner scanner = new Scanner(files);
+                            while (scanner.hasNextLine()) {
+                                System.out.println(scanner.nextLine());
+                            }
+                            scanner.close();
+                        } catch (FileNotFoundException ex) {
+                            ex.printStackTrace();
                         }
                     }
+                    }
+                    panFold.setBackground(new Color(21, 105, 19));
                 }
             }
         });
