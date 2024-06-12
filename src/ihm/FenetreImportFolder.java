@@ -1,15 +1,39 @@
 package src.ihm;
 //#region imports
-import javax.swing.*;
-import java.awt.*;
+//swing imports
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JLayeredPane;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
+
+//awt imports
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Color;
+import java.awt.Insets;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Component;
+import java.awt.BorderLayout;
+
+//awt event imports
 import java.awt.event.ActionEvent;
-//#endregion
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+//io imports
+import java.io.File;
+import java.io.FileNotFoundException;
+
+//util imports
+import java.util.Scanner;
+
+//#endregion
 
 
 public class FenetreImportFolder extends SuperposedFenetre {
@@ -69,10 +93,10 @@ public class FenetreImportFolder extends SuperposedFenetre {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 int returnValue = fileChooser.showOpenDialog(null);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
+                    File selectedFile[] = fileChooser.getSelectedFiles();
                     File[] files = selectedFile.listFiles();
                         for (File file : files) {
                             if (file.getName().matches("graph-test\\d+.txt")) {
@@ -89,7 +113,7 @@ public class FenetreImportFolder extends SuperposedFenetre {
                                     ex.printStackTrace();
                                 }
                         }
-                    }                        
+                    }
                 }
             }
         });
