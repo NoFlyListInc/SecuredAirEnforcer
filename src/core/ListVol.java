@@ -2,28 +2,55 @@ package src.core;
 //#region import
 //import ArrayList object
 import java.util.ArrayList;
+
+import src.exception.ParseException;
+
 //import reader files tools
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 //#endregion
 
+/**
+ * Class ListVol
+ * Permet de gérer une liste de vols
+ * @attributs vols
+ * @methodes addVol, removeVol, getVol, getVolByCode, fill, toString
+ * @autor NOUVEL Armand
+ */
 public class ListVol 
 {
     //#region
-    private ArrayList<Vol> vols;
+
+    /**
+     * ArrayList des vols
+     */
+    private ArrayList<Vol> list;
+
     //#endregion
 
     //#region constructeur
+
+    /**
+     * Constructeur de ListVol
+     */
     public ListVol() {
-        this.vols = new ArrayList<Vol>();
+        this.list = new ArrayList<Vol>();
     }
+
     //#endregion
 
     //#region accesseurs
+
+    /**
+     * Retourne la liste des vols
+     * @return ArrayList des vols
+     */
     public ArrayList<Vol> getList() {
-        return this.vols;
+        return this.list;
     }
+
+
     //#endregion
 
     //#region méthodes
@@ -35,8 +62,8 @@ public class ListVol
      */
     public boolean addVol(Vol vol) {
         //si le vol n'est pas null et n'est pas déjà dans la liste
-        if (vol!=null && this.vols.contains(vol)==false) {
-            this.vols.add(vol);
+        if (vol!=null && this.list.contains(vol)==false) {
+            this.list.add(vol);
             return true;
         }
         return false;
@@ -49,8 +76,8 @@ public class ListVol
      */
     public boolean removeVol(Vol vol) {
         //si le vol n'est pas null et est dans la liste
-        if (vol!=null && this.vols.contains(vol)) {
-            this.vols.remove(vol);
+        if (vol!=null && this.list.contains(vol)) {
+            this.list.remove(vol);
             return true;
         }
         return false;
@@ -63,8 +90,8 @@ public class ListVol
      */
     public Vol getVol(int i) {
         //si l'index est valide
-        if (i >= 0 && i < this.vols.size()) {
-            return this.vols.get(i);
+        if (i >= 0 && i < this.list.size()) {
+            return this.list.get(i);
         }
         return null;
     }
@@ -76,7 +103,7 @@ public class ListVol
      */
     public Vol getVolByCode(String code) {
         //parcours de la liste
-        for (Vol vol : this.vols) {
+        for (Vol vol : this.list) {
             //si le code correspond
             if (vol.getCode().equals(code)) {
                 return vol;
@@ -87,37 +114,56 @@ public class ListVol
     //#endregion
 
     //#region fill with a file
-    public void fill(String file, ListAeroport listAeroport) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String line;
-            //lecture des lignes
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(";");
-                //création du vol
+
+    /**
+     * Rempli la liste des vols à partir d'un fichier vol-testxx.csv
+     * @param file adresse du fichier
+     * @param listAeroport liste des aeroports
+     */
+    public void fill(String file, ListAeroport listAeroport) throws ParseException ,IOException {
+        ArrayList<ParseException> exceptions = new ArrayList<ParseException>();
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line;
+        //lecture des lignes
+        int cpt = 0;
+        while ((line = reader.readLine()) != null) {
+            cpt++;
+            String[] parts = line.split(";");
+            //création du vol
+            try {
                 Vol vol = new Vol(parts[0],
-                                  listAeroport.getAeroportByCode(parts[1]),
-                                  listAeroport.getAeroportByCode(parts[2]),
-                                  new Horaire(Integer.parseInt(parts[3]), Integer.parseInt(parts[4])),
-                                  Integer.parseInt(parts[5]));
+                                    listAeroport.getAeroportByCode(parts[1]),
+                                    listAeroport.getAeroportByCode(parts[2]),
+                                    new Horaire(parts[3], parts[4]),
+                                    parts[5]);
                 //ajout du vol à la liste
                 this.addVol(vol);
+            } catch (IllegalArgumentException e) {
+                exceptions.add(new ParseException(file, cpt, e.getMessage()));
             }
-            reader.close();
-        } catch (IOException e) { //erreur de lecture du fichier
-            e.printStackTrace();
+        }
+        reader.close();
+        if (exceptions.size() > 0) {
+            throw new ParseException(exceptions);
         }
     }
+
     //#endregion
 
     //#region affichage
+
+    /**
+     * Affiche la liste des vols
+     * @return String
+     */
     public String toString() {
         //[affiche un vol] saut de ligne .....
         String str = "";
-        for (Vol vol : this.vols) {
+        for (Vol vol : this.list) {
             str += vol.toString() + "\n\n";
         }
         return str;
     }
+    
     //#endregion
 }

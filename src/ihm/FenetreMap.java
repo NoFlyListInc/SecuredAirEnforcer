@@ -5,6 +5,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.Box;
 import javax.swing.JSlider;
 import javax.swing.JFileChooser;
@@ -53,7 +54,11 @@ public class FenetreMap extends SuperposedFenetre
     public FenetreMap() {
         this.map = new Map(infoLabel);
         ListAeroport listAeroport = new ListAeroport();
-        listAeroport.fill("data/aeroports.txt");
+        try {
+            listAeroport.fill("data/aeroports.txt");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
         map.setListAeroport(listAeroport);
         this.constrFen();
     }
@@ -291,7 +296,11 @@ public class FenetreMap extends SuperposedFenetre
                 File selectedFile = fileChooser.getSelectedFile();
                 String filePath = selectedFile.getAbsolutePath();
                 ListVol listVols = new ListVol();
-                listVols.fill(filePath, map.getListAeroport());
+                try {
+                    listVols.fill(filePath, map.getListAeroport());
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
                 map.addInformation(map.getListAeroport(), listVols, 15, 1);
                 sliderHauteur.setEnabled(true);
                 sliderMarge.setEnabled(true);

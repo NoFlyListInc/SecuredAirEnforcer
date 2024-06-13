@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.Box;
@@ -64,8 +65,12 @@ public class FenetreGraphe extends SuperposedFenetre {
         } else if (file.getName().endsWith(".csv")) {
             ListVol listVol = new ListVol();
             ListAeroport listAeroport = new ListAeroport();
-            listAeroport.fill("./data/aeroports.txt");
-            listVol.fill(cheminFichier, listAeroport);
+            try {
+                listAeroport.fill("./data/aeroports.txt");
+                listVol.fill(cheminFichier, listAeroport);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
             this.graph.fillVol(listVol, 15);
         }
         Viewer viewerGraphe = new Viewer(this.graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);

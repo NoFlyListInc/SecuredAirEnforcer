@@ -1,78 +1,140 @@
 package src.core;
+
 //#region import
 import org.jxmapviewer.viewer.GeoPosition;
 //#endregion
 
+/**
+ * Class qui défini un Vol
+ * @attributs code, depart, arrivee, heureDepart, duree
+ * @methodes getHeureArrivee, collision, toString
+ * @autor NOUVEL Armand
+ */
 public class Vol 
 {
     //#region attribut
+
+    /**
+     * Code unique du vol
+     */
     private String code;
+
+    /**
+     * Aeroport de depart
+     */
     private Aeroport depart;
+
+    /**
+     * Aeroport d'arrivee
+     */
     private Aeroport arrivee;
+
+    /**
+     * Horaire de depart
+     */
     private Horaire heureDepart;
+
+    /**
+     * Duree du vol en minute
+     */
     private int duree;
+
     //#endregion
 
     //#region constructeur
-    public Vol(String code, Aeroport depart, Aeroport arrivee, Horaire heureDepart, int duree) {
+
+    /**
+     * Constructeur de la class Vol
+     * @param code code du vol
+     * @param depart aeroport de depart
+     * @param arrivee aeroport d'arrivee
+     * @param heureDepart horaire de depart
+     * @param duree (String) duree du vol en minute, duree > 0
+     * @throws IllegalArgumentException si les valeurs sont null ou vides
+     */
+    public Vol(String code, Aeroport depart, Aeroport arrivee, Horaire heureDepart, String duree) throws IllegalArgumentException {
+        if (code == null || code.isEmpty())
+            throw new IllegalArgumentException("Le code du vol ne peut pas etre vide");
+        if (depart == null)
+            throw new IllegalArgumentException("L'aeroport de depart ne peut pas etre vide");
+        if (arrivee == null)
+            throw new IllegalArgumentException("L'aeroport d'arrivee ne peut pas etre vide");
+        if (heureDepart == null)
+            throw new IllegalArgumentException("L'horaire de depart ne peut pas etre vide");
+        //conversion de la duree en int
+        int dureeInt = 0;
+        try {
+            dureeInt = Integer.parseInt(duree);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("La duree du vol doit etre un nombre entier");
+        }
+        if (dureeInt <= 0)
+            throw new IllegalArgumentException("La duree du vol doit etre superieur à 0");
+        //initialisation des attributs
         this.code = code;
         this.depart = depart;
         this.arrivee = arrivee;
         this.heureDepart = heureDepart;
-        this.duree = duree;
+        this.duree = dureeInt;
     }
 
-    public Vol() {
-        this.code = "";
-        this.depart = new Aeroport();
-        this.arrivee = new Aeroport();
-        this.heureDepart = new Horaire();
-        this.duree = 0;
+    /**
+     * Constructeur de la class Vol
+     * @param code code du vol
+     * @param depart aeroport de depart
+     * @param arrivee aeroport d'arrivee
+     * @param heureDepart horaire de depart
+     * @param duree duree du vol en minute, duree > 0
+     * @throws IllegalArgumentException si les valeurs sont null ou vides
+     */
+    public Vol(String code, Aeroport depart, Aeroport arrivee, Horaire heureDepart, int duree) throws IllegalArgumentException {
+        this(code, depart, arrivee, heureDepart, Integer.toString(duree));
     }
+
     //#endregion
 
     //#region accesseurs
+
+    /**
+     * Retourne le code du vol
+     * @return String
+     */
     public String getCode() {
         return this.code;
     }
 
+    /**
+     * Retourne l'aeroport de depart
+     * @return Aeroport
+     */
     public Aeroport getDepart() {
         return this.depart;
     }
 
+    /**
+     * Retourne l'aeroport d'arrivee
+     * @return Aeroport
+     */
     public Aeroport getArrivee() {
         return this.arrivee;
     }
 
+    /**
+     * Retourne l'horaire de depart
+     * @return Horaire
+     */
     public Horaire getHeureDepart() {
         return this.heureDepart;
     }
 
+    /**
+     * Retourne la duree du vol
+     * @return int
+     */
     public int getDuree() {
         return this.duree;
     }
-    //#endregion
-
-    //#region mutateurs
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public void setDepart(Aeroport depart) {
-        this.depart = depart;
-    }
-
-    public void setArrivee(Aeroport arrivee) {
-        this.arrivee = arrivee;
-    }
-
-    public void setHeureDepart(Horaire heureDepart) {
-        this.heureDepart = heureDepart;
-    }
-
-    public void setDuree(int duree) {
-        this.duree = duree;
-    }
+    
     //#endregion
 
     //#region méthodes
@@ -82,9 +144,13 @@ public class Vol
      * @return un horaire
      */
     public Horaire getHeureArrivee() {
-        Horaire heureArrivee = new Horaire(this.heureDepart.getHeure(), this.heureDepart.getMinute());
-        heureArrivee.ajouterMinutes(this.duree);
-        return heureArrivee;
+        try {
+            Horaire heureArrivee = new Horaire(this.heureDepart.getHeure(), this.heureDepart.getMinute());
+            heureArrivee.ajouterMinutes(this.duree);
+            return heureArrivee;
+        } catch (IllegalArgumentException e) {
+            return null; //! à changer
+        }
     }
 
     /**
@@ -205,9 +271,15 @@ public class Vol
     //#endregion
 
     //#region affichage
+
+    /**
+     * Retourne une chaine de caractère représentant le vol
+     * @return String
+     */
     public String toString() {
         //AF030218 : [LYS] Lyon -> [BOD] Bordeaux : 8h58 - 9h58 (60 minutes)
         return this.code + " : " + "[" + this.depart.getCode() + "]" + " " + this.depart.getVille() + " -> " + "[" + this.arrivee.getCode() + "]" + " " + this.arrivee.getVille() + " : " + this.heureDepart + " - " + this.getHeureArrivee() + " (" + this.duree + " minutes)";
     }
+    
     //#endregion
 }

@@ -1,4 +1,5 @@
 package src.core;
+
 /**
  * Classe qui défini un Aeroport
  * @attributs code, ville, latitude, longitude
@@ -8,10 +9,27 @@ package src.core;
 public class Aeroport
 {
     //#region Attributs
+
+    /**
+     * code unique de l'aeroport
+     */
     private String code;
+
+    /**
+     * ville où se trouve l'aeroport
+     */
     private String ville;
+
+    /**
+     * coordonnee latitude de l'aeroport, (N ou S)
+     */
     private Coordonnee latitude;
+
+    /**
+     * coordonnee longitude de l'aeroport (E ou W/O)
+     */
     private Coordonnee longitude;
+
     //#endregion
 
     //#region Constructeurs
@@ -20,27 +38,30 @@ public class Aeroport
      * Constructructeur de Aeroport
      * @param code String
      * @param ville String
-     * @param latitude Coordonnee
-     * @param longitude Coordonnee
+     * @param latitude Coordonnee, (N ou S)
+     * @param longitude Coordonnee, (E ou W/O)
+     * @throws IllegalArgumentException si les valeurs sont null ou vides
      */
-    public Aeroport(String code, String ville, Coordonnee latitude, Coordonnee longitude)
+    public Aeroport(String code, String ville, Coordonnee latitude, Coordonnee longitude) throws IllegalArgumentException
     {
+        //verification des valeurs
+        if (code == null || code.isEmpty())
+            throw new IllegalArgumentException("Le code de l'aeroport ne peut pas etre vide");
+        if (ville == null || ville.isEmpty())
+            throw new IllegalArgumentException("La ville de l'aeroport ne peut pas etre vide");
+        if (latitude == null)
+            throw new IllegalArgumentException("La latitude de l'aeroport ne peut pas etre vide");
+        if (longitude == null)
+            throw new IllegalArgumentException("La longitude de l'aeroport ne peut pas etre vide");
+        if (latitude.getDirection() != 'N' && latitude.getDirection() != 'S')
+            throw new IllegalArgumentException("La latitude de l'aeroport doit etre soit N ou S");
+        if (longitude.getDirection() != 'E' && longitude.getDirection() != 'W' && longitude.getDirection() != 'O')
+            throw new IllegalArgumentException("La longitude de l'aeroport doit etre soit E ou W/O");
+        //affectation des valeurs
         this.code = code;
         this.ville = ville;
         this.latitude = latitude;
         this.longitude = longitude;
-    }
-
-    /**
-     * Constructructeur vide de Aeroport, 
-     * le code et la ville sont des chaines vides et les deux coordonnees sont 0° 0' 0'' N 
-     */
-    public Aeroport()
-    {
-        this.code = "";
-        this.ville = "";
-        this.latitude = new Coordonnee();
-        this.longitude = new Coordonnee();
     }
 
     //#endregion
@@ -85,46 +106,6 @@ public class Aeroport
 
     //#endregion
 
-    //#region mutateurs
-
-    /**
-     * modifie le code de l'aeroport
-     * @param code String
-     */
-    public void setCode(String code)
-    {
-        this.code = code;
-    }
-
-    /**
-     * modifie la ville de l'aeroport
-     * @param ville String
-     */
-    public void setVille(String ville)
-    {
-        this.ville = ville;
-    }
-
-    /**
-     * modifie la latitude de l'aeroport
-     * @param latitude Coordonnee
-     */
-    public void setlatitude(Coordonnee latitude)
-    {
-        this.latitude = latitude;
-    }
-
-    /**
-     * modifie la longitude de l'aeroport
-     * @param longitude Coordonnee
-     */
-    public void setlongitude(Coordonnee longitude)
-    {
-        this.longitude = longitude;
-    }
-
-    //#endregion
-
     //#region methodes
 
     /**
@@ -146,6 +127,8 @@ public class Aeroport
         //6371 * cos(latitude) * cos(longitude)
         return 6371 * Math.cos(this.latitude.getDecimalRadians()) * Math.cos(this.longitude.getDecimalRadians());
     }
+
+
 
     //#endregion
 

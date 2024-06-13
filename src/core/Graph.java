@@ -1,28 +1,56 @@
 package src.core;
 
-//import graphstream tools
+//#region import
+//import graphstream class
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.graph.Node;
-//import reader files tools 
+//import reader files class 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+//import list class
 import java.util.ArrayList; // pour DSature
 import java.util.Comparator;
 import java.util.HashMap;//pour DSature
 import java.util.HashSet; //pour DSature
 import java.util.PriorityQueue; //pour DSature
 import java.util.Iterator; // pour DSature
+//#endregion
 
-public class Graph extends SingleGraph {
+/**
+ * Classe qui défini un Graph
+ * @attributs kmax, koptimal, volsMemesNiveaux
+ * @methodes getKmax, getKoptimal, getVolsMemesNiveaux, setKmax, setKoptimal, dSature, fillFile, fillVol, fillMap, hideSoloNode
+ * @extends SingleGraph
+ * @author LACROIX Xavier et NOUVEL Armand
+ */
+public class Graph extends SingleGraph 
+{
     // #region attribut
+
+    /**
+     * Nombre maximum de couleurs possibles pour la coloration
+     */
     private int kmax;
-    private int koptimal; // nombre de coloration optimal trouvé par dsature
+
+    /**
+     * Nombre de coloration optimal trouvé arpès coloration
+     */
+    private int koptimal;
+
+    /**
+     * Liste des vols en risque de collision et qui ont le même niveau de vol
+     */
     private ArrayList<HashMap<Vol, Vol>> volsMemesNiveaux;
 
     // #endregion
 
     // #region constructeur
+
+    /**
+     * Constructeur de la classe Graph
+     * @param id String, identifiant du graph
+     */
     public Graph(String id) {
         super(id);
         this.kmax = 20; // nombre max de niveaux de vols possibles par défaut
@@ -33,27 +61,51 @@ public class Graph extends SingleGraph {
     // #endregion
 
     // #region accesseurs
+
+    /**
+     * Retourne le kmax
+     * @return int
+     */
     public int getKmax() {
         return this.kmax;
     }
 
+    /**
+     * Retourne le koptimal
+     * @return int
+     */
     public int getKoptimal() {
         return this.koptimal;
     }
 
+    /**
+     * Retourne la liste des vols en risque de collision et qui ont le même niveau de vol
+     * @return ArrayList<HashMap<Vol, Vol>>
+     */
     public ArrayList<HashMap<Vol, Vol>> getVolsMemesNiveaux() {
         return this.volsMemesNiveaux;
     }
+
     // #endregion
 
     // #region mutateurs
+
+    /**
+     * Modifie le kmax
+     * @param kmax int
+     */
     public void setKmax(int kmax) {
         this.kmax = kmax;
     }
 
+    /**
+     * Modifie le koptimal
+     * @param koptimal int
+     */
     public void setKoptimal(int koptimal) {
         this.koptimal = koptimal;
     }
+    
     // #endregion
 
     // #region coloration
@@ -321,7 +373,7 @@ public class Graph extends SingleGraph {
     // #region methode
 
     /**
-     * 
+     * cache les noeud avec un degrée de 0
      */
     public void hideSoloNode() {
         // parcours de tous les noeuds

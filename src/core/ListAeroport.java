@@ -1,5 +1,7 @@
 package src.core;
 //#region import
+//import exception
+import src.exception.ParseException;
 //import ArrayList object
 import java.util.ArrayList;
 //import reader files tools
@@ -11,23 +13,45 @@ import org.jxmapviewer.viewer.GeoPosition;
 //#endregion
 
 
-
+/**
+ * Class ListAeroport
+ * Permet de gérer une liste d'aeroports
+ * @attributs list
+ * @methodes addAeroport, removeAeroport, getAeroport, getAeroportByCode, getAeroportByPosition, fill, toString
+ * @autor NOUVEL Armand
+ */
 public class ListAeroport 
 {
     //#region attribut
+
+    /**
+     * ArrayList des aeroports
+     */
     private ArrayList<Aeroport> list;
+
     //#endregion
 
     //#region constructeur
+
+    /**
+     * Constructeur de ListAeroport
+     */
     public ListAeroport() {
         this.list = new ArrayList<Aeroport>();
     }
+
     //#endregion
 
     //#region accesseurs
+
+    /**
+     * Retourne la liste des aeroports
+     * @return ArrayList des aeroports
+     */
     public ArrayList<Aeroport> getList() {
         return this.list;
     }
+
     //#endregion
 
     //#region méthodes
@@ -40,8 +64,7 @@ public class ListAeroport
     public boolean addAeroport(Aeroport aeroport) {
         //si l'aeroport n'est pas null et n'est pas déjà dans la liste
         if (aeroport!=null && this.list.contains(aeroport)==false) {
-            this.list.add(aeroport);
-            return true;
+            return this.list.add(aeroport);
         }
         return false;
     }
@@ -54,8 +77,7 @@ public class ListAeroport
     public boolean removeAeroport(Aeroport aeroport) {
         //si l'aeroport n'est pas null et est dans la liste
         if (aeroport!=null && this.list.contains(aeroport)) {
-            this.list.remove(aeroport);
-            return true;
+            return this.list.remove(aeroport);
         }
         return false;
     }
@@ -79,6 +101,10 @@ public class ListAeroport
      * @return l'aeroport recherché si le code est valide, sinon null
      */
     public Aeroport getAeroportByCode(String code) {
+        // si le code est null ou vide
+        if (code == null || code.isEmpty()) {
+            return null;
+        }
         //parcours de la liste
         for (Aeroport aeroport : this.list) {
             //si le code est trouvé
@@ -112,29 +138,41 @@ public class ListAeroport
      * Rempli la liste des aeroports depuis un fichier
      * @param file adresse du fichier
      * @throws IOException erreur de lecture du fichier
+     * @throws ParseException erreur dans les données du fichier
      */
-    public void fill(String file) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String line;
-            //parcours du fichier ligne par ligne
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(";");
+    public void fill(String file) throws ParseException, IOException {
+        ArrayList<ParseException> exceptions = new ArrayList<ParseException>();
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line;
+        //parcours du fichier ligne par ligne
+        int cpt = 0;
+        while ((line = reader.readLine()) != null) {
+            cpt++;
+            String[] parts = line.split(";");
+            try {
                 //création de l'aeroport
                 Aeroport aeroport = new Aeroport(parts[0], parts[1], 
-                        new Coordonnee(Integer.parseInt(parts[2]), Integer.parseInt(parts[3]), Integer.parseInt(parts[4]), parts[5].charAt(0)),
-                        new Coordonnee(Integer.parseInt(parts[6]), Integer.parseInt(parts[7]), Integer.parseInt(parts[8]), parts[9].charAt(0)));
+                        new Coordonnee(parts[2], parts[3], parts[4], parts[5]),
+                        new Coordonnee(parts[6], parts[7], parts[8], parts[9]));
                 //ajout de l'aeroport à la liste
                 this.addAeroport(aeroport);
+            } catch(IllegalArgumentException e) {
+                exceptions.add(new ParseException(file, cpt, e.getMessage()));
             }
-            reader.close();
-        } catch (IOException e) { //erreur de lecture du fichier
-            e.printStackTrace();
+        }
+        reader.close();
+        if (exceptions.size() > 0) {
+            throw new ParseException(exceptions);
         }
     }
     //#endregion
 
     //#region affichage
+
+    /**
+     * Affiche la liste des aeroports
+     * @return String
+     */
     public String toString() {
         //[affiche un aeroport] saut de ligne .....
         StringBuilder sb = new StringBuilder();

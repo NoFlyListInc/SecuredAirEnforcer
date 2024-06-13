@@ -1,4 +1,9 @@
 package src.core;
+//#region import
+//import painter and waypoint objects
+import src.ihm.AeroportWaypointRenderer;
+import src.ihm.CollisionWaypointRenderer;
+import src.ihm.LineOverlayPainter;
 //import JXMapViewer objects
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
@@ -8,11 +13,6 @@ import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.WaypointPainter;
-
-import src.ihm.AeroportWaypointRenderer;
-import src.ihm.CollisionWaypointRenderer;
-import src.ihm.LineOverlayPainter;
-
 import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.painter.CompoundPainter;
@@ -36,18 +36,50 @@ import java.util.ArrayList;
 import java.util.List;
 //#endregion
 
-
+/**
+ * Class Map
+ * Permet de gérer une carte
+ * @attributs ListAeroportWaypoint, ListCollisionWaypoint, listAeroport, listVols, label
+ * @methodes Map, addInformation, getListAeroport, getListVols, setListAeroport, setListVols
+ * @autor NOUVEL Armand
+ */
 public class Map extends JXMapViewer
 {
     //#region attributs
+
+    /**
+     * liste des waypoints d'aeroports
+     */
     private Set<DefaultWaypoint> ListAeroportWaypoint = new HashSet<>();
+
+    /**
+     * liste des waypoints de collisions
+     */
     private Set<DefaultWaypoint> ListCollisionWaypoint = new HashSet<>();
+
+    /**
+     * liste des aeroports
+     */
     private ListAeroport listAeroport;
+
+    /**
+     * liste des vols
+     */
     private ListVol listVols;
+
+    /**
+     * label pour afficher les informations
+     */
     private JLabel label;
+
     //#endregion
 
     //#region constructeur
+
+    /**
+     * Constructeur de Map
+     * @param label, JLabel, label pour afficher les informations
+     */
     public Map(JLabel label) {
         super();
         this.label = label;
@@ -82,23 +114,43 @@ public class Map extends JXMapViewer
     //#endregion
 
     //#region accesseurs
+
+    /**
+     * retourne la liste des aeroports
+     * @return listAeroport
+     */
     public ListAeroport getListAeroport() {
         return listAeroport;
     }
-
+    
+    /**
+     * retourne la liste des vols
+     * @return listVols
+     */
     public ListVol getListVols() {
         return listVols;
     }
+
     //#endregion
 
     //#region mutateurs
+
+    /**
+     * modifie la liste des aeroports
+     * @param listAeroport
+     */
     public void setListAeroport(ListAeroport listAeroport) {
         this.listAeroport=listAeroport;
     }
 
+    /**
+     * modifie la liste des vols
+     * @param listVols
+     */
     public void setListVols(ListVol listVols) {
         this.listVols=listVols;
     }
+
     //#endregion
 
     //#region methodes
@@ -184,6 +236,10 @@ public class Map extends JXMapViewer
     //#endregion
 
     //#region listener class
+
+    /**
+     * ActionListener pour les clics sur les aeroports
+     */
     class MouseClickAeroportListener extends MouseAdapter {
         //click sur un aeroport
         public void mouseClicked(MouseEvent e) {
@@ -208,6 +264,9 @@ public class Map extends JXMapViewer
         }
     }
 
+    /**
+     * ActionListener pour les clics sur les collisions
+     */
     class MouseClickCollisionListener extends MouseAdapter {
         //click sur une collision
         public void mouseClicked(MouseEvent e) {
@@ -236,5 +295,6 @@ public class Map extends JXMapViewer
             }
         }
     }
+    
     //#endregion
 }

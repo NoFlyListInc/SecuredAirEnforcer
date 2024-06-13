@@ -1,4 +1,5 @@
 package src.core;
+
 /**
  * Classe qui défini une Coordonnee géophraphique
  * @attributs degree, minute, seconde, direction
@@ -8,13 +9,80 @@ package src.core;
 public class Coordonnee 
 {
     //#region Attributs
+
+    /**
+     * degré de la coordonnée, 0 <= degree <= 180
+     */
     private int degree;
+
+    /**
+     * minute de la coordonnée, 0 <= minute <= 60
+     */
     private int minute;
+
+    /**
+     * seconde de la coordonnée, 0 <= seconde <= 60
+     */
     private int seconde;
+
+    /**
+     * direction de la coordonnée, (N, S, E, O)
+     */
     private char direction;
+
     //#endregion
 
     //#region Constructeurs
+
+    /**
+     * Constructructeur de Coordonnee
+     * @param degree String, 0 <= degree <= 180
+     * @param minute String, 0 <= minute <= 60
+     * @param seconde String, 0 <= seconde <= 60
+     * @param direction String, {'N', 'S', 'E', 'O'}
+     * @throws IllegalArgumentException si les valeurs ne sont pas correctes
+     */
+    public Coordonnee(String degree, String minute, String seconde, String direction) throws IllegalArgumentException
+    {
+        //conversion des string en int
+        int degreeInt=0;
+        try {
+            degreeInt = Integer.parseInt(degree);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("le degré doit être un entier");
+        }
+        int minuteInt=0;
+        try {
+            minuteInt = Integer.parseInt(minute);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("la minute doit être un entier");
+        }
+        int secondeInt=0;
+        try {
+            secondeInt = Integer.parseInt(seconde);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("la seconde doit être un entier");
+        }
+        //conversion de la direction en char
+        char directionChar = direction.charAt(0);
+        //vérification des valeurs
+        if (degreeInt < 0 || degreeInt > 180){
+            throw new IllegalArgumentException("Le degré doit être compris entre 0 et 180");
+        }
+        if (minuteInt < 0 || minuteInt > 60){
+            throw new IllegalArgumentException("La minute doit être comprise entre 0 et 60");
+        }
+        if (secondeInt < 0 || secondeInt > 60){
+            throw new IllegalArgumentException("La seconde doit être comprise entre 0 et 60");
+        }
+        if (directionChar != 'N' && directionChar != 'S' && directionChar != 'E' && directionChar != 'O') {
+            throw new IllegalArgumentException("La direction doit être N, S, E ou O");
+        }
+        this.degree = degreeInt;
+        this.minute = minuteInt;
+        this.seconde = secondeInt;
+        this.direction = directionChar;
+    }
 
     /**
      * Constructructeur de Coordonnee
@@ -22,44 +90,12 @@ public class Coordonnee
      * @param minute int, 0 <= minute <= 60
      * @param seconde int, 0 <= seconde <= 60
      * @param direction char, {'N', 'S', 'E', 'O'}
-     * @throws Exception si les valeurs ne sont pas correctes
+     * @throws IllegalArgumentException si les valeurs ne sont pas correctes
      */
-    public Coordonnee(int degree, int minute, int seconde, char direction)
+    public Coordonnee(int degree, int minute, int seconde, char direction) throws IllegalArgumentException
     {
-        try {
-            if (degree < 0 || degree > 180){
-                throw new Exception("Le degré doit être compris entre 0 et 180");
-            }
-            if (minute < 0 || minute > 60){
-                throw new Exception("La minute doit être comprise entre 0 et 60");
-            }
-            if (seconde < 0 || seconde > 60){
-                throw new Exception("La seconde doit être comprise entre 0 et 60");
-            }
-            if (direction != 'N' && direction != 'S' && direction != 'E' && direction != 'O') {
-                throw new Exception("La direction doit être N, S, E ou O");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.degree = degree;
-        this.minute = minute;
-        this.seconde = seconde;
-        this.direction = direction;
+        this(String.valueOf(degree), String.valueOf(minute), String.valueOf(seconde), String.valueOf(direction));
     }
-
-    /**
-     * Constructructeur vide de Coordonnee, 
-     * les valeurs sont 0° 0' 0'' N 
-     */
-    public Coordonnee()
-    {
-        this.degree = 0;
-        this.minute = 0;
-        this.seconde = 0;
-        this.direction = 'N';
-    }
-
     //#endregion
 
     //#region accesseurs
@@ -98,78 +134,6 @@ public class Coordonnee
     public char getDirection()
     {
         return this.direction;
-    }
-
-    //#endregion
-
-    //#region mutateurs
-
-    /**
-     * modifie le degré
-     * @param degree int, 0 <= degree <= 180
-     * @throws Exception si la valeur n'est pas correcte
-     */
-    public void setDegree(int degree)
-    {
-        try {
-            if (degree < 0 || degree > 180){
-                throw new Exception("Le degré doit être compris entre 0 et 180");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.degree = degree;
-    }
-
-    /**
-     * modifie la minute
-     * @param minute int, 0 <= minute <= 60
-     * @throws Exception si la valeur n'est pas correcte
-     */
-    public void setMinute(int minute)
-    {
-        try {
-            if (minute < 0 || minute > 60){
-                throw new Exception("La minute doit être comprise entre 0 et 60");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.minute = minute;
-    }
-
-    /**
-     * modifie la seconde
-     * @param seconde int, 0 <= seconde <= 60
-     * @throws Exception si la valeur n'est pas correcte
-     */
-    public void setSeconde(int seconde)
-    {
-        try {
-            if (seconde < 0 || seconde > 60){
-                throw new Exception("La seconde doit être comprise entre 0 et 60");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.seconde = seconde;
-    }
-
-    /**
-     * modifie la direction
-     * @param direction char, {'N', 'S', 'E', 'O'}
-     * @throws Exception si la valeur n'est pas correcte
-     */
-    public void setDirection(char direction)
-    {
-        try {
-            if (direction != 'N' && direction != 'S' && direction != 'E' && direction != 'O') {
-                throw new Exception("La direction doit être N, S, E ou O");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.direction = direction;
     }
 
     //#endregion
