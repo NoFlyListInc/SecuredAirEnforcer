@@ -6,8 +6,6 @@ import src.core.ListVol;
 //graphstream objects
 import org.graphstream.ui.swingViewer.Viewer;
 import java.io.File;
-
-
 //swing objects
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -30,18 +28,50 @@ import java.awt.Color;
 //#endregion
 
 /**
- * Classe FenetreGraphe
- * Fenêtre pour afficher un graph
+ * Class FenetreGraphe
+ * Fenêtre pour afficher un Graph
  * @extends SuperposedFenetre
  * @autor NOUVEL Armand et Thomas FERNANDES
  */
 public class FenetreGraphe extends SuperposedFenetre {
 
     //#region Attributs
-    JPanel settingMenuPosition = new JPanel();
-    JButton settingButton;
-    Graph graph;
-    JPanel infoLabel;
+
+    /**
+     * chemin du fichier
+     */
+    private String cheminFichier;
+
+    /**
+     * JPanel du setting menu
+     */
+    private JPanel settingMenuPosition = new JPanel();
+
+    /**
+     * JButton du setting menu
+     */
+    private JButton settingButton;
+
+    /**
+     * le graph qui sera affiché
+     */
+    private Graph graph;
+
+    /**
+     * JLabel des infos du graph
+     */
+    private JPanel infoLabel;
+
+    /**
+     * JPanel du graph
+     */
+    private JPanel panGraph;
+
+    /**
+     * JPanel des boutons
+     */
+    private JPanel panBouton;
+
     //#endregion
 
     /**
@@ -49,44 +79,85 @@ public class FenetreGraphe extends SuperposedFenetre {
      * @param cheminFichier String
      */
     public FenetreGraphe(String cheminFichier) {
+        this.cheminFichier = cheminFichier;
         // Base de la fenêtre
         this.setTitle("Graphe");
         this.setMinimumSize(new Dimension(400,300));  
         this.setSize(800, 600);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
+        this.constrFen();
+
+        // ajustement de la taille
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                Dimension size = getContentPane().getSize();
+                panGraph.setBounds(0, 0, size.width, size.height);
+                panBouton.setBounds(0, 0, size.width, size.height);
+                menu.setBounds(0, 0, size.width, size.height);
+            }
+        });
+    }
+
+    /**
+     * Construit la fenêtre
+     */
+    private void constrFen() {
+
         this.setLayout(new BorderLayout());
-        
+        this.superposePan.setPreferredSize(new Dimension(800, 600));
+
+        this.panGraph = this.constrGraphPan();
+        this.superposePan.add(this.panGraph, JLayeredPane.DEFAULT_LAYER);
+
+        this.panBouton = this.constrBoutonPan();
+        this.superposePan.add(panBouton, JLayeredPane.PALETTE_LAYER);
+
+        this.constrSettingMenu();
+
+        this.setContentPane(superposePan);
+    }
+
+    /**
+     * Construit le JPanel du graph
+     * @return JPanel
+     */
+    private JPanel constrGraphPan() {
         // creation du graph
-        File file = new File(cheminFichier);
+        File file = new File(this.cheminFichier);
         this.graph = new Graph(file.getName());
         if (file.getName().endsWith(".txt")) {
-            this.graph.fillFile(cheminFichier);
+            this.graph.fillFile(this.cheminFichier);
         } else if (file.getName().endsWith(".csv")) {
             ListVol listVol = new ListVol();
             ListAeroport listAeroport = new ListAeroport();
             try {
                 listAeroport.fill("./data/aeroports.txt");
-                listVol.fill(cheminFichier, listAeroport);
+                listVol.fill(this.cheminFichier, listAeroport);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+                return null;
             }
             this.graph.fillVol(listVol, 15);
         }
         Viewer viewerGraphe = new Viewer(this.graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         viewerGraphe.enableAutoLayout();
 
-        // superposePan
-        superposePan.setPreferredSize(new Dimension(800, 600));
+        // JPanel
+        JPanel pan = new JPanel();
+        pan.setLayout(new BorderLayout());
+        pan.setOpaque(true);
+        pan.setBounds(0, 0, 800, 600);
+        pan.add(viewerGraphe.addDefaultView(false), BorderLayout.CENTER);
+        return pan;
+    }
 
-        // JPanel pricipale
-        JPanel panPrincipale = new JPanel();
-        panPrincipale.setLayout(new BorderLayout());
-        panPrincipale.setOpaque(true);
-        panPrincipale.setBounds(0, 0, 800, 600);
-        panPrincipale.add(viewerGraphe.addDefaultView(false), BorderLayout.CENTER);
-        this.superposePan.add(panPrincipale, JLayeredPane.DEFAULT_LAYER);
-
+    /**
+     * Construit le JPanel des boutons
+     * @return JPanel
+    */
+    private JPanel constrBoutonPan() {
         // JPanel des boutons
         JPanel buttonPan = new JPanel();
         buttonPan.setBounds(0, 0, 800, 600);
@@ -130,25 +201,13 @@ public class FenetreGraphe extends SuperposedFenetre {
 
         buttonPan.add(menuPan, BorderLayout.WEST);
 
-        superposePan.add(buttonPan, JLayeredPane.PALETTE_LAYER);
-
-        this.constrSettingMenu();
-
-        // Ajout du superposePan
-        this.setContentPane(superposePan);
-
-        // ajustement de la taille
-        this.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                Dimension size = getContentPane().getSize();
-                panPrincipale.setBounds(0, 0, size.width, size.height);
-                buttonPan.setBounds(0, 0, size.width, size.height);
-                menu.setBounds(0, 0, size.width, size.height);
-            }
-        });
+        return buttonPan;
     }
 
+    /**
+     * Construit le JPanel du setting menu
+     * @return  JPanel
+     */
     private void constrSettingMenu() {
         //parametre le panel border pour positionner le settingMenu
         this.settingMenuPosition.setLayout(new BorderLayout());
@@ -292,7 +351,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         settingMenuPan.add(settingPopUp);
         settingMenuPan.add(Box.createVerticalGlue());
 
-        this.settingMenuPosition.add(settingMenuPan, BorderLayout.EAST);
+        settingMenuPosition.add(settingMenuPan, BorderLayout.EAST);
     }
 
     private JPanel createInfoPan() {

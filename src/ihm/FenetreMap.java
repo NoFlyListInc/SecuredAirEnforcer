@@ -39,11 +39,11 @@ import java.io.File;
  */
 public class FenetreMap extends SuperposedFenetre
 {
-    //#region Attributs
-    private Map map;
-    JLabel infoLabel = new JLabel();
-    JPanel settingMenuPosition = new JPanel();
-    JButton settingButton = new JButton();
+    //#region Attributes
+    private JLabel infoLabel = new JLabel();
+    private Map map = new Map(this.infoLabel);
+    private JPanel settingMenuPosition = new JPanel();
+    private JButton settingButton = new JButton();
     //#endregion
 
     //#region Constructeur
@@ -52,14 +52,6 @@ public class FenetreMap extends SuperposedFenetre
      * Constructeur de la classe FenetreMap
      */
     public FenetreMap() {
-        this.map = new Map(infoLabel);
-        ListAeroport listAeroport = new ListAeroport();
-        try {
-            listAeroport.fill("data/aeroports.txt");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-        }
-        map.setListAeroport(listAeroport);
         this.constrFen();
     }
     //#endregion

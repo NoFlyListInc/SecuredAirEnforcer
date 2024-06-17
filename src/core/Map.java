@@ -133,26 +133,6 @@ public class Map extends JXMapViewer
 
     //#endregion
 
-    //#region mutateurs
-
-    /**
-     * modifie la liste des aeroports
-     * @param listAeroport
-     */
-    public void setListAeroport(ListAeroport listAeroport) {
-        this.listAeroport=listAeroport;
-    }
-
-    /**
-     * modifie la liste des vols
-     * @param listVols
-     */
-    public void setListVols(ListVol listVols) {
-        this.listVols=listVols;
-    }
-
-    //#endregion
-
     //#region methodes
 
     /**
