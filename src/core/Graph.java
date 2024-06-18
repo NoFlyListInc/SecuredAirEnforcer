@@ -24,6 +24,8 @@ import java.util.Iterator; // pour DSature
  * @extends SingleGraph
  * @author LACROIX Xavier et NOUVEL Armand
  */
+import src.core.VolsMemesNiveaux;
+
 public class Graph extends SingleGraph 
 {
     // #region attribut
@@ -41,7 +43,8 @@ public class Graph extends SingleGraph
     /**
      * Liste des vols en risque de collision et qui ont le même niveau de vol
      */
-    private ArrayList<HashMap<Vol, Vol>> volsMemesNiveaux;
+    private int kdonne; // nombre de coloration donné par l'utilisateur
+    private VolsMemesNiveaux volsMemesNiveaux;
 
     // #endregion
 
@@ -55,7 +58,8 @@ public class Graph extends SingleGraph
         super(id);
         this.kmax = 20; // nombre max de niveaux de vols possibles par défaut
         this.koptimal = 1;
-        this.volsMemesNiveaux = new ArrayList<HashMap<Vol, Vol>>();
+        this.kdonne = 20;
+        this.volsMemesNiveaux = new VolsMemesNiveaux();
 
     }
     // #endregion
@@ -78,11 +82,11 @@ public class Graph extends SingleGraph
         return this.koptimal;
     }
 
-    /**
-     * Retourne la liste des vols en risque de collision et qui ont le même niveau de vol
-     * @return ArrayList<HashMap<Vol, Vol>>
-     */
-    public ArrayList<HashMap<Vol, Vol>> getVolsMemesNiveaux() {
+    public int getKdonne() {
+        return this.kdonne;
+    }
+
+    public VolsMemesNiveaux getVolsMemesNiveaux() {
         return this.volsMemesNiveaux;
     }
 
@@ -105,7 +109,10 @@ public class Graph extends SingleGraph
     public void setKoptimal(int koptimal) {
         this.koptimal = koptimal;
     }
-    
+
+    public void setKdonne(int kdonne) {
+        this.kdonne = kdonne;
+    }
     // #endregion
 
     // #region coloration
@@ -140,19 +147,6 @@ public class Graph extends SingleGraph
         }
     }
 
-    /**
-     * La fonction ajoute à volsMemeNiveaux une paire de vol si elle est en risque
-     * de collision
-     * et que kmax à été atteint
-     * 
-     * @param vol1 premier vol
-     * @param vol2 deuxième vol, qui est en risque de collision avec le premier
-     */
-    public void gestionNiveauMaxAtteint(Vol vol1, Vol vol2) {
-        HashMap<Vol, Vol> paireCollision = new HashMap<Vol, Vol>();
-        paireCollision.put(vol1, vol2);
-        this.volsMemesNiveaux.add(paireCollision);
-    }
 
     /**
      * Procédure colorant le graphe selon l'algorithme de coloration DSATURE.
@@ -206,10 +200,10 @@ public class Graph extends SingleGraph
         while (!queueDePriorite.isEmpty()) {
             NodeInfo maxPtr = queueDePriorite.poll();
             int u = nodeIndexMap.get(maxPtr.node);
-    
+            
             // Réinitialiser le tableau couleursVoisins pour chaque nœud
             // Arrays.fill(couleursVoisins, false);
-    
+            
             // Utilisation de l'itérateur pour les voisins
             Iterator<Node> neighborIterator = maxPtr.node.getNeighborNodeIterator();
             while (neighborIterator.hasNext()) {
@@ -219,7 +213,7 @@ public class Graph extends SingleGraph
                     couleursVoisins[couleurs[v]] = true;
                 }
             }
-    
+            
             int i = 0;
             while (i < couleursVoisins.length) {
                 if (!couleursVoisins[i]) {
@@ -227,7 +221,7 @@ public class Graph extends SingleGraph
                 }
                 i++;
             }
-    
+            
             if (i >= kdonne) {
                 // Si la couleur choisie dépasse kdonne, chercher la couleur avec le moins de collisions
                 int minCollisions = Integer.MAX_VALUE;
@@ -248,8 +242,20 @@ public class Graph extends SingleGraph
                     }
                 }
                 i = bestColor;
+
+                // Ajoute les voisins ayant la même couleur à volsMemesNiveaux
+                neighborIterator = maxPtr.node.getNeighborNodeIterator();
+                while (neighborIterator.hasNext()) {
+                    Node neighbor = neighborIterator.next();
+                    int v = nodeIndexMap.get(neighbor);
+                    if (couleurs[v] == i) {
+                        Vol vol1 = this.getVolsMemesNiveaux().getVolFromNode(maxPtr.node, this.getVolsMemesNiveaux().getListVol());
+                        Vol vol2 = this.getVolsMemesNiveaux().getVolFromNode(neighbor, this.getVolsMemesNiveaux().getListVol());
+                        this.getVolsMemesNiveaux().gestionNiveauMaxAtteint(vol1, vol2);
+                    }
+                }
             }
-    
+
             couleurs[u] = i;
             maxPtr.node.setAttribute("ui.style", "fill-color: " + couleursHex[i] + ";");
     
@@ -277,13 +283,16 @@ public class Graph extends SingleGraph
             }
         }
     
-        for (int u = 0; u < n; u++) {
-            if (couleurs[u] != -1) {
-                System.out.println("Vol " + indexNoeudMap[u].getId() + " ---> Niveau de vol : " + couleurs[u]);
-            } else {
-                System.out.println("Vol " + indexNoeudMap[u].getId() + " n'a pas pu être coloré avec les " + kdonne + " couleurs disponibles.");
-            }
-        }
+        System.out.println("Nombre de coloration optimal : " + this.koptimal);
+        System.out.println("Nombre de niveaux de vols utilisés : " + this.kdonne);
+        System.out.println("Nombre de vols en risque de collision : " + this.getVolsMemesNiveaux().size());
+        System.out.println(this.getVolsMemesNiveaux());
+        System.out.println("Kmax : " + this.kmax);
+        System.out.println("Nombre de coloration optimal : " + this.koptimal);
+        System.out.println("Nombre de niveaux de vols utilisés : " + this.kdonne);
+        System.out.println("Nombre de vols en risque de collision : " + this.getVolsMemesNiveaux().size());
+        System.out.println(this.getVolsMemesNiveaux());
+        System.out.println("Kmax : " + this.kmax);
     }
 
     public String getColoredGraph() {
@@ -337,6 +346,7 @@ public class Graph extends SingleGraph
      */
     public void fillVol(ListVol listVol, int marge) {
         this.clear();
+        this.getVolsMemesNiveaux().setListVol(listVol);;
         // creation des noeuds
         for (Vol vol : listVol.getList()) {
             this.addNode(vol.getCode()).addAttribute("ui.label", vol.getCode()); // ajout du label
@@ -363,6 +373,7 @@ public class Graph extends SingleGraph
      */
     public void fillMap(ListAeroport listAeroport, ListVol listVol) {
         this.clear();
+        this.getVolsMemesNiveaux().setListVol(listVol);
         // creation des noeuds
         for (Aeroport aeroport : listAeroport.getList()) {
             Node noeud = this.addNode(aeroport.getCode());
