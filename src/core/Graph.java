@@ -15,6 +15,9 @@ import java.util.HashMap;//pour DSature
 import java.util.HashSet; //pour DSature
 import java.util.PriorityQueue; //pour DSature
 import java.util.Iterator; // pour DSature
+
+import src.core.VolsMemesNiveaux;
+
 //#endregion
 
 /**
@@ -24,8 +27,6 @@ import java.util.Iterator; // pour DSature
  * @extends SingleGraph
  * @author LACROIX Xavier et NOUVEL Armand
  */
-import src.core.VolsMemesNiveaux;
-
 public class Graph extends SingleGraph 
 {
     // #region attribut
@@ -41,9 +42,13 @@ public class Graph extends SingleGraph
     private int koptimal;
 
     /**
-     * Liste des vols en risque de collision et qui ont le même niveau de vol
+     * Nombre de coloration donné par l'utilisateur
      */
     private int kdonne; // nombre de coloration donné par l'utilisateur
+
+    /**
+     * Liste des vols en risque de collision et qui ont le même niveau de vol
+     */
     private VolsMemesNiveaux volsMemesNiveaux;
 
     // #endregion
@@ -283,11 +288,6 @@ public class Graph extends SingleGraph
             }
         }
     
-        System.out.println("Nombre de coloration optimal : " + this.koptimal);
-        System.out.println("Nombre de niveaux de vols utilisés : " + this.kdonne);
-        System.out.println("Nombre de vols en risque de collision : " + this.getVolsMemesNiveaux().size());
-        System.out.println(this.getVolsMemesNiveaux());
-        System.out.println("Kmax : " + this.kmax);
         System.out.println("Nombre de coloration optimal : " + this.koptimal);
         System.out.println("Nombre de niveaux de vols utilisés : " + this.kdonne);
         System.out.println("Nombre de vols en risque de collision : " + this.getVolsMemesNiveaux().size());
