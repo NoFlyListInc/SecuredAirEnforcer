@@ -32,7 +32,7 @@ import java.awt.Color;
  * Classe FenetreGraphe
  * Fenêtre pour afficher un graph
  * @extends SuperposedFenetre
- * @autor NOUVEL Armand et Thomas FERNANDES
+ * @autor NOUVEL Armand et FERNANDES Thomas
  */
 public class FenetreGraphe extends SuperposedFenetre {
 
@@ -48,15 +48,16 @@ public class FenetreGraphe extends SuperposedFenetre {
      * @param cheminFichier String
      */
     public FenetreGraphe(String cheminFichier) {
-        // Base de la fenêtre
+    //#region Fenetre
         this.setTitle("Graphe");
         this.setMinimumSize(new Dimension(400,300));  
         this.setSize(800, 600);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
+    //#endregion
         
-        // creation du graph
+    //#region Creation du graphe
         File file = new File(cheminFichier);
         this.graph = new Graph(file.getName());
         if (file.getName().endsWith(".txt")) {
@@ -70,6 +71,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         }
         Viewer viewerGraphe = new Viewer(this.graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         viewerGraphe.enableAutoLayout();
+    //#endregion
 
         // superposePan
         superposePan.setPreferredSize(new Dimension(800, 600));

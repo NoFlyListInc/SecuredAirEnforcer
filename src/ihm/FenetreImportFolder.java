@@ -8,6 +8,9 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+
+import src.core.Graph;
+
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 
@@ -29,22 +32,38 @@ import java.awt.event.ComponentEvent;
 //io imports
 import java.io.File;
 import java.io.FileNotFoundException;
-
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.BufferedReader;
 //util imports
-import java.util.Scanner;
 
 //#endregion
 
-
+/**
+ * <h3>Cette classe crée une fenêtre pour importer un dossier.</h3>
+ * <p>La fenêtre contient un panneau pour charger un dossier contenant des fichiers .txt.</p>
+ * <p>Le panneau contient un titre, une instruction et un bouton pour parcourir les fichiers.</p>
+ * <p>Les fichiers doivent être en format .txt.</p>
+ * @autor FERNANDES Thomas
+ */
 public class FenetreImportFolder extends SuperposedFenetre {
 
+    /**
+     * Constructeur de la fenêtre d'importation de dossier.
+     * <p>Crée une fenêtre pour importer un dossier contenant des fichiers .txt.</p>
+     * <p>Le panneau contient un titre, une instruction et un bouton pour parcourir les fichiers.</p>
+     */
     public FenetreImportFolder() {
+
+    //#region Fenetre
         // Base de la fenêtre
         this.setTitle("Construction Window");
         this.setSize(800, 600);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
+    //#endregion
 
+    //#region Panneau
         // Création du panneau principal avec GridBagLayout
         JPanel panneau = new JPanel(new GridBagLayout());
         panneau.setBackground(new Color(98, 142, 255));
@@ -59,7 +78,9 @@ public class FenetreImportFolder extends SuperposedFenetre {
         panFold.setBackground(new Color(45, 40, 63));
         panFold.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         panFold.setPreferredSize(new Dimension(220, 280));
+    //#endregion
 
+    //#region Labels
         // Titre de l'importation de dossier
         JLabel titreFold = new JLabel("<html><center>Charger un dossier</center></html>");
         titreFold.setForeground(Color.WHITE);
@@ -73,7 +94,9 @@ public class FenetreImportFolder extends SuperposedFenetre {
         instructionFold.setFont(instructionFold.getFont().deriveFont(Font.PLAIN, 15));
         instructionFold.setHorizontalAlignment(SwingConstants.CENTER);
         instructionFold.setAlignmentX(Component.CENTER_ALIGNMENT);
+    //#endregion
 
+    //#region Bouton
         // Bouton pour parcourir le dossier
         RoundedButton boutonFold = new RoundedButton("Parcourir...");
         boutonFold.setBackground(new Color(176, 226, 255));
@@ -105,12 +128,20 @@ public class FenetreImportFolder extends SuperposedFenetre {
                                 continue;
                             }
                             try {
-                                Scanner scanner = new Scanner(file);
-                                while (scanner.hasNextLine()) {
-                                    System.out.println(scanner.nextLine());
-                                }
-                                scanner.close();
-                            } catch (FileNotFoundException ex) {
+                                String Path = file.getAbsolutePath();
+                                Graph graph = new Graph("test");
+                                graph.fillFile(Path);
+
+                                BufferedReader reader = new BufferedReader(new FileReader(Path));
+                                String line = reader.readLine();
+                                int kMAX = Integer.parseInt(line);
+                                reader.close();
+                                graph.dSature(kMAX);
+
+
+                                String graphInfo = graph.getColoredGraph();
+                                System.out.println(graphInfo);
+                            } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
                         }
@@ -119,13 +150,20 @@ public class FenetreImportFolder extends SuperposedFenetre {
                     File[] selectedFiles = fileChooser.getSelectedFiles();
                     for (File files : selectedFiles) {
                         try {
-                            Scanner scanner = new Scanner(files);
-                            while (scanner.hasNextLine()) {
-                                System.out.println(scanner.nextLine());
-                            }
-                            scanner.close();
+                            String Path = files.getAbsolutePath();
+                            Graph graph = new Graph("test");
+                            graph.fillFile(Path);
+
+                            BufferedReader reader = new BufferedReader(new FileReader(Path));
+                            String line = reader.readLine();
+                            int kMAX = Integer.parseInt(line);
+                            reader.close();
+                            graph.dSature(kMAX);
                         } catch (FileNotFoundException ex) {
                             ex.printStackTrace();
+                        }
+                        catch (IOException e1) {
+                            e1.printStackTrace();
                         }
                     }
                     }
@@ -133,8 +171,10 @@ public class FenetreImportFolder extends SuperposedFenetre {
                 }
             }
         });
+    //#endregion
 
-        
+
+        // Ajouter les panneaux à la grille
         panneau.add(panFold, gbc);
         this.add(panneau);
 
@@ -142,8 +182,7 @@ public class FenetreImportFolder extends SuperposedFenetre {
         // Ajouter le panneau à la fenêtre
         this.superposePan.add(panneau, JLayeredPane.DEFAULT_LAYER);
 
-
-        //menu
+    //#region Menu
         JPanel buttonPan = new JPanel();
         buttonPan.setBounds(0, 0, 800, 600);
         buttonPan.setOpaque(false);
@@ -168,5 +207,6 @@ public class FenetreImportFolder extends SuperposedFenetre {
         });
 
         this.setContentPane(superposePan);
+    //#endregion
     }
 }

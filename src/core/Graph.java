@@ -12,6 +12,8 @@ import java.util.Comparator;
 import java.util.HashMap;//pour DSature
 import java.util.HashSet; //pour DSature
 import java.util.PriorityQueue; //pour DSature
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.Iterator; // pour DSature
 
 public class Graph extends SingleGraph {
@@ -175,6 +177,10 @@ public class Graph extends SingleGraph {
                 }
                 i++;
             }
+
+            if ( i > this.koptimal) {
+                this.setKoptimal(i);
+            }
     
             if (i >= kdonne) {
                 // Si la couleur choisie dépasse kdonne, chercher la couleur avec le moins de collisions
@@ -234,7 +240,21 @@ public class Graph extends SingleGraph {
         }
     }
     
-    
+    public String getColoredGraph() {
+        String graphInfo = "";
+        Pattern pattern = Pattern.compile("fill-color: (.*?);");
+        for (Node node : this) {
+            String style = node.getAttribute("ui.style");
+            Matcher matcher = pattern.matcher(style);
+            String color = "";
+            if (matcher.find()) {
+                color = matcher.group(1);
+            }
+            System.out.println(graphInfo += node.getId() + " " + color + "\n");
+        }
+        return graphInfo;
+    }
+
 
     // #endregion
 
