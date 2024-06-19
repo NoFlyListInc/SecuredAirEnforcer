@@ -1,6 +1,6 @@
 package src.core;
 
-//#region import
+//#region Imports
 //import graphstream class
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.algorithm.coloring.WelshPowell;
@@ -33,7 +33,7 @@ import java.awt.Color;
  * @author LACROIX Xavier et NOUVEL Armand
  */
 public class Graph extends SingleGraph {
-    // #region attribut
+    // #region Attribut
 
     /**
      * Nombre maximum de couleurs possibles pour la coloration
@@ -57,7 +57,7 @@ public class Graph extends SingleGraph {
 
     // #endregion
 
-    // #region constructeur
+    // #region Constructeur
 
     /**
      * Constructeur de la classe Graph
@@ -74,7 +74,7 @@ public class Graph extends SingleGraph {
     }
     // #endregion
 
-    // #region accesseurs
+    // #region Accesseurs
 
     /**
      * Retourne le kmax
@@ -114,7 +114,7 @@ public class Graph extends SingleGraph {
 
     // #endregion
 
-    // #region mutateurs
+    // #region Mutateurs
 
     /**
      * Modifie le kmax
@@ -144,7 +144,7 @@ public class Graph extends SingleGraph {
     }
     // #endregion
 
-    // #region coloration
+    // #region Coloration
     /**
      * La classe NodeInfo stocke des informations sur un nœud, sa saturation, son
      * degré et le
@@ -175,6 +175,7 @@ public class Graph extends SingleGraph {
             return Integer.compare(n2.degree, n1.degree);
         }
     }
+    // #region DSature
 
     /**
      * Procédure colorant le graphe selon l'algorithme de coloration DSATURE.
@@ -207,6 +208,10 @@ public class Graph extends SingleGraph {
                 "#bcf60c", "#fabebe", "#008080", "#e6beff", "#9a6324", "#fffac8", "#800000", "#aaffc3",
                 "#808000", "#ffd8b1", "#000075", "#808080", "#ffffff", "#000000"
         }; // Tableau de couleurs pour les nœuds
+        Color[] cols = new Color[getKdonne()];
+        for (int i = 0; i < getKdonne(); i++) {
+            cols[i] = Color.getHSBColor((float) (Math.random()), 0.8f, 0.9f);
+        }
         int[] degreNoeud = new int[n]; // Tableau pour les degrés des nœuds
         HashSet<Integer>[] adjCols = new HashSet[n]; // Tableau de sets pour les couleurs adjacentes
         PriorityQueue<NodeInfo> queueDePriorite = new PriorityQueue<>(new MaxSat()); // File de priorité pour les nœuds
@@ -289,7 +294,10 @@ public class Graph extends SingleGraph {
             }
 
             couleurs[u] = i;
-            maxPtr.node.setAttribute("ui.style", "fill-color: " + couleursHex[i] + ";");
+            
+            int col = (int) maxPtr.node.getNumber("color");
+            maxPtr.node.setAttribute("ui.style", "fill-color:rgba(" + cols[i].getRed() + "," + cols[i].getGreen() + "," + cols[i].getBlue() + ",200);");
+            // maxPtr.node.setAttribute("ui.style", "fill-color: " + couleursHex[i] + ";");
 
             // Réinitialisation de l'itérateur pour les voisins
             neighborIterator = maxPtr.node.getNeighborNodeIterator();
@@ -321,7 +329,8 @@ public class Graph extends SingleGraph {
         System.out.println(this.getVolsMemesNiveaux());
         System.out.println("Kmax : " + this.kmax);
     }
-
+    // #endregion
+    // #region Welsh-Powell
     /**
      * Coloration du graphe selon l'algorithme de Welsh-Powell
      * 
@@ -336,8 +345,8 @@ public class Graph extends SingleGraph {
         System.out.println("Nombre de coloration optimal : " + getKoptimal());
     
         // Display colors
-        Color[] cols = new Color[getKoptimal()];
-        for (int i = 0; i < getKoptimal(); i++) {
+        Color[] cols = new Color[getKdonne()];
+        for (int i = 0; i < getKdonne(); i++) {
             cols[i] = Color.getHSBColor((float) (Math.random()), 0.8f, 0.9f);
         }
         for (Node n : this) {
@@ -345,10 +354,10 @@ public class Graph extends SingleGraph {
             n.setAttribute("ui.style", "fill-color:rgba(" + cols[col].getRed() + "," + cols[col].getGreen() + "," + cols[col].getBlue() + ",200);");
         }
     }
-
+    // #endregion
     // #endregion
 
-    // #region fill the graph
+    // #region Remplissage du graphe
 
     /**
      * Rempli le graph depuis un fichier graph-testx.txt
@@ -431,7 +440,7 @@ public class Graph extends SingleGraph {
     }
     // #endregion
 
-    // #region methode
+    // #region Méthodes
 
     /**
      * cache les noeud avec un degrée de 0
