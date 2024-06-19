@@ -3,32 +3,36 @@ package src.core;
 //#region import
 //import graphstream class
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.algorithm.coloring.WelshPowell;
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 //import reader files class 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 //import list class
-import java.util.ArrayList; // pour DSature
 import java.util.Comparator;
 import java.util.HashMap;//pour DSature
 import java.util.HashSet; //pour DSature
 import java.util.PriorityQueue; //pour DSature
+import java.util.Set;
 import java.util.Iterator; // pour DSature
-
-import src.core.VolsMemesNiveaux;
+import java.util.List;
+import java.awt.Color;
 
 //#endregion
 
 /**
  * Classe qui défini un Graph
+ * 
  * @attributs kmax, koptimal, volsMemesNiveaux
- * @methodes getKmax, getKoptimal, getVolsMemesNiveaux, setKmax, setKoptimal, dSature, fillFile, fillVol, fillMap, hideSoloNode
+ * @methodes getKmax, getKoptimal, getVolsMemesNiveaux, setKmax, setKoptimal,
+ *           dSature, fillFile, fillVol, fillMap, hideSoloNode
  * @extends SingleGraph
  * @author LACROIX Xavier et NOUVEL Armand
  */
-public class Graph extends SingleGraph 
-{
+public class Graph extends SingleGraph {
     // #region attribut
 
     /**
@@ -57,6 +61,7 @@ public class Graph extends SingleGraph
 
     /**
      * Constructeur de la classe Graph
+     * 
      * @param id String, identifiant du graph
      */
     public Graph(String id) {
@@ -73,6 +78,7 @@ public class Graph extends SingleGraph
 
     /**
      * Retourne le kmax
+     * 
      * @return int
      */
     public int getKmax() {
@@ -81,16 +87,27 @@ public class Graph extends SingleGraph
 
     /**
      * Retourne le koptimal
+     * 
      * @return int
      */
     public int getKoptimal() {
         return this.koptimal;
     }
 
+    /**
+     * Retourne le kdonne
+     * 
+     * @return int
+     */
     public int getKdonne() {
         return this.kdonne;
     }
 
+    /**
+     * Retourne les vols de même niveaux
+     * 
+     * @return VolsMemesNiveaux
+     */
     public VolsMemesNiveaux getVolsMemesNiveaux() {
         return this.volsMemesNiveaux;
     }
@@ -101,6 +118,7 @@ public class Graph extends SingleGraph
 
     /**
      * Modifie le kmax
+     * 
      * @param kmax int
      */
     public void setKmax(int kmax) {
@@ -109,12 +127,18 @@ public class Graph extends SingleGraph
 
     /**
      * Modifie le koptimal
+     * 
      * @param koptimal int
      */
     public void setKoptimal(int koptimal) {
         this.koptimal = koptimal;
     }
 
+    /**
+     * Modifie le kdonne
+     * 
+     * @param kdonne int
+     */
     public void setKdonne(int kdonne) {
         this.kdonne = kdonne;
     }
@@ -152,7 +176,6 @@ public class Graph extends SingleGraph
         }
     }
 
-
     /**
      * Procédure colorant le graphe selon l'algorithme de coloration DSATURE.
      * Cette méthode utilise l'algorithme DSATURE pour attribuer une couleur à
@@ -173,24 +196,25 @@ public class Graph extends SingleGraph
      *               coloré et le niveau de vol correspondant sera affiché.
      *               Le nombre de coloration optimal est stocké dans la variable
      *               koptimal
+     * @author Xavier LACROIX
      */
-    public void dSature(int kdonne) {
+    public void dSature() {
         int n = this.getNodeCount(); // Nombre de nœuds dans le graphe
         boolean[] couleursVoisins = new boolean[n]; // Tableau pour vérifier les couleurs utilisées par les voisins
         int[] couleurs = new int[n]; // Tableau pour les couleurs des nœuds
         String[] couleursHex = {
-            "#e6194b", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#46f0f0", "#f032e6", 
-            "#bcf60c", "#fabebe", "#008080", "#e6beff", "#9a6324", "#fffac8", "#800000", "#aaffc3", 
-            "#808000", "#ffd8b1", "#000075", "#808080", "#ffffff", "#000000"
+                "#e6194b", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#46f0f0", "#f032e6",
+                "#bcf60c", "#fabebe", "#008080", "#e6beff", "#9a6324", "#fffac8", "#800000", "#aaffc3",
+                "#808000", "#ffd8b1", "#000075", "#808080", "#ffffff", "#000000"
         }; // Tableau de couleurs pour les nœuds
         int[] degreNoeud = new int[n]; // Tableau pour les degrés des nœuds
         HashSet<Integer>[] adjCols = new HashSet[n]; // Tableau de sets pour les couleurs adjacentes
         PriorityQueue<NodeInfo> queueDePriorite = new PriorityQueue<>(new MaxSat()); // File de priorité pour les nœuds
         HashMap<Node, Integer> nodeIndexMap = new HashMap<>(); // Map pour associer les nœuds à leurs indices
         Node[] indexNoeudMap = new Node[n]; // Tableau pour associer les indices aux nœuds
-    
+
         int idx = 0;
-    
+
         // Instancier tous les noeuds à une couleur nulle (-1)
         for (Node node : this) {
             couleurs[idx] = -1;
@@ -201,14 +225,14 @@ public class Graph extends SingleGraph
             queueDePriorite.add(new NodeInfo(0, degreNoeud[idx], node));
             idx++;
         }
-    
+
         while (!queueDePriorite.isEmpty()) {
             NodeInfo maxPtr = queueDePriorite.poll();
             int u = nodeIndexMap.get(maxPtr.node);
-            
+
             // Réinitialiser le tableau couleursVoisins pour chaque nœud
             // Arrays.fill(couleursVoisins, false);
-            
+
             // Utilisation de l'itérateur pour les voisins
             Iterator<Node> neighborIterator = maxPtr.node.getNeighborNodeIterator();
             while (neighborIterator.hasNext()) {
@@ -218,7 +242,7 @@ public class Graph extends SingleGraph
                     couleursVoisins[couleurs[v]] = true;
                 }
             }
-            
+
             int i = 0;
             while (i < couleursVoisins.length) {
                 if (!couleursVoisins[i]) {
@@ -226,12 +250,13 @@ public class Graph extends SingleGraph
                 }
                 i++;
             }
-            
-            if (i >= kdonne) {
-                // Si la couleur choisie dépasse kdonne, chercher la couleur avec le moins de collisions
+
+            if (i >= this.kdonne) {
+                // Si la couleur choisie dépasse kdonne, chercher la couleur avec le moins de
+                // collisions
                 int minCollisions = Integer.MAX_VALUE;
                 int bestColor = -1;
-                for (int j = 0; j < kdonne; j++) {
+                for (int j = 0; j < this.kdonne; j++) {
                     int collisions = 0;
                     neighborIterator = maxPtr.node.getNeighborNodeIterator();
                     while (neighborIterator.hasNext()) {
@@ -254,8 +279,10 @@ public class Graph extends SingleGraph
                     Node neighbor = neighborIterator.next();
                     int v = nodeIndexMap.get(neighbor);
                     if (couleurs[v] == i) {
-                        Vol vol1 = this.getVolsMemesNiveaux().getVolFromNode(maxPtr.node, this.getVolsMemesNiveaux().getListVol());
-                        Vol vol2 = this.getVolsMemesNiveaux().getVolFromNode(neighbor, this.getVolsMemesNiveaux().getListVol());
+                        Vol vol1 = this.getVolsMemesNiveaux().getVolFromNode(maxPtr.node,
+                                this.getVolsMemesNiveaux().getListVol());
+                        Vol vol2 = this.getVolsMemesNiveaux().getVolFromNode(neighbor,
+                                this.getVolsMemesNiveaux().getListVol());
                         this.getVolsMemesNiveaux().gestionNiveauMaxAtteint(vol1, vol2);
                     }
                 }
@@ -263,7 +290,7 @@ public class Graph extends SingleGraph
 
             couleurs[u] = i;
             maxPtr.node.setAttribute("ui.style", "fill-color: " + couleursHex[i] + ";");
-    
+
             // Réinitialisation de l'itérateur pour les voisins
             neighborIterator = maxPtr.node.getNeighborNodeIterator();
             while (neighborIterator.hasNext()) {
@@ -273,7 +300,7 @@ public class Graph extends SingleGraph
                     couleursVoisins[couleurs[v]] = false;
                 }
             }
-    
+
             // Mise à jour des informations de saturation et de degré pour les voisins
             neighborIterator = maxPtr.node.getNeighborNodeIterator();
             while (neighborIterator.hasNext()) {
@@ -287,7 +314,7 @@ public class Graph extends SingleGraph
                 }
             }
         }
-    
+
         System.out.println("Nombre de coloration optimal : " + this.koptimal);
         System.out.println("Nombre de niveaux de vols utilisés : " + this.kdonne);
         System.out.println("Nombre de vols en risque de collision : " + this.getVolsMemesNiveaux().size());
@@ -295,16 +322,29 @@ public class Graph extends SingleGraph
         System.out.println("Kmax : " + this.kmax);
     }
 
-    public String getColoredGraph() {
-        String graphInfo = "";
-        for (Node node : this) {
-            graphInfo += node.getId() + node.getAttribute("ui.style") + "\n";
+    /**
+     * Coloration du graphe selon l'algorithme de Welsh-Powell
+     * 
+     * @author Xavier LACROIX
+     */
+    public void welshPowell() {
+        WelshPowell wp = new WelshPowell("color");
+        wp.init(this);
+        wp.compute();
+    
+        setKoptimal(wp.getChromaticNumber());
+        System.out.println("Nombre de coloration optimal : " + getKoptimal());
+    
+        // Display colors
+        Color[] cols = new Color[getKoptimal()];
+        for (int i = 0; i < getKoptimal(); i++) {
+            cols[i] = Color.getHSBColor((float) (Math.random()), 0.8f, 0.9f);
         }
-
-        return graphInfo;
+        for (Node n : this) {
+            int col = (int) n.getNumber("color");
+            n.setAttribute("ui.style", "fill-color:rgba(" + cols[col].getRed() + "," + cols[col].getGreen() + "," + cols[col].getBlue() + ",200);");
+        }
     }
-    
-    
 
     // #endregion
 
@@ -346,7 +386,8 @@ public class Graph extends SingleGraph
      */
     public void fillVol(ListVol listVol, int marge) {
         this.clear();
-        this.getVolsMemesNiveaux().setListVol(listVol);;
+        this.getVolsMemesNiveaux().setListVol(listVol);
+        ;
         // creation des noeuds
         for (Vol vol : listVol.getList()) {
             this.addNode(vol.getCode()).addAttribute("ui.label", vol.getCode()); // ajout du label
