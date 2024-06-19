@@ -4,11 +4,17 @@ package src.ihm;
 //swing imports
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import javax.swing.UIManager;
 
 //awt imports
 import java.awt.Shape;
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
+
 //#endregion
 
 /**
@@ -60,9 +66,25 @@ public class RoundedButton extends JButton {
      * @param g Graphics
      */
     protected void paintComponent(Graphics g) {
-        g.setColor(getBackground());
-        g.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, 20, 20);
+        Graphics2D g2d = (Graphics2D) g.create();
+    
+    
+        
+        
+        g2d.setColor(getBackground());
+    
+        // Dessiner le bouton par-dessus l'ombre
+        boolean isMouseOver = getModel().isRollover();
+        if (isMouseOver) {
+            g2d.setColor(new Color(156,206,235));
+            g2d.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+        } else {
+            g2d.setColor(getBackground());
+            g2d.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+        }
+
         super.paintComponent(g);
+        g2d.dispose();
     }
 
     /**
@@ -70,8 +92,19 @@ public class RoundedButton extends JButton {
      * @param g Graphics
      */
     protected void paintBorder(Graphics g) {
-        g.setColor(getForeground());
-        g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 20, 20);
+        Graphics2D g2d = (Graphics2D) g.create();
+
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        boolean isMouseOver = getModel().isRollover();
+        if (isMouseOver) {
+            g2d.setColor(getForeground());
+            g2d.setStroke(new BasicStroke(2));
+            g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+        } else {
+            g2d.setColor(getForeground());
+            g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+        }
     }
 
     /**
@@ -82,8 +115,9 @@ public class RoundedButton extends JButton {
      */
     public boolean contains(int x, int y) {
         if (shape == null || !shape.getBounds().equals(getBounds())) {
-            shape = new RoundRectangle2D.Float(0, 0, getWidth()-1, getHeight()-1, 20, 20);
+            shape = new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
         }
         return shape.contains(x, y);
     }
+
 }
