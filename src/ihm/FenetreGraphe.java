@@ -5,7 +5,11 @@ import src.core.ListAeroport;
 import src.core.ListVol;
 //graphstream objects
 import org.graphstream.ui.swingViewer.Viewer;
-import java.io.File;
+import org.graphstream.ui.swingViewer.View;
+import org.graphstream.ui.swingViewer.util.Camera;
+import org.graphstream.ui.swingViewer.util.DefaultMouseManager;
+import org.graphstream.ui.swingViewer.util.MouseManager;
+import org.graphstream.ui.geom.Point3;
 //swing objects
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -25,7 +29,17 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Color;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.Cursor;
+//io objects
+import java.io.File;
 //#endregion
+
 
 /**
  * Class FenetreGraphe
@@ -137,19 +151,66 @@ public class FenetreGraphe extends SuperposedFenetre {
                 listVol.fill(this.cheminFichier, listAeroport);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-                return null;
             }
             this.graph.fillVol(listVol, 15);
         }
         Viewer viewerGraphe = new Viewer(this.graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         viewerGraphe.enableAutoLayout();
 
+        // zoom
+        View view = viewerGraphe.addDefaultView(false);
+
+        view.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                e.consume();
+                int i = e.getWheelRotation();
+                double factor = Math.pow(1.25, i);
+                view.getCamera().setViewPercent(view.getCamera().getViewPercent() * factor);
+            }
+        });
+
+        // deplacement
+        Point point = new Point();
+        view.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                point.x = e.getX();
+                point.y = e.getY();
+            }
+        });
+
+        view.addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseDragged(MouseEvent e) {
+                Camera cam = view.getCamera();
+                double dx = cam.getViewPercent() * (point.x - e.getX()) / 50;
+                double dy = cam.getViewPercent() * (e.getY() - point.y) / 50;
+                Point3 px = cam.getViewCenter();
+                cam.setViewCenter(px.x + dx, px.y + dy, 0);
+                point.x = e.getX() + (int)dx;
+                point.y = e.getY() + (int)dy;
+            }
+        });
+
+        // changement de la souris quand on deplace
+        view.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                setCursor(new Cursor(Cursor.MOVE_CURSOR));
+            }
+        
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+
         // JPanel
         JPanel pan = new JPanel();
         pan.setLayout(new BorderLayout());
         pan.setOpaque(true);
         pan.setBounds(0, 0, 800, 600);
-        pan.add(viewerGraphe.addDefaultView(false), BorderLayout.CENTER);
+        pan.add(view, BorderLayout.CENTER);
+
         return pan;
     }
 

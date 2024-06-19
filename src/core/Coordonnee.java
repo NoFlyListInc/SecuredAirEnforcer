@@ -39,7 +39,7 @@ public class Coordonnee
      * @param degree String, 0 <= degree <= 180
      * @param minute String, 0 <= minute <= 60
      * @param seconde String, 0 <= seconde <= 60
-     * @param direction String, {'N', 'S', 'E', 'O'}
+     * @param direction String, {'N', 'S', 'E', 'O'/'W'}
      * @throws IllegalArgumentException si les valeurs ne sont pas correctes
      */
     public Coordonnee(String degree, String minute, String seconde, String direction) throws IllegalArgumentException
@@ -75,8 +75,8 @@ public class Coordonnee
         if (secondeInt < 0 || secondeInt > 60){
             throw new IllegalArgumentException("La seconde doit être comprise entre 0 et 60");
         }
-        if (directionChar != 'N' && directionChar != 'S' && directionChar != 'E' && directionChar != 'O') {
-            throw new IllegalArgumentException("La direction doit être N, S, E ou O");
+        if (directionChar != 'N' && directionChar != 'S' && directionChar != 'E' && directionChar != 'O' && directionChar != 'W') {
+            throw new IllegalArgumentException("La direction doit être N, S, E ou O/W");
         }
         this.degree = degreeInt;
         this.minute = minuteInt;
@@ -89,7 +89,7 @@ public class Coordonnee
      * @param degree int, 0 <= degree <= 180
      * @param minute int, 0 <= minute <= 60
      * @param seconde int, 0 <= seconde <= 60
-     * @param direction char, {'N', 'S', 'E', 'O'}
+     * @param direction char, {'N', 'S', 'E', 'O'/'W'}
      * @throws IllegalArgumentException si les valeurs ne sont pas correctes
      */
     public Coordonnee(int degree, int minute, int seconde, char direction) throws IllegalArgumentException

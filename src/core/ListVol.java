@@ -129,6 +129,10 @@ public class ListVol
         while ((line = reader.readLine()) != null) {
             cpt++;
             String[] parts = line.split(";");
+            if (parts.length != 6) {
+                exceptions.add(new ParseException(file, cpt, "Le nombre de champs est incorrect"));
+                continue;
+            }
             //création du vol
             try {
                 Vol vol = new Vol(parts[0],

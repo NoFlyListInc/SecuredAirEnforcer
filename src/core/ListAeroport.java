@@ -149,6 +149,10 @@ public class ListAeroport
         while ((line = reader.readLine()) != null) {
             cpt++;
             String[] parts = line.split(";");
+            if (parts.length != 10) {
+                exceptions.add(new ParseException(file, cpt, "Nombre de champs incorrect"));
+                continue;
+            }
             try {
                 //création de l'aeroport
                 Aeroport aeroport = new Aeroport(parts[0], parts[1], 

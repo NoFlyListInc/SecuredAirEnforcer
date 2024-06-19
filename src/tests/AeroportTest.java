@@ -2,73 +2,84 @@ package src.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
+import org.junit.Before;
 import org.junit.Test;
 import src.core.Aeroport;
 import src.core.Coordonnee;
-import src.core.ListAeroport;
 
 
 public class AeroportTest {
 
-    // Test de la création d'un aéroport avec des coordonnées valides
+    private Aeroport aeroport;
+    private Coordonnee lattitude;
+    private Coordonnee longitude;
+
+    @Before
+    public void setUp() {
+        this.lattitude = new Coordonnee(50, 3, 30, 'N');
+        this.longitude = new Coordonnee(2, 30, 30, 'E');
+        this.aeroport = new Aeroport("CDG", "Charles de Gaulle", this.lattitude, this.longitude);
+    }
+
     @Test
     public void testCreationAeroport() {
-        Coordonnee lattitude = new Coordonnee(50, 3, 30, 'N');
-        Coordonnee longitude = new Coordonnee(2, 30, 30, 'E');
-        Aeroport aeroport = new Aeroport("CDG", "Charles de Gaulle", lattitude, longitude);
-        assertNotNull(aeroport);
-        assertEquals("CDG", aeroport.getCode());
-        assertEquals("Charles de Gaulle", aeroport.getVille());
-        assertEquals(lattitude, aeroport.getLatitude());
-        assertEquals(longitude, aeroport.getLongitude());
+        // Vérification des valeurs
+        assertNotNull(this.aeroport);
+        assertEquals("CDG", this.aeroport.getCode());
+        assertEquals("Charles de Gaulle", this.aeroport.getVille());
+        assertEquals(this.lattitude, this.aeroport.getLatitude());
+        assertEquals(this.longitude, this.aeroport.getLongitude());
+
+        // Vérification des erreurs lors de valeur null
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Aeroport(null, "Charles de Gaulle", this.lattitude, this.longitude);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Aeroport("CDG", null, this.lattitude, this.longitude);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Aeroport("CDG", "Charles de Gaulle", null, this.longitude);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Aeroport("CDG", "Charles de Gaulle", this.lattitude, null);
+        });
+
+        // Vérification des erreurs lors de valeur vide
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Aeroport("", "Charles de Gaulle", this.lattitude, this.longitude);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Aeroport("CDG", "", this.lattitude, this.longitude);
+        });
+
+        // Verification des différentes possibilité de direction des coordonnées (N et E deja testé en haut)
+        Coordonnee latitudeSouth = new Coordonnee(50, 3, 30, 'S');
+        Coordonnee longitudeWest = new Coordonnee(2, 30, 30, 'W');
+        Coordonnee longitudeWest2 = new Coordonnee(2, 30, 30, 'O');
+        Aeroport aeroportSouthWest = new Aeroport("CDG", "Charles de Gaulle", latitudeSouth, longitudeWest);
+        Aeroport aeroportSouthWest2 = new Aeroport("CDG", "Charles de Gaulle", latitudeSouth, longitudeWest2);
+        assertNotNull(aeroportSouthWest);
+        assertNotNull(aeroportSouthWest2);
+
+        // Vérification des erreurs lors de valeur de direction incorrecte
+        Coordonnee lattitudeWrongDirection = new Coordonnee(50, 3, 30, 'A');
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Aeroport("CDG", "Charles de Gaulle", lattitudeWrongDirection, longitude);
+        });
+        Coordonnee longitudeWrongDirection = new Coordonnee(2, 30, 30, 'A');
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Aeroport("CDG", "Charles de Gaulle", lattitude, longitudeWrongDirection);
+        });
     }
 
-    // Test de modification du code de l'aéroport
     @Test
-    public void testModificationCodeAeroport() {
-        Coordonnee lattitude = new Coordonnee(50, 3, 30, 'N');
-        Coordonnee longitude = new Coordonnee(2, 30, 30, 'E');
-        Aeroport aeroport = new Aeroport("CDG", "Charles de Gaulle", lattitude, longitude);
-        aeroport.setCode("ORY");
-        assertEquals("ORY", aeroport.getCode());
+    public void testGetx() {
+        assertEquals(this.aeroport.getx(), 50.05833333333333, 0.0001);
     }
 
-    // Test d'ajout d'un aéroport à la liste d'aéroports
     @Test
-    public void testAjoutAeroportListe() {
-        Coordonnee lattitude = new Coordonnee(50, 3, 30, 'N');
-        Coordonnee longitude = new Coordonnee(2, 30, 30, 'E');
-        ListAeroport listeAeroport = new ListAeroport();
-        Aeroport aeroport = new Aeroport("CDG", "Charles de Gaulle", lattitude, longitude);
-        assertTrue(listeAeroport.addAeroport(aeroport));
-        assertEquals(1, listeAeroport.getList().size());
-        assertTrue(listeAeroport.getList().contains(aeroport));
+    public void testGety() {
+        assertEquals(this.aeroport.gety(), 2.5083333333333333, 0.0001);
     }
-
-    // Test de suppression d'un aéroport de la liste d'aéroports
-    @Test
-    public void testSuppressionAeroportListe() {
-        ListAeroport listeAeroport = new ListAeroport();
-        Coordonnee lattitude = new Coordonnee(50, 3, 30, 'N');
-        Coordonnee longitude = new Coordonnee(2, 30, 30, 'E');
-        Aeroport aeroport = new Aeroport("CDG", "Charles de Gaulle", lattitude, longitude);
-        listeAeroport.addAeroport(aeroport);
-        assertTrue(listeAeroport.removeAeroport(aeroport));
-        assertEquals(0, listeAeroport.getList().size());
-        assertFalse(listeAeroport.getList().contains(aeroport));
-    }
-
-    // Test de récupération d'un aéroport de la liste d'aéroports par son code
-    @Test
-    public void testRecuperationAeroportParCode() {
-        ListAeroport listeAeroport = new ListAeroport();
-        Coordonnee lattitude = new Coordonnee(50, 3, 30, 'N');
-        Coordonnee longitude = new Coordonnee(2, 30, 30, 'E');
-        Aeroport aeroport = new Aeroport("CDG", "Charles de Gaulle", lattitude, longitude);
-        listeAeroport.addAeroport(aeroport);
-        assertEquals(aeroport, listeAeroport.getAeroportByCode("CDG"));
-    }
-
 }

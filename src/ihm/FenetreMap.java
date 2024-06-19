@@ -15,7 +15,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JScrollPane;
 
 //src objects
-import src.core.ListAeroport;
 import src.core.ListVol;
 import src.core.Map;
 

@@ -1,42 +1,65 @@
 package src.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+import org.junit.Before;
 import org.junit.Test;
 import src.core.Horaire;
 
 
 public class HoraireTest {
 
-    // Test de la création d'un horaire avec des valeurs valides
+    Horaire horaire;
+
+    @Before
+    public void setUp() {
+        this.horaire = new Horaire(8, 30);
+    }
+
     @Test
     public void testCreationHoraire() {
-        Horaire horaire = new Horaire(8, 30);
-        assertEquals(8, horaire.getHeure());
-        assertEquals(30, horaire.getMinute());
+        // Vérification des valeurs
+        assertEquals(8, this.horaire.getHeure());
+        assertEquals(30, this.horaire.getMinute());
+
+        // Vérification des erreurs lors de valeur incorrecte
+        // heure < 0
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Horaire(-1, 30);
+        });
+        // minute < 0
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Horaire(8, -1);
+        });
+        // minute > 60
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Horaire(8, 61);
+        });
+        // heure n'est pas un nombre
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Horaire("a", "30");
+        });
+        // minute n'est pas un nombre
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Horaire("8", "a");
+        });
     }
 
-    // Test de modification des heures
     @Test
-    public void testModificationHeure() {
-        Horaire horaire = new Horaire(8, 30);
-        horaire.setHeure(10);
-        assertEquals(10, horaire.getHeure());
+    public void testGetEnMinute() {
+        assertEquals(510, this.horaire.getEnMinute());
     }
 
-    // Test de modification des minutes
     @Test
-    public void testModificationMinute() {
-        Horaire horaire = new Horaire(8, 30);
-        horaire.setMinute(45);
-        assertEquals(45, horaire.getMinute());
-    }
+    public void testAjouterMinutes() {
+        this.horaire.ajouterMinutes(30);
+        assertEquals(9, this.horaire.getHeure());
+        assertEquals(0, this.horaire.getMinute());
 
-    // Test de représentation sous forme de chaîne de caractères
-    @Test
-    public void testRepresentationString() {
-        Horaire horaire = new Horaire(8, 30);
-        assertEquals("8h30", horaire.toString());
+        // Vérification des erreurs lors de valeur incorrecte
+        // minutes < 0
+        assertThrows(IllegalArgumentException.class, () -> {
+            this.horaire.ajouterMinutes(-1);
+        });
     }
-
-    // Ajoutez d'autres tests selon les fonctionnalités que vous souhaitez tester
 }
