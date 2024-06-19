@@ -53,6 +53,7 @@ public class FenetreImportGraph extends SuperposedFenetre {
         boutonVol.setContentAreaFilled(false);
         boutonVol.setFont(boutonVol.getFont().deriveFont(Font.PLAIN, 25));
         boutonVol.setAlignmentX(Component.CENTER_ALIGNMENT);
+        boutonVol.setToolTipText("<html>Charger un fichier CSV <br> Exemple : <br> ID_vol ; ID_aéro_départ ; ID_aéro_départ ; Heure_départ ; Min_départ ; duration</html>");
 
         // Ajouter les composants au panneau de vol
         panVol.add(titreVol);
@@ -86,6 +87,7 @@ public class FenetreImportGraph extends SuperposedFenetre {
         boutonPrefait.setContentAreaFilled(false);
         boutonPrefait.setFont(boutonPrefait.getFont().deriveFont(Font.PLAIN, 25));
         boutonPrefait.setAlignmentX(Component.CENTER_ALIGNMENT);
+        boutonPrefait.setToolTipText("<html>Charger un fichier TXT <br> Exemple : <br> kmax <br> nbNoeuds<br> arretes</html>");
 
         // Ajouter les composants au panneau des aéroports
         panPrefait.add(titrePrefait);

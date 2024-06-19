@@ -192,6 +192,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         importVolPan.setOpaque(false);
         importVolPan.setLayout(new BoxLayout(importVolPan, BoxLayout.LINE_AXIS));
         RoundedButton importVolButton = new RoundedButton("importer une liste de vols");
+        importVolButton.setToolTipText("<html>Charger un fichier CSV <br> Exemple : <br> ID_vol ; ID_aéro_départ ; ID_aéro_départ ; Heure_départ ; Min_départ ; duration</html>");
         importVolButton.addActionListener((ActionListener) -> {
             JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -218,6 +219,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         importPrefaitPan.setOpaque(false);
         importPrefaitPan.setLayout(new BoxLayout(importPrefaitPan, BoxLayout.LINE_AXIS));
         RoundedButton importPrefaitButton = new RoundedButton("importer un graphe préfait");
+        importPrefaitButton.setToolTipText("<html>Charger un fichier TXT <br> Exemple : <br> kmax <br> nbNoeuds<br> arretes</html>");
         importPrefaitButton.addActionListener((ActionListener) -> {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -269,6 +271,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         couleurPan.setLayout(new BoxLayout(couleurPan, BoxLayout.LINE_AXIS));
         RoundedButton couleurButton = new RoundedButton("Appliquer la coloration");
         couleurButton.setBackground(new Color(176, 226, 255));
+        couleurButton.setToolTipText("Appliquer la coloration sur le graphe");
         couleurButton.addActionListener((ActionListener) -> {
             graph.dSature(sliderCouleur.getValue());
             retour.doClick();

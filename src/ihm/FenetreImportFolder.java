@@ -103,6 +103,7 @@ public class FenetreImportFolder extends SuperposedFenetre {
         boutonFold.setContentAreaFilled(false);
         boutonFold.setFont(boutonFold.getFont().deriveFont(Font.PLAIN, 25));
         boutonFold.setAlignmentX(Component.CENTER_ALIGNMENT);
+        boutonFold.setToolTipText("<html>Charger un dossier contenant des fichiers TXT ou un/des fichier(s) TXT<br>Exemple : <br> kmax <br> nbNoeuds<br> arretes</html>");
 
         // Ajouter les composants au panneau d'importation de dossier
         panFold.add(titreFold);

@@ -4,7 +4,6 @@ package src.ihm;
 //swing imports
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
-import javax.swing.UIManager;
 
 //awt imports
 import java.awt.Shape;
@@ -35,6 +34,8 @@ public class RoundedButton extends JButton {
         this.setOpaque(false);
         this.setFocusPainted(false);
     }
+
+    
 
     /**
      * Constructeur du bouton arrondi avec une image.
@@ -67,10 +68,6 @@ public class RoundedButton extends JButton {
      */
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
-    
-    
-        
-        
         g2d.setColor(getBackground());
     
         // Dessiner le bouton par-dessus l'ombre
