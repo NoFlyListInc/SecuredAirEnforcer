@@ -17,6 +17,7 @@ public class ParseException extends Exception
         for (Exception e : exceptions) {
             sb.append(e.getMessage()).append("\n");
         }
+        sb.append("Les informations seront chargées partiellement.");
         return sb.toString();
     }
 }

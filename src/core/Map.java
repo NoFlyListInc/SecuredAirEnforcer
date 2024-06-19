@@ -24,6 +24,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+
 //import swing objects
 import javax.swing.JLabel;
 //import graphstream objects
@@ -137,13 +138,12 @@ public class Map extends JXMapViewer
 
     /**
      * rajoute les aeroports, les vols et les collisions sur la carte
-     * @param listAeroport
      * @param listVol
      */
     public void addInformation(ListAeroport listAeroport, ListVol listVol, int marge, int kmax) {
         //on met à jour les attributs
-        this.listAeroport = listAeroport;
         this.listVols = listVol;
+        this.listAeroport = listAeroport;
         //on crée le graph des aeroports
         Graph graphMap = new Graph("graphMap");
         graphMap.fillMap(listAeroport, listVol);
@@ -151,7 +151,8 @@ public class Map extends JXMapViewer
         //on créée le graph des collisions
         Graph graphCollision = new Graph("graphCollision");
         graphCollision.fillVol(listVol, marge);
-        graphCollision.dSature(kmax);
+        graphCollision.setKdonne(kmax);
+        graphCollision.dSature();
         // vide les listes de waypoint
         ListAeroportWaypoint.clear();
         ListCollisionWaypoint.clear();

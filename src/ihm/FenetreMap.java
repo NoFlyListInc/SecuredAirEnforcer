@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 //src objects
 import src.core.ListVol;
 import src.core.Map;
+import src.core.ListAeroport;
 
 //awt objects
 import java.awt.Color;
@@ -61,6 +62,7 @@ public class FenetreMap extends SuperposedFenetre
      * construie la fenetre
      */
     private void constrFen() {
+        // creation de la fenetre
         this.setTitle("Map");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.constrPan();
@@ -286,13 +288,21 @@ public class FenetreMap extends SuperposedFenetre
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
                 String filePath = selectedFile.getAbsolutePath();
+                ListAeroport listAeroport = new ListAeroport();
+                // lecture du fichier aeroport
+                try {
+                    listAeroport.fill("data/aeroports.txt");
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
+                }
+                // lecture du fichier vol-test
                 ListVol listVols = new ListVol();
                 try {
-                    listVols.fill(filePath, map.getListAeroport());
+                    listVols.fill(filePath, listAeroport);
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
                 }
-                map.addInformation(map.getListAeroport(), listVols, 15, 1);
+                map.addInformation(listAeroport, listVols, 15, 1);
                 sliderHauteur.setEnabled(true);
                 sliderMarge.setEnabled(true);
                 sliderHauteur.setValue(1);
