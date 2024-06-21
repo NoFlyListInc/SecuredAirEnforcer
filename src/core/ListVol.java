@@ -130,7 +130,7 @@ public class ListVol
             cpt++;
             String[] parts = line.split(";");
             if (parts.length != 6) {
-                exceptions.add(new ParseException(file, cpt, "Le nombre de champs est incorrect"));
+                exceptions.add(new ParseException(cpt, "Le nombre de champs est incorrect"));
                 continue;
             }
             //création du vol
@@ -143,12 +143,12 @@ public class ListVol
                 //ajout du vol à la liste
                 this.addVol(vol);
             } catch (IllegalArgumentException e) {
-                exceptions.add(new ParseException(file, cpt, e.getMessage()));
+                exceptions.add(new ParseException(cpt, e.getMessage()));
             }
         }
         reader.close();
         if (exceptions.size() > 0) {
-            throw new ParseException(exceptions);
+            throw new ParseException(file, exceptions);
         }
     }
 

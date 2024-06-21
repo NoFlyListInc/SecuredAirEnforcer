@@ -3,6 +3,9 @@ package src.core;
 //#region Imports
 //import graphstream class
 import org.graphstream.graph.implementations.SingleGraph;
+
+import src.exception.ParseException;
+
 import org.graphstream.algorithm.coloring.WelshPowell;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
@@ -395,27 +398,79 @@ public class Graph extends SingleGraph {
      * 
      * @param file adresse du fichier
      */
-    public void fillFile(String file) {
+    public void fillFile(String file) throws ParseException, IOException {
         this.clear();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String line;
-            // première ligne => kmax
-            this.kmax = Integer.parseInt(reader.readLine());
-            // deuxième ligne => nombre de noeuds
-            int nbr_noeuds = Integer.parseInt(reader.readLine());
-            // creation des noeuds
-            for (int i = 1; i <= nbr_noeuds; i++) {
-                this.addNode(Integer.toString(i)).addAttribute("ui.label", i); // ajout du label
+        ArrayList<ParseException> exceptions = new ArrayList<ParseException>();
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line;
+
+        // première ligne => kmax
+        String premiereLigne = reader.readLine();
+        if (premiereLigne == null) {
+            exceptions.add(new ParseException(1, "La première ligne ne doit pas etre vide"));
+        }
+        else if (!premiereLigne.matches("\\d+")) {
+            exceptions.add(new ParseException(1, "La première ligne doit être un entier positif"));
+        }
+        this.kmax = Integer.parseInt(premiereLigne);
+
+        // deuxième ligne => nombre de noeuds
+        String deuxiemeligne = reader.readLine();
+        if (deuxiemeligne == "") {
+            exceptions.add(new ParseException(2, "La deuxième ligne ne doit pas etre vide"));
+        }
+        else if (!deuxiemeligne.matches("\\d+")) {
+            exceptions.add(new ParseException(2, "La deuxième ligne doit être un entier positif"));
+        }
+        int nbr_noeuds = Integer.parseInt(deuxiemeligne);
+
+        // creation des noeuds
+        for (int i = 1; i <= nbr_noeuds; i++) {
+            this.addNode(Integer.toString(i)).addAttribute("ui.label", i); // ajout du label
+        }
+
+        // creations des arretes
+        int cpt=2;
+        while ((line = reader.readLine()) != null) {
+            cpt++;
+            if (line == "") {
+                exceptions.add(new ParseException(cpt, "La ligne est vide"));
             }
-            // creations des arretes
-            while ((line = reader.readLine()) != null) {
+            else {
                 String[] parts = line.split(" ");
-                this.addEdge(parts[0] + "," + parts[1], parts[0], parts[1]);
+                if (parts.length != 2) {
+                    exceptions.add(new ParseException(cpt, "La ligne doit contenir 2 entiers séparés par un espace"));
+                }
+                else if (!parts[0].matches("\\d+") ) {
+                    exceptions.add(new ParseException(cpt, "la première valeur n'est pas un entier"));
+                }
+                else if (!parts[1].matches("\\d+")) {
+                    exceptions.add(new ParseException(cpt, "la deuxième valeur n'est pas un entier"));
+                }
+                else if (Integer.parseInt(parts[0]) < 0) {
+                    exceptions.add(new ParseException(cpt, "le premier entier doit être positif"));
+                }
+                else if (Integer.parseInt(parts[1]) < 0) {
+                    exceptions.add(new ParseException(cpt, "Le deuxième entier doit être positif"));
+                }
+                else if (Integer.parseInt(parts[0]) > nbr_noeuds) {
+                    exceptions.add(new ParseException(cpt, "Le premier entier doit être inférieur ou égal au nombre de noeuds : " + nbr_noeuds));
+                }
+                else if (Integer.parseInt(parts[1]) > nbr_noeuds) {
+                    exceptions.add(new ParseException(cpt, "Le deuxième entier doit être inférieur ou égal au nombre de noeuds " + nbr_noeuds));
+                }
+                else if (parts[0].equals(parts[1])) {
+                    exceptions.add(new ParseException(cpt, "Un noeuds ne peut pas être relié à lui même"));
+                }
+                else if (this.getEdge(parts[0] + "," + parts[1]) == null && this.getEdge(parts[1] + "," + parts[0]) == null) {
+                    this.addEdge(parts[0] + "," + parts[1], parts[0], parts[1]);
+                }
             }
-            reader.close();
-        } catch (IOException e) { // erreur de lecture du fichier
-            e.printStackTrace();
+        }
+        reader.close();
+        // gestion des exceptions
+        if (exceptions.size() > 0) {
+            throw new ParseException(file, exceptions);
         }
     }
 

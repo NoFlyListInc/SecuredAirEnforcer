@@ -4,16 +4,17 @@ import java.util.ArrayList;
 
 public class ParseException extends Exception
 {
-    public ParseException(String file, int ligne, String msg) {
-        super("Erreur lors de la lecture du fichier " + file + " à la ligne " + ligne + " : " + msg);
+    public ParseException(int ligne, String msg) {
+        super("ligne " + ligne + " : " + msg);
     }
 
-    public ParseException(ArrayList<? extends Exception> exceptions) {
-        super(CombinedException(exceptions));
+    public ParseException(String file, ArrayList<? extends Exception> exceptions) {
+        super(CombinedException(file, exceptions));
     }
 
-    private static String CombinedException(ArrayList<? extends Exception> exceptions) {
+    private static String CombinedException(String file, ArrayList<? extends Exception> exceptions) {
         StringBuilder sb = new StringBuilder();
+        sb.append("Le fichier ").append(file).append(" contient des erreurs :\n");
         for (Exception e : exceptions) {
             sb.append(e.getMessage()).append("\n");
         }

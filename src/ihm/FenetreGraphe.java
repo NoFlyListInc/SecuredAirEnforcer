@@ -7,6 +7,7 @@ import src.core.ListVol;
 import org.graphstream.ui.swingViewer.Viewer;
 import org.graphstream.ui.swingViewer.View;
 import org.graphstream.ui.swingViewer.util.Camera;
+import org.graphstream.ui.swingViewer.util.DefaultMouseManager;
 import org.graphstream.ui.geom.Point3;
 //swing objects
 import javax.swing.BoxLayout;
@@ -146,7 +147,11 @@ public class FenetreGraphe extends SuperposedFenetre {
 
         this.graph = new Graph(file.getName());
         if (file.getName().endsWith(".txt")) {
-            this.graph.fillFile(this.cheminFichier);
+            try {
+                this.graph.fillFile(this.cheminFichier);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
+            }
         } else if (file.getName().endsWith(".csv")) {
             ListAeroport listAeroport = new ListAeroport();
             try {
@@ -162,56 +167,71 @@ public class FenetreGraphe extends SuperposedFenetre {
             }
             this.graph.fillVol(listVol, 15);
         }
-        Viewer viewerGraphe = new Viewer(this.graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
-        viewerGraphe.enableAutoLayout();
-    //#endregion
 
-        // zoom
-        View view = viewerGraphe.addDefaultView(false);
+        // Viewer pour zoomer et deplacer
+        Viewer vue = new Viewer(this.graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD); // Créer un viewer
+        vue.enableAutoLayout();
+        View view = vue.addDefaultView(false);
+        view.setMouseManager(new DefaultMouseManager() {
+                private Point lastMousePosition;
 
-        view.addMouseWheelListener(new MouseWheelListener() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                e.consume();
-                int i = e.getWheelRotation();
-                double factor = Math.pow(1.25, i);
-                view.getCamera().setViewPercent(view.getCamera().getViewPercent() * factor);
-            }
-        });
+                //deplacement
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    if (curElement != null) {
+                        elementMoving(curElement, e);
+                    } else {
+                        Point currentMousePosition = e.getPoint();
+                        Camera camera = view.getCamera();
+                        double dx, dy;
 
-        // deplacement
-        Point point = new Point();
-        view.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                point.x = e.getX();
-                point.y = e.getY();
-            }
-        });
+                        if (lastMousePosition != null) {
+                            dx = lastMousePosition.getX() - currentMousePosition.getX();
+                            dy = lastMousePosition.getY() - currentMousePosition.getY();
+                        }
+                        else {
+                            dx = -currentMousePosition.getX();
+                            dy = -currentMousePosition.getY();
+                        }
 
-        view.addMouseMotionListener(new MouseMotionAdapter() {
-            public void mouseDragged(MouseEvent e) {
-                Camera cam = view.getCamera();
-                double dx = cam.getViewPercent() * (point.x - e.getX()) / 50;
-                double dy = cam.getViewPercent() * (e.getY() - point.y) / 50;
-                Point3 px = cam.getViewCenter();
-                cam.setViewCenter(px.x + dx, px.y + dy, 0);
-                point.x = e.getX() + (int)dx;
-                point.y = e.getY() + (int)dy;
-            }
-        });
+                        camera.setViewCenter(
+                                camera.getViewCenter().x + dx * camera.getViewPercent() * 0.0075,
+                                camera.getViewCenter().y - dy * camera.getViewPercent() * 0.0075,
+                                camera.getViewCenter().z
+                                
+                        );
+                        lastMousePosition = currentMousePosition;
+                    }
+                }
 
-        // changement de la souris quand on deplace
-        view.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                setCursor(new Cursor(Cursor.MOVE_CURSOR));
-            }
-        
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-        });
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    setCursor(new Cursor(Cursor.MOVE_CURSOR));
+                    lastMousePosition = e.getPoint();
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    lastMousePosition = null;
+                }
+
+            });
+
+            // ecouteur pour zoomer
+            view.addMouseWheelListener(new MouseWheelListener() {
+                @Override
+                public void mouseWheelMoved(MouseWheelEvent e) {
+                    Camera camera = view.getCamera();
+                    double zoomFactor = 1.1;
+                    if (e.getWheelRotation() < 0) {
+                        camera.setViewPercent(camera.getViewPercent() / zoomFactor);
+                    }
+                    else {
+                        camera.setViewPercent(camera.getViewPercent() * zoomFactor);
+                    }
+                }
+            });
 
         // JPanel
         JPanel pan = new JPanel();

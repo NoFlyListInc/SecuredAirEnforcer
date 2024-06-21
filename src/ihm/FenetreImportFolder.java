@@ -4,6 +4,7 @@ package src.ihm;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -154,7 +155,11 @@ public class FenetreImportFolder extends SuperposedFenetre {
                         try {
                             String Path = files.getAbsolutePath();
                             Graph graph = new Graph("test");
-                            graph.fillFile(Path);
+                            try {
+                                graph.fillFile(Path);
+                            } catch (Exception ex) {
+                                //TODO je sais pas quoi faire encore
+                            }
 
                             BufferedReader reader = new BufferedReader(new FileReader(Path));
                             String line = reader.readLine();

@@ -150,7 +150,7 @@ public class ListAeroport
             cpt++;
             String[] parts = line.split(";");
             if (parts.length != 10) {
-                exceptions.add(new ParseException(file, cpt, "Nombre de champs incorrect"));
+                exceptions.add(new ParseException(cpt, "Nombre de champs incorrect"));
                 continue;
             }
             try {
@@ -161,12 +161,12 @@ public class ListAeroport
                 //ajout de l'aeroport à la liste
                 this.addAeroport(aeroport);
             } catch(IllegalArgumentException e) {
-                exceptions.add(new ParseException(file, cpt, e.getMessage()));
+                exceptions.add(new ParseException(cpt, e.getMessage()));
             }
         }
         reader.close();
         if (exceptions.size() > 0) {
-            throw new ParseException(exceptions);
+            throw new ParseException(file, exceptions);
         }
     }
     //#endregion
