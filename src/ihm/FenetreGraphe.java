@@ -249,25 +249,21 @@ public class FenetreGraphe extends SuperposedFenetre {
 
         JPanel menuPan = new JPanel();
         menuPan.setOpaque(false);
-        menuPan.setLayout(new BoxLayout(menuPan, BoxLayout.PAGE_AXIS));
+        menuPan.setLayout(new BorderLayout());
 
         //Panel info
         this.infoLabel.setText(createInfoString());
         JPanel infoPan = new JPanel();
         infoPan.setOpaque(false);
-        infoPan.setLayout(new BoxLayout(infoPan, BoxLayout.LINE_AXIS));
-        infoPan.add(this.infoLabel);
-        infoPan.add(Box.createHorizontalGlue());
-        menuPan.add(infoLabel);
-        menuPan.add(Box.createVerticalGlue());
+        infoPan.setLayout(new BorderLayout());
+        infoPan.add(this.infoLabel, BorderLayout.WEST);
+        menuPan.add(infoLabel, BorderLayout.NORTH);
 
         JPanel menuButtonPan = new JPanel();
         menuButtonPan.setOpaque(false);
         menuButtonPan.setLayout(new BoxLayout(menuButtonPan, BoxLayout.LINE_AXIS));
-        this.menuButton.setMaximumSize(new Dimension(121, 30));
-        menuButtonPan.add(this.menuButton);
-        menuButtonPan.add(Box.createHorizontalGlue());
-        menuPan.add(menuButtonPan);
+        menuButtonPan.add(this.menuButton, BorderLayout.WEST);
+        menuPan.add(menuButtonPan, BorderLayout.SOUTH);
 
         buttonPan.add(menuPan, BorderLayout.WEST);
 
