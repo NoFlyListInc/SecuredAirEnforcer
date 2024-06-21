@@ -16,7 +16,12 @@ import java.util.Comparator;
 import java.util.HashMap;//pour DSature
 import java.util.HashSet; //pour DSature
 import java.util.PriorityQueue; //pour DSature
+
 import java.util.Set;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import java.util.Iterator; // pour DSature
 import java.util.List;
 import java.awt.Color;
@@ -256,9 +261,13 @@ public class Graph extends SingleGraph {
                 i++;
             }
 
-            if (i >= this.kdonne) {
-                // Si la couleur choisie dépasse kdonne, chercher la couleur avec le moins de
-                // collisions
+
+            if ( i > this.koptimal) {
+                this.setKoptimal(i);
+            }
+    
+            if (i >= kdonne) {
+                // Si la couleur choisie dépasse kdonne, chercher la couleur avec le moins de collisions
                 int minCollisions = Integer.MAX_VALUE;
                 int bestColor = -1;
                 for (int j = 0; j < this.kdonne; j++) {
@@ -330,6 +339,7 @@ public class Graph extends SingleGraph {
         System.out.println("Kmax : " + this.kmax);
     }
     // #endregion
+
     // #region Welsh-Powell
     /**
      * Coloration du graphe selon l'algorithme de Welsh-Powell
@@ -354,7 +364,28 @@ public class Graph extends SingleGraph {
             n.setAttribute("ui.style", "fill-color:rgba(" + cols[col].getRed() + "," + cols[col].getGreen() + "," + cols[col].getBlue() + ",200);");
         }
     }
+
     // #endregion
+
+
+    
+    
+    public String getColoredGraph() {
+        String graphInfo = "";
+        Pattern pattern = Pattern.compile("fill-color: (.*?);");
+        for (Node node : this) {
+            String style = node.getAttribute("ui.style");
+            Matcher matcher = pattern.matcher(style);
+            String color = "";
+            if (matcher.find()) {
+                color = matcher.group(1);
+            }
+            System.out.println(graphInfo += node.getId() + " " + color + "\n");
+        }
+        return graphInfo;
+    }
+
+
     // #endregion
 
     // #region Remplissage du graphe

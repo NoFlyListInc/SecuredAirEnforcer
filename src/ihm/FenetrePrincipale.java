@@ -106,6 +106,7 @@ public class FenetrePrincipale extends JFrame
         ouvrirCarte.setBackground(new Color(176, 226, 255));
         ouvrirCarte.setVerticalTextPosition(SwingConstants.BOTTOM);
         ouvrirCarte.setHorizontalTextPosition(SwingConstants.CENTER);
+        ouvrirCarte.setToolTipText("Ouvrir la carte de la France");
 
         ouvrirCarte.addActionListener(e -> {
             FenetreMap fen = new FenetreMap();
@@ -117,6 +118,7 @@ public class FenetrePrincipale extends JFrame
         ouvrirGraphe.setBackground(new Color(176, 226, 255));
         ouvrirGraphe.setVerticalTextPosition(SwingConstants.BOTTOM);
         ouvrirGraphe.setHorizontalTextPosition(SwingConstants.CENTER);
+        ouvrirGraphe.setToolTipText("Ouvrir un graphe préfait");
 
         ouvrirGraphe.addActionListener(e -> {
             FenetreImportGraph fen = new FenetreImportGraph();
@@ -128,6 +130,7 @@ public class FenetrePrincipale extends JFrame
         foldGraphe.setBackground(new Color(176, 226, 255));
         foldGraphe.setVerticalTextPosition(SwingConstants.BOTTOM);
         foldGraphe.setHorizontalTextPosition(SwingConstants.CENTER);
+        foldGraphe.setToolTipText("Coloration à la chaine de graphes");
 
         foldGraphe.addActionListener(e -> {
             FenetreImportFolder fen = new FenetreImportFolder();

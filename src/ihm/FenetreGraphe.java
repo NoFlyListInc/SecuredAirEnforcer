@@ -43,7 +43,7 @@ import java.io.File;
  * Class FenetreGraphe
  * Fenêtre pour afficher un Graph
  * @extends SuperposedFenetre
- * @autor NOUVEL Armand et Thomas FERNANDES
+ * @autor NOUVEL Armand et FERNANDES Thomas
  */
 public class FenetreGraphe extends SuperposedFenetre {
 
@@ -91,8 +91,12 @@ public class FenetreGraphe extends SuperposedFenetre {
      * @param cheminFichier String
      */
     public FenetreGraphe(String cheminFichier) {
+
         this.cheminFichier = cheminFichier;
         // Base de la fenêtre
+
+    //#region Fenetre
+
         this.setTitle("Graphe");
         this.setMinimumSize(new Dimension(400,300));  
         this.setSize(800, 600);
@@ -131,6 +135,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         this.setContentPane(superposePan);
     }
 
+
     /**
      * Construit le JPanel du graph
      * @return JPanel
@@ -138,6 +143,7 @@ public class FenetreGraphe extends SuperposedFenetre {
     private JPanel constrGraphPan() {
         // creation du graph
         File file = new File(this.cheminFichier);
+
         this.graph = new Graph(file.getName());
         if (file.getName().endsWith(".txt")) {
             this.graph.fillFile(this.cheminFichier);
@@ -158,6 +164,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         }
         Viewer viewerGraphe = new Viewer(this.graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         viewerGraphe.enableAutoLayout();
+    //#endregion
 
         // zoom
         View view = viewerGraphe.addDefaultView(false);
@@ -320,6 +327,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         importVolPan.setOpaque(false);
         importVolPan.setLayout(new BoxLayout(importVolPan, BoxLayout.LINE_AXIS));
         RoundedButton importVolButton = new RoundedButton("importer une liste de vols");
+        importVolButton.setToolTipText("<html>Charger un fichier CSV <br> Exemple : <br> ID_vol ; ID_aéro_départ ; ID_aéro_départ ; Heure_départ ; Min_départ ; duration</html>");
         importVolButton.addActionListener((ActionListener) -> {
             JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -346,6 +354,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         importPrefaitPan.setOpaque(false);
         importPrefaitPan.setLayout(new BoxLayout(importPrefaitPan, BoxLayout.LINE_AXIS));
         RoundedButton importPrefaitButton = new RoundedButton("importer un graphe préfait");
+        importPrefaitButton.setToolTipText("<html>Charger un fichier TXT <br> Exemple : <br> kmax <br> nbNoeuds<br> arretes</html>");
         importPrefaitButton.addActionListener((ActionListener) -> {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -391,15 +400,18 @@ public class FenetreGraphe extends SuperposedFenetre {
         sliderCouleurPan.add(intLabel);
         sliderCouleurPan.add(Box.createHorizontalGlue());
         settingPopUp.add(sliderCouleurPan);
+
         // Dsature button
         JPanel dsaturePan = new JPanel();
         dsaturePan.setOpaque(false);
         dsaturePan.setLayout(new BoxLayout(dsaturePan, BoxLayout.LINE_AXIS));
         RoundedButton dsatureButton = new RoundedButton("colorier avec DSature");
+        dsatureButton.setToolTipText("Appliquer la méthode DSature sur le graphe");
         dsatureButton.setBackground(new Color(176, 226, 255));
         dsatureButton.addActionListener((ActionListener) -> {
             graph.setKdonne(sliderCouleur.getValue());
             graph.dSature();
+
             retour.doClick();
             infoLabel.setText(createInfoString());
         });
@@ -414,6 +426,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         welshPowellPan.setOpaque(false);
         welshPowellPan.setLayout(new BoxLayout(welshPowellPan, BoxLayout.LINE_AXIS));
         RoundedButton welshPowellButton = new RoundedButton("Colorier avec WelshPowell");
+        welshPowellButton.setToolTipText("Appliquer la méthode WelshPowell sur le graphe");
         welshPowellButton.setBackground(new Color(176, 226, 255));
         welshPowellButton.addActionListener((ActionListener) -> {
             graph.setKdonne(sliderCouleur.getValue());

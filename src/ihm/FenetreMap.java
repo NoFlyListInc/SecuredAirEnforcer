@@ -193,9 +193,12 @@ public class FenetreMap extends SuperposedFenetre
         importPan.setLayout(new BoxLayout(importPan, BoxLayout.LINE_AXIS));
         RoundedButton importButton = new RoundedButton("importer une liste de vols");
         importButton.setBackground(new Color(176, 226, 255));
+        importButton.setToolTipText("<html>Charger un fichier CSV <br> Exemple : <br> ID_vol ; ID_aéro_départ ; ID_aéro_départ ; Heure_départ ; Min_départ ; duration</html>");
         importPan.add(Box.createHorizontalGlue());
         importPan.add(importButton);
         importPan.add(Box.createHorizontalGlue());
+
+
         //ajout du button import dans le settingPopUp
         settingPopUp.add(importPan);
         settingPopUp.add(Box.createRigidArea(new Dimension(0,15)));
@@ -259,6 +262,7 @@ public class FenetreMap extends SuperposedFenetre
         buttonPan.setLayout(new BoxLayout(buttonPan, BoxLayout.LINE_AXIS));
         RoundedButton button = new RoundedButton("Appliquer les paramètres");
         button.setBackground(new Color(176, 226, 255));
+        button.setToolTipText("Appliquer les paramètres sur la carte");
         button.setEnabled(false);
         button.addActionListener((ActionListener) -> {
             map.addInformation(map.getListAeroport(), map.getListVols(), sliderMarge.getValue(), sliderHauteur.getValue());
