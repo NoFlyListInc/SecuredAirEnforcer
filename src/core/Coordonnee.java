@@ -141,6 +141,25 @@ public class Coordonnee
     //#region methodes
 
     /**
+     * vérifie si deux coordonnees sont égaux
+     * @param other
+     * @return boolean
+     */
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        Coordonnee otherCoordonnee = (Coordonnee) other;
+        if (this.degree == otherCoordonnee.degree &&
+            this.minute == otherCoordonnee.minute &&
+            this.seconde == otherCoordonnee.seconde &&
+            this.direction == otherCoordonnee.direction) {
+                return true;
+            }
+        return false;
+    }
+
+    /**
      * Convertit la coordonnée en degrés décimaux
      * @return double
      */

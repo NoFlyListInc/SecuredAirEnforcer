@@ -20,80 +20,20 @@ import org.jxmapviewer.viewer.GeoPosition;
  * @methodes addAeroport, removeAeroport, getAeroport, getAeroportByCode, getAeroportByPosition, fill, toString
  * @autor NOUVEL Armand
  */
-public class ListAeroport 
+public class ListAeroport extends ArrayList<Aeroport>
 {
-    //#region attribut
-
-    /**
-     * ArrayList des aeroports
-     */
-    private ArrayList<Aeroport> list;
-
-    //#endregion
-
     //#region constructeur
 
     /**
      * Constructeur de ListAeroport
      */
     public ListAeroport() {
-        this.list = new ArrayList<Aeroport>();
-    }
-
-    //#endregion
-
-    //#region accesseurs
-
-    /**
-     * Retourne la liste des aeroports
-     * @return ArrayList des aeroports
-     */
-    public ArrayList<Aeroport> getList() {
-        return this.list;
+        super();
     }
 
     //#endregion
 
     //#region méthodes
-
-    /**
-     * Ajoute un aeroport à la liste
-     * @param aeroport Aeroport à ajouter
-     * @return true si l'ajout a été effectué, sinon false
-     */
-    public boolean addAeroport(Aeroport aeroport) {
-        //si l'aeroport n'est pas null et n'est pas déjà dans la liste
-        if (aeroport!=null && this.list.contains(aeroport)==false) {
-            return this.list.add(aeroport);
-        }
-        return false;
-    }
-
-    /**
-     * Supprime un aeroport de la liste
-     * @param aeroport Aeroport à supprimer
-     * @return true si la suppression a été effectuée, sinon false
-     */
-    public boolean removeAeroport(Aeroport aeroport) {
-        //si l'aeroport n'est pas null et est dans la liste
-        if (aeroport!=null && this.list.contains(aeroport)) {
-            return this.list.remove(aeroport);
-        }
-        return false;
-    }
-
-    /**
-     * Retourne un aeroport de la liste à partir de son index
-     * @param i index de l'aeroport
-     * @return l'aeroport recherché si l'index est valide, sinon null
-     */
-    public Aeroport getAeroport(int i) {
-        //si l'index est valide
-        if (i >= 0 && i < this.list.size()) {
-            return this.list.get(i);
-        }
-        return null;
-    }
 
     /**
      * Retourne un aeroport de la liste à partir de son code
@@ -106,7 +46,7 @@ public class ListAeroport
             return null;
         }
         //parcours de la liste
-        for (Aeroport aeroport : this.list) {
+        for (Aeroport aeroport : this) {
             //si le code est trouvé
             if (aeroport.getCode().equals(code)) {
                 return aeroport;
@@ -122,7 +62,7 @@ public class ListAeroport
      */
     public Aeroport getAeroportByPosition(GeoPosition position) {
         //parcours de la liste
-        for (Aeroport aeroport : this.list) {
+        for (Aeroport aeroport : this) {
             //si la position est trouvée
             if (aeroport.getLatitude().getDecimal()==position.getLatitude() && aeroport.getLongitude().getDecimal()==position.getLongitude()) {
                 return aeroport;
@@ -159,7 +99,7 @@ public class ListAeroport
                         new Coordonnee(parts[2], parts[3], parts[4], parts[5]),
                         new Coordonnee(parts[6], parts[7], parts[8], parts[9]));
                 //ajout de l'aeroport à la liste
-                this.addAeroport(aeroport);
+                this.add(aeroport);
             } catch(IllegalArgumentException e) {
                 exceptions.add(new ParseException(cpt, e.getMessage()));
             }
@@ -180,7 +120,7 @@ public class ListAeroport
     public String toString() {
         //[affiche un aeroport] saut de ligne .....
         StringBuilder sb = new StringBuilder();
-        for (Aeroport aeroport : this.list) {
+        for (Aeroport aeroport : this) {
             sb.append(aeroport.toString()).append("\n\n");
         }
         return sb.toString();

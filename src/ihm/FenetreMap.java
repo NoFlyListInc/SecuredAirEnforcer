@@ -63,7 +63,7 @@ public class FenetreMap extends SuperposedFenetre
      */
     private void constrFen() {
         // creation de la fenetre
-        this.setTitle("Map");
+        this.setTitle("Carte");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.constrPan();
         this.setContentPane(this.superposePan);
@@ -90,6 +90,7 @@ public class FenetreMap extends SuperposedFenetre
 
         //button setting
         Image settingImage = new ImageIcon("image/parametre.png").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+        settingButton.setToolTipText("Ouvrir les paramètres");
         this.settingButton.setIcon(new ImageIcon(settingImage));
         this.settingButton.setBorderPainted(false);
         this.settingButton.setContentAreaFilled(false);
@@ -164,6 +165,7 @@ public class FenetreMap extends SuperposedFenetre
         //button retour
         Image retourImage = new ImageIcon("image/rightArrow.png").getImage().getScaledInstance(25, 20, Image.SCALE_SMOOTH);
         JButton retour = new JButton(new ImageIcon(retourImage));
+        retour.setToolTipText("Fermer les paramètres");
         retour.setBorderPainted(false);
         retour.setContentAreaFilled(false);
         retour.setFocusPainted(false);

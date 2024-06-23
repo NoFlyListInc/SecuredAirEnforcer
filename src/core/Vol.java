@@ -140,6 +140,26 @@ public class Vol
     //#region méthodes
 
     /**
+     * vérifie si deux vols sont égaux
+     * @param other
+     * @return boolean
+     */
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        Vol otherVol = (Vol) other;
+        if (this.code == otherVol.code && 
+            this.depart.equals(otherVol.depart) &&
+            this.arrivee.equals(otherVol.arrivee) &&
+            this.heureDepart.equals(otherVol.heureDepart) &&
+            this.duree == otherVol.duree) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Retourne l'heure d'arrivée du vol
      * @return un horaire
      */
@@ -149,7 +169,7 @@ public class Vol
             heureArrivee.ajouterMinutes(this.duree);
             return heureArrivee;
         } catch (IllegalArgumentException e) {
-            return null; //! à changer
+            throw new RuntimeException("Erreur lors du calcul de l'heure d'arrivée : " + e.getMessage(), e);
         }
     }
 

@@ -42,7 +42,7 @@ public class FenetrePrincipale extends JFrame
         // Création de la fenêtre
         this.setMinimumSize(new Dimension(400,300)); 
         this.setSize(800, 600);
-        this.setTitle("home sweat home");
+        this.setTitle("Menu principal");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
 

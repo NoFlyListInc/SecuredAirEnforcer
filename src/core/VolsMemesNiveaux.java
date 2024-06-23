@@ -63,7 +63,7 @@ public class VolsMemesNiveaux {
 
     public Vol getVolFromNode(Node node, ListVol listVol) {
         // parcours de la liste des vols
-        for (Vol vol : listVol.getList()) {
+        for (Vol vol : listVol) {
             // si le code du vol est égal à l'id du noeud
             if (vol.getCode().equals(node.getId())) {
                 return vol;

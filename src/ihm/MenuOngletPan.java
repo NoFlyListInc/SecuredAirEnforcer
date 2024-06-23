@@ -81,6 +81,7 @@ public class MenuOngletPan extends JPanel
         homePan.setLayout(new BoxLayout(homePan, BoxLayout.LINE_AXIS));
         Image imageHome = new ImageIcon("image/homeLogo.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         RoundedButton home = new RoundedButton(new ImageIcon(imageHome));
+        home.setToolTipText("Retour au menu principal");
         home.addActionListener((ActionListener) -> {
             FenetrePrincipale fenetre = new FenetrePrincipale();
             fenetre.setVisible(true);
@@ -98,6 +99,7 @@ public class MenuOngletPan extends JPanel
         mapPan.setLayout(new BoxLayout(mapPan, BoxLayout.LINE_AXIS));
         Image imageMap = new ImageIcon("image/map.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         RoundedButton map = new RoundedButton(new ImageIcon(imageMap));
+        map.setToolTipText("Ouvrir la carte de la France avec les vols");
         map.addActionListener((ActionListener) -> {
             FenetreMap fenetre = new FenetreMap();
             fenetre.setVisible(true);
@@ -115,6 +117,7 @@ public class MenuOngletPan extends JPanel
         importGraphPan.setLayout(new BoxLayout(importGraphPan, BoxLayout.LINE_AXIS));
         Image imageGraph = new ImageIcon("image/graph.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         RoundedButton importGraph = new RoundedButton(new ImageIcon(imageGraph));
+        importGraph.setToolTipText("Ouvrir le menu pour charger les graphes");
         importGraph.addActionListener((ActionListener) -> {
             FenetreImportGraph fenetre = new FenetreImportGraph();
             fenetre.setVisible(true);
@@ -132,6 +135,7 @@ public class MenuOngletPan extends JPanel
         graphePan.setLayout(new BoxLayout(graphePan, BoxLayout.LINE_AXIS));
         Image imageColor = new ImageIcon("image/plan.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         RoundedButton entreeGraphe = new RoundedButton(new ImageIcon(imageColor));
+        entreeGraphe.setToolTipText("Ouvrir le menu pour colorier plusieurs graphes");
         entreeGraphe.addActionListener((ActionListener) -> {
             FenetreImportFolder fenetre = new FenetreImportFolder();
             fenetre.setVisible(true);

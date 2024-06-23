@@ -484,16 +484,16 @@ public class Graph extends SingleGraph {
         this.getVolsMemesNiveaux().setListVol(listVol);
         ;
         // creation des noeuds
-        for (Vol vol : listVol.getList()) {
+        for (Vol vol : listVol) {
             this.addNode(vol.getCode()).addAttribute("ui.label", vol.getCode()); // ajout du label
         }
         // creation des arretes
-        for (int i = 0; i < listVol.getList().size(); i++) {
-            for (int j = i + 1; j < listVol.getList().size(); j++) {
+        for (int i = 0; i < listVol.size(); i++) {
+            for (int j = i + 1; j < listVol.size(); j++) {
                 // si les vols i et j sont en collision
-                if ((listVol.getVol(i).collision(listVol.getVol(j), marge)) != null) {
-                    this.addEdge(listVol.getVol(i).getCode() + "," + listVol.getVol(j).getCode(),
-                            listVol.getVol(i).getCode(), listVol.getVol(j).getCode()); // code de l'arrete =
+                if ((listVol.get(i).collision(listVol.get(j), marge)) != null) {
+                    this.addEdge(listVol.get(i).getCode() + "," + listVol.get(j).getCode(),
+                            listVol.get(i).getCode(), listVol.get(j).getCode()); // code de l'arrete =
                                                                                        // "codei,codej"
                 }
             }
@@ -511,12 +511,12 @@ public class Graph extends SingleGraph {
         this.clear();
         this.getVolsMemesNiveaux().setListVol(listVol);
         // creation des noeuds
-        for (Aeroport aeroport : listAeroport.getList()) {
+        for (Aeroport aeroport : listAeroport) {
             Node noeud = this.addNode(aeroport.getCode());
             noeud.addAttribute("ui.label", aeroport.getCode()); // ajout du label
         }
         // creation des arretes
-        for (Vol vol : listVol.getList()) {
+        for (Vol vol : listVol) {
             // si l'arrete n'existe pas on l'ajoute
             if (this.getNode(vol.getDepart().getCode()).getEdgeBetween(vol.getArrivee().getCode()) == null) {
                 this.addEdge(vol.getCode(), vol.getDepart().getCode(), vol.getArrivee().getCode()); // code de l'arrete

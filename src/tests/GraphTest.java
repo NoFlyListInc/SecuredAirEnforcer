@@ -69,8 +69,8 @@ public class GraphTest {
         Horaire horaire2 = new Horaire(12, 2);
         Vol vol1 = new Vol("Vol1", aeroport1, aeroport2, horaire1, 5);
         Vol vol2 = new Vol("Vol2", aeroport2, aeroport1, horaire2, 6);
-        listVol.addVol(vol1);
-        listVol.addVol(vol2);
+        listVol.add(vol1);
+        listVol.add(vol2);
         
         //Set up graph
         graph.fillVol(listVol, 5);

@@ -272,6 +272,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         });
         settingPan.add(settingButton);
         settingPan.add(Box.createVerticalGlue());
+        settingButton.setToolTipText("Ouvrir les paramètres");
         buttonPan.add(settingPan, BorderLayout.EAST);
 
         JPanel menuPan = new JPanel();
@@ -289,6 +290,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         JPanel menuButtonPan = new JPanel();
         menuButtonPan.setOpaque(false);
         menuButtonPan.setLayout(new BoxLayout(menuButtonPan, BoxLayout.LINE_AXIS));
+        this.menuButton.setMaximumSize(new Dimension(121, 30));
         menuButtonPan.add(this.menuButton, BorderLayout.WEST);
         menuPan.add(menuButtonPan, BorderLayout.SOUTH);
 
@@ -318,6 +320,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         //button retour
         Image retourImage = new ImageIcon("image/rightArrow.png").getImage().getScaledInstance(25, 20, Image.SCALE_SMOOTH);
         JButton retour = new JButton(new ImageIcon(retourImage));
+        retour.setToolTipText("Fermer le menu paramètres");
         retour.setBorderPainted(false);
         retour.setContentAreaFilled(false);
         retour.setFocusPainted(false);

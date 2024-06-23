@@ -19,6 +19,7 @@ public class MenuButtonPanel extends RoundedPanel {
         this.add(new JLabel("<html><font color='white'>MENU</font></html>"));
         Image buttonImage = new ImageIcon("image/topArrow.png").getImage().getScaledInstance(25, 20, Image.SCALE_SMOOTH);
         JButton button = new JButton(new ImageIcon(buttonImage));
+        button.setToolTipText("Ouvrir le menu rapide");
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);
         button.setFocusPainted(false);

@@ -192,11 +192,11 @@ public class Map extends JXMapViewer
         }
 
         //créer les waypoint pour les collisions
-        for (int i = 0; i < listVol.getList().size(); i++) {
-            for (int j = i+1; j < listVol.getList().size(); j++) {
+        for (int i = 0; i < listVol.size(); i++) {
+            for (int j = i+1; j < listVol.size(); j++) {
                 //si les vols i et j sont en collision et de meme couleur
-                GeoPosition collisionPoint=(listVol.getVol(i).collision(listVol.getVol(j), marge));
-                if (collisionPoint!=null && graphCollision.getNode(listVol.getVol(i).getCode()).getAttribute("ui.style").equals(graphCollision.getNode(listVol.getVol(j).getCode()).getAttribute("ui.style"))) {
+                GeoPosition collisionPoint=(listVol.get(i).collision(listVol.get(j), marge));
+                if (collisionPoint!=null && graphCollision.getNode(listVol.get(i).getCode()).getAttribute("ui.style").equals(graphCollision.getNode(listVol.get(j).getCode()).getAttribute("ui.style"))) {
                     DefaultWaypoint waypoint = new DefaultWaypoint(collisionPoint);
                     ListCollisionWaypoint.add(waypoint);
                 }
@@ -260,13 +260,13 @@ public class Map extends JXMapViewer
             for (DefaultWaypoint waypoint : ListCollisionWaypoint) {
                 Point2D waypointPosition = convertGeoPositionToPoint(waypoint.getPosition());
                 if (rect.contains(waypointPosition)) {
-                    for(int i=0; i<listVols.getList().size(); i++){
+                    for(int i=0; i<listVols.size(); i++){
                         //parcours les vols pour trouver la collision
-                        for(int j=i+1; j<listVols.getList().size(); j++){
-                            GeoPosition collisionPoint=(listVols.getVol(i).collision(listVols.getVol(j), 15));
+                        for(int j=i+1; j<listVols.size(); j++){
+                            GeoPosition collisionPoint=(listVols.get(i).collision(listVols.get(j), 15));
                             if(collisionPoint!=null && collisionPoint.equals(waypoint.getPosition())){
                                 // Afficher les informations sur la collision
-                                label.setText(listVols.getVol(i).getCode() + " <=> " + listVols.getVol(j).getCode());
+                                label.setText(listVols.get(i).getCode() + " <=> " + listVols.get(j).getCode());
                             }
                         }
                     }

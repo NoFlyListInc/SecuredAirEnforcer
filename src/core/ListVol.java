@@ -18,16 +18,8 @@ import java.io.IOException;
  * @methodes addVol, removeVol, getVol, getVolByCode, fill, toString
  * @autor NOUVEL Armand
  */
-public class ListVol 
+public class ListVol extends ArrayList<Vol>
 {
-    //#region
-
-    /**
-     * ArrayList des vols
-     */
-    private ArrayList<Vol> list;
-
-    //#endregion
 
     //#region constructeur
 
@@ -35,82 +27,9 @@ public class ListVol
      * Constructeur de ListVol
      */
     public ListVol() {
-        this.list = new ArrayList<Vol>();
+        super();
     }
 
-    //#endregion
-
-    //#region accesseurs
-
-    /**
-     * Retourne la liste des vols
-     * @return ArrayList des vols
-     */
-    public ArrayList<Vol> getList() {
-        return this.list;
-    }
-
-
-    //#endregion
-
-    //#region méthodes
-
-    /**
-     * Ajoute un vol à la liste
-     * @param vol vol à ajouter
-     * @return true si l'ajout a été effectué, sinon false
-     */
-    public boolean addVol(Vol vol) {
-        //si le vol n'est pas null et n'est pas déjà dans la liste
-        if (vol!=null && this.list.contains(vol)==false) {
-            this.list.add(vol);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Supprime un vol de la liste
-     * @param vol vol à supprimer
-     * @return true si la suppression a été effectuée, sinon false
-     */
-    public boolean removeVol(Vol vol) {
-        //si le vol n'est pas null et est dans la liste
-        if (vol!=null && this.list.contains(vol)) {
-            this.list.remove(vol);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Retourne un vol de la liste à partir de son index
-     * @param i index du vol
-     * @return le vol recherché si l'index est valide, sinon null
-     */
-    public Vol getVol(int i) {
-        //si l'index est valide
-        if (i >= 0 && i < this.list.size()) {
-            return this.list.get(i);
-        }
-        return null;
-    }
-
-    /**
-     * Retourne un vol de la liste à partir de son code
-     * @param code code du vol
-     * @return le vol recherché si le code est valide, sinon null
-     */
-    public Vol getVolByCode(String code) {
-        //parcours de la liste
-        for (Vol vol : this.list) {
-            //si le code correspond
-            if (vol.getCode().equals(code)) {
-                return vol;
-            }
-        }
-        return null;
-    }
     //#endregion
 
     //#region fill with a file
@@ -141,7 +60,7 @@ public class ListVol
                                     new Horaire(parts[3], parts[4]),
                                     parts[5]);
                 //ajout du vol à la liste
-                this.addVol(vol);
+                this.add(vol);
             } catch (IllegalArgumentException e) {
                 exceptions.add(new ParseException(cpt, e.getMessage()));
             }
@@ -163,7 +82,7 @@ public class ListVol
     public String toString() {
         //[affiche un vol] saut de ligne .....
         String str = "";
-        for (Vol vol : this.list) {
+        for (Vol vol : this) {
             str += vol.toString() + "\n\n";
         }
         return str;

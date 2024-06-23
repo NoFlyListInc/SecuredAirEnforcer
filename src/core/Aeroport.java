@@ -109,6 +109,25 @@ public class Aeroport
     //#region methodes
 
     /**
+     * vérifie si deux aeroports sont égaux
+     * @param other
+     * @return boolean
+     */
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        Aeroport otherAeroport = (Aeroport) other;
+        if (this.code == otherAeroport.code &&
+            this.ville == otherAeroport.ville &&
+            this.longitude.equals(otherAeroport.longitude) &&
+            this.latitude.equals(otherAeroport.latitude)) {
+                return true;
+            }
+        return false;
+    }
+
+    /**
      * renvoie la coordonnee x de l'aeroport
      * @return double
      */

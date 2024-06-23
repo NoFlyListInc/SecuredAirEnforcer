@@ -95,6 +95,23 @@ public class Horaire
     //#region méthodes
 
     /**
+     * vérifie si deux horaires sont égaux
+     * @param other
+     * @return boolean
+     */
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        Horaire otherHoraire = (Horaire) other;
+        if (this.heure == otherHoraire.heure &&
+            this.minute == otherHoraire.minute) {
+                return true;
+            }
+        return false;
+    }  
+
+    /**
      * Retourne l'horaire en minute
      * @return int
      */
