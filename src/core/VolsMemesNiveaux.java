@@ -56,12 +56,12 @@ public class VolsMemesNiveaux {
     public void gestionNiveauMaxAtteint(Vol vol1, Vol vol2) {
         HashMap<Vol, Vol> paireCollision = new HashMap<Vol, Vol>();
         paireCollision.put(vol1, vol2);
-        if (!this.contains(vol1, vol2)) {
+        if (!this.contient(vol1, vol2)) {
             this.volsMemesNiveaux.add(paireCollision);
         }
     }
 
-    public Vol getVolFromNode(Node node, ListVol listVol) {
+    public Vol getVolDepuisNoeud(Node node, ListVol listVol) {
         // parcours de la liste des vols
         for (Vol vol : listVol) {
             // si le code du vol est égal à l'id du noeud
@@ -76,7 +76,7 @@ public class VolsMemesNiveaux {
      * Retourne la taille de la liste des vols en risque de collision
      * @return
      */
-    public int size() {
+    public int taille() {
         return this.volsMemesNiveaux.size();
     }
 
@@ -86,7 +86,7 @@ public class VolsMemesNiveaux {
      * @param vol2
      * @return boolean
      */
-    public boolean contains(Vol vol1, Vol vol2) {
+    public boolean contient(Vol vol1, Vol vol2) {
         for (HashMap<Vol, Vol> paire : this.volsMemesNiveaux) {
             if (paire.containsKey(vol1) && paire.containsValue(vol2)) {
                 return true;

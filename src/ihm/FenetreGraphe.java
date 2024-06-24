@@ -1,7 +1,8 @@
 package src.ihm;
 //#region import
-import src.core.Graph;
+import src.core.Graphe;
 import src.core.ListeAeroport;
+
 import src.core.ListVol;
 //graphstream objects
 import org.graphstream.ui.swingViewer.Viewer;
@@ -68,7 +69,7 @@ public class FenetreGraphe extends SuperposedFenetre {
     /**
      * le graph qui sera affiché
      */
-    private Graph graph;
+    private Graphe graph;
 
     /**
      * JLabel des infos du graph
@@ -145,10 +146,11 @@ public class FenetreGraphe extends SuperposedFenetre {
         // creation du graph
         File file = new File(this.cheminFichier);
 
-        this.graph = new Graph(file.getName());
+        this.graph = new Graphe(file.getName());
         if (file.getName().endsWith(".txt")) {
             try {
-                this.graph.remplirFichier(this.cheminFichier);
+
+                this.graph.remplirAvecFichier(this.cheminFichier);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
             }
@@ -165,7 +167,8 @@ public class FenetreGraphe extends SuperposedFenetre {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
             }
-            this.graph.remplirVol(listVol, 15);
+
+            this.graph.remplirAvecListeVol(listVol, 15);
         }
 
         // Viewer pour zoomer et deplacer
@@ -432,7 +435,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         dsatureButton.setToolTipText("Appliquer la méthode DSature sur le graphe");
         dsatureButton.setBackground(new Color(176, 226, 255));
         dsatureButton.addActionListener((ActionListener) -> {
-            graph.définirKdonne(sliderCouleur.getValue());
+            graph.setKdonne(sliderCouleur.getValue());
             graph.dSature();
 
             retour.doClick();
@@ -452,7 +455,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         welshPowellButton.setToolTipText("Appliquer la méthode WelshPowell sur le graphe");
         welshPowellButton.setBackground(new Color(176, 226, 255));
         welshPowellButton.addActionListener((ActionListener) -> {
-            graph.définirKdonne(sliderCouleur.getValue());
+            graph.setKdonne(sliderCouleur.getValue());
             graph.welshPowell();
             retour.doClick();
             infoLabel.setText(createInfoString());

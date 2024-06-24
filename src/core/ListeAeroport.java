@@ -64,7 +64,7 @@ public class ListeAeroport extends ArrayList<Aeroport>
         //parcours de la liste
         for (Aeroport aeroport : this) {
             //si la position est trouvée
-            if (aeroport.getLatitude().obtenirDecimal()==position.getLatitude() && aeroport.getLongitude().obtenirDecimal()==position.getLongitude()) {
+            if (aeroport.getLatitude().getDecimal()==position.getLatitude() && aeroport.getLongitude().getDecimal()==position.getLongitude()) {
                 return aeroport;
             }
         }

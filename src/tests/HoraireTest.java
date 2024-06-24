@@ -19,8 +19,8 @@ public class HoraireTest {
     @Test
     public void testCreationHoraire() {
         // Vérification des valeurs
-        assertEquals(8, this.horaire.obtenirHeure());
-        assertEquals(30, this.horaire.obtenirMinute());
+        assertEquals(8, this.horaire.getHeure());
+        assertEquals(30, this.horaire.getMinute());
 
         // Vérification des erreurs lors de valeur incorrecte
         // heure < 0
@@ -47,14 +47,14 @@ public class HoraireTest {
 
     @Test
     public void testGetEnMinute() {
-        assertEquals(510, this.horaire.obtenirEnMinute());
+        assertEquals(510, this.horaire.getEnMinute());
     }
 
     @Test
     public void testAjouterMinutes() {
         this.horaire.ajouterMinutes(30);
-        assertEquals(9, this.horaire.obtenirHeure());
-        assertEquals(0, this.horaire.obtenirMinute());
+        assertEquals(9, this.horaire.getHeure());
+        assertEquals(0, this.horaire.getMinute());
 
         // Vérification des erreurs lors de valeur incorrecte
         // minutes < 0

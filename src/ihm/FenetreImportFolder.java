@@ -10,7 +10,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import src.core.Graph;
+import src.core.Graphe;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
@@ -149,9 +149,10 @@ public class FenetreImportFolder extends SuperposedFenetre {
                         for (File files : fileChooser.getSelectedFiles()) {
                             //creation du graph
                             String Path = files.getAbsolutePath();
-                            Graph graph = new Graph("graph");
+                            Graphe graph = new Graphe("graph");
                             try {
-                                graph.remplirFichier(Path);
+                                graph.remplirAvecFichier(Path);
+
                             } catch (Exception ex) {
                                 JOptionPane.showMessageDialog(FenetreImportFolder.this, ex.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
                             }
@@ -173,7 +174,7 @@ public class FenetreImportFolder extends SuperposedFenetre {
                             writer.close();
 
                             //nouvelle ligne dans le fichier coloration-groupe
-                            writerColorationFile.write(files.getName().replace("graph","colo")+";"+graph.getVolsMemesNiveaux().size());
+                            writerColorationFile.write(files.getName().replace("graph","colo")+";"+graph.getVolsMemesNiveaux().taille());
                             writerColorationFile.newLine();
                         }
                         writerColorationFile.close();

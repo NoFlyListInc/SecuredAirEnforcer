@@ -16,8 +16,9 @@ import javax.swing.JScrollPane;
 
 //src objects
 import src.core.ListVol;
-import src.core.Map;
+import src.core.Carte;
 import src.core.ListeAeroport;
+
 
 //awt objects
 import java.awt.Color;
@@ -41,7 +42,7 @@ public class FenetreMap extends SuperposedFenetre
 {
     //#region Attributes
     private JLabel infoLabel = new JLabel();
-    private Map map = new Map(this.infoLabel);
+    private Carte map = new Carte(this.infoLabel);
     private JPanel settingMenuPosition = new JPanel();
     private JButton settingButton = new JButton();
     //#endregion
@@ -267,7 +268,7 @@ public class FenetreMap extends SuperposedFenetre
         button.setToolTipText("Appliquer les paramètres sur la carte");
         button.setEnabled(false);
         button.addActionListener((ActionListener) -> {
-            map.addInformation(map.getListAeroport(), map.getListVols(), sliderMarge.getValue(), sliderHauteur.getValue());
+            map.addInformation(map.getListAeroport(), map.getListeVols(), sliderMarge.getValue(), sliderHauteur.getValue());
         });
         buttonPan.add(Box.createHorizontalGlue());
         buttonPan.add(button);

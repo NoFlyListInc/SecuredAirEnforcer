@@ -78,7 +78,7 @@ public class Horaire
      * Renvoie l'heure
      * @return int
      */
-    public int obtenirHeure() {
+    public int getHeure() {
         return this.heure;
     }
 
@@ -86,7 +86,7 @@ public class Horaire
      * Renvoie les minutes
      * @return int
      */
-    public int obtenirMinute() {
+    public int getMinute() {
         return this.minute;
     }
 
@@ -115,7 +115,7 @@ public class Horaire
      * Retourne l'horaire en minute
      * @return int
      */
-    public int obtenirEnMinute() {
+    public int getEnMinute() {
         return this.heure * 60 + this.minute;
     }
 
@@ -128,7 +128,7 @@ public class Horaire
         if (minutes < 0) {
             throw new IllegalArgumentException("minutes doit être supérieur ou égal à 0");
         }
-        int totalMinutes = this.obtenirEnMinute() + minutes;
+        int totalMinutes = this.getEnMinute() + minutes;
         this.heure = totalMinutes / 60;
         this.minute = totalMinutes % 60;
     }

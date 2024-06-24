@@ -163,7 +163,7 @@ public class Coordonnee
      * Convertit la coordonnée en degrés décimaux
      * @return double
      */
-    public double obtenirDecimal()
+    public double getDecimal()
     {
         // Conversion en degrés décimaux
         double decimal = this.degree + (this.minute / 60.0) + (this.seconde / 3600.0);
@@ -181,7 +181,7 @@ public class Coordonnee
      */
     public double getDecimalRadians()
     {
-        return Math.toRadians(this.obtenirDecimal());
+        return Math.toRadians(this.getDecimal());
     }
 
     //#endregion

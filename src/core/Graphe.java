@@ -3,8 +3,10 @@ package src.core;
 //#region Imports
 //import graphstream class
 import org.graphstream.graph.implementations.SingleGraph;
+
+import src.exception.ExceptionAnalyse;
+
 import org.graphstream.algorithm.coloring.WelshPowell;
-import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 //import reader files class 
 import java.io.BufferedReader;
@@ -13,23 +15,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 //import list class
 import java.util.Comparator;
-import java.util.HashMap;//pour DSature
-import java.util.HashSet; //pour DSature
-import java.util.PriorityQueue; //pour DSature
-
-import java.util.Set;
+import java.util.HashMap;
+import java.util.HashSet; 
+import java.util.PriorityQueue; 
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import java.util.Iterator; // pour DSature
-import java.util.List;
+import java.util.Iterator;
 import java.awt.Color;
 
 //#endregion
 
 /**
- * Classe qui défini un Graph
+ * Classe qui défini un Graphe
  * 
  * @attributs kmax, koptimal, volsMemesNiveaux
  * @methodes getKmax, getKoptimal, getVolsMemesNiveaux, setKmax, setKoptimal,
@@ -37,7 +36,7 @@ import java.awt.Color;
  * @extends SingleGraph
  * @author LACROIX Xavier et NOUVEL Armand
  */
-public class Graph extends SingleGraph {
+public class Graphe extends SingleGraph {
     // #region Attribut
 
     /**
@@ -69,11 +68,11 @@ public class Graph extends SingleGraph {
      * 
      * @param id String, identifiant du graph
      */
-    public Graph(String id) {
+    public Graphe(String id) {
         super(id);
         this.kmax = 20; // nombre max de niveaux de vols possibles par défaut
         this.koptimal = 1;
-        this.kdonne = 20;
+        this.kdonne = Integer.MAX_VALUE;
         this.volsMemesNiveaux = new VolsMemesNiveaux();
 
     }
@@ -155,15 +154,15 @@ public class Graph extends SingleGraph {
      * degré et le
      * nœud lui-même.
      */
-    private class NodeInfo {
+    private class InfoNoeud {
         int saturation;
-        int degree;
-        Node node;
+        int degre;
+        Node noeud;
 
-        NodeInfo(int saturation, int degree, Node node) {
+        InfoNoeud(int saturation, int degre, Node noeud) {
             this.saturation = saturation;
-            this.degree = degree;
-            this.node = node;
+            this.degre = degre;
+            this.noeud = noeud;
         }
     }
 
@@ -172,12 +171,12 @@ public class Graph extends SingleGraph {
      * NodeInfo en
      * fonction des valeurs de saturation et de degré.
      */
-    private class MaxSat implements Comparator<NodeInfo> {
-        public int compare(NodeInfo n1, NodeInfo n2) {
+    private class MaxSat implements Comparator<InfoNoeud> {
+        public int compare(InfoNoeud n1, InfoNoeud n2) {
             if (n1.saturation != n2.saturation) {
                 return Integer.compare(n2.saturation, n1.saturation);
             }
-            return Integer.compare(n2.degree, n1.degree);
+            return Integer.compare(n2.degre, n1.degre);
         }
     }
     // #region DSature
@@ -205,51 +204,47 @@ public class Graph extends SingleGraph {
      * @author Xavier LACROIX
      */
     public void dSature() {
-        int n = this.getNodeCount(); // Nombre de nœuds dans le graphe
-        boolean[] couleursVoisins = new boolean[n]; // Tableau pour vérifier les couleurs utilisées par les voisins
-        int[] couleurs = new int[n]; // Tableau pour les couleurs des nœuds
-        String[] couleursHex = {
-                "#e6194b", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#46f0f0", "#f032e6",
-                "#bcf60c", "#fabebe", "#008080", "#e6beff", "#9a6324", "#fffac8", "#800000", "#aaffc3",
-                "#808000", "#ffd8b1", "#000075", "#808080", "#ffffff", "#000000"
-        }; // Tableau de couleurs pour les nœuds
-        Color[] cols = new Color[getKdonne()];
+        this.setKoptimal(0);
+        int nombreNoeud = this.getNodeCount(); // Nombre de nœuds dans le graphe
+        boolean[] couleursVoisins = new boolean[nombreNoeud]; // Tableau pour vérifier les couleurs utilisées par les voisins
+        int[] tableauCouleurNoeud = new int[nombreNoeud]; // Tableau pour les couleurs des nœuds
+        Color[] couleursVisuelles = new Color[getKdonne()];
         for (int i = 0; i < getKdonne(); i++) {
-            cols[i] = Color.getHSBColor((float) (Math.random()), 0.8f, 0.9f);
-        }
-        int[] degreNoeud = new int[n]; // Tableau pour les degrés des nœuds
-        HashSet<Integer>[] adjCols = new HashSet[n]; // Tableau de sets pour les couleurs adjacentes
-        PriorityQueue<NodeInfo> queueDePriorite = new PriorityQueue<>(new MaxSat()); // File de priorité pour les nœuds
-        HashMap<Node, Integer> nodeIndexMap = new HashMap<>(); // Map pour associer les nœuds à leurs indices
-        Node[] indexNoeudMap = new Node[n]; // Tableau pour associer les indices aux nœuds
+            couleursVisuelles[i] = Color.getHSBColor((float) (Math.random()), 0.8f, 0.9f);
+        } //couleurs visuelles à afficher pour chaque niveau de vol
+        int[] degreNoeud = new int[nombreNoeud]; // Tableau pour les degrés des nœuds
+        HashSet<Integer>[] adjCols = new HashSet[nombreNoeud]; // Tableau de sets pour les couleurs adjacentes
+        PriorityQueue<InfoNoeud> queueDePriorite = new PriorityQueue<>(new MaxSat()); // File de priorité pour les nœuds
+        HashMap<Node, Integer> mapIndexNoeud = new HashMap<>(); // Map pour associer les nœuds à leurs indices
+        Node[] mapNoeudIndex = new Node[nombreNoeud]; // Tableau pour associer les indices aux nœuds
 
-        int idx = 0;
+        int index = 0;
 
         // Instancier tous les noeuds à une couleur nulle (-1)
         for (Node node : this) {
-            couleurs[idx] = -1;
-            degreNoeud[idx] = node.getDegree();
-            adjCols[idx] = new HashSet<>();
-            nodeIndexMap.put(node, idx);
-            indexNoeudMap[idx] = node;
-            queueDePriorite.add(new NodeInfo(0, degreNoeud[idx], node));
-            idx++;
+            tableauCouleurNoeud[index] = -1;
+            degreNoeud[index] = node.getDegree();
+            adjCols[index] = new HashSet<>();
+            mapIndexNoeud.put(node, index);
+            mapNoeudIndex[index] = node;
+            queueDePriorite.add(new InfoNoeud(0, degreNoeud[index], node));
+            index++;
         }
 
         while (!queueDePriorite.isEmpty()) {
-            NodeInfo maxPtr = queueDePriorite.poll();
-            int u = nodeIndexMap.get(maxPtr.node);
+            InfoNoeud maxPointeur = queueDePriorite.poll();
+            int u = mapIndexNoeud.get(maxPointeur.noeud);
 
             // Réinitialiser le tableau couleursVoisins pour chaque nœud
             // Arrays.fill(couleursVoisins, false);
 
             // Utilisation de l'itérateur pour les voisins
-            Iterator<Node> neighborIterator = maxPtr.node.getNeighborNodeIterator();
+            Iterator<Node> neighborIterator = maxPointeur.noeud.getNeighborNodeIterator();
             while (neighborIterator.hasNext()) {
                 Node neighbor = neighborIterator.next();
-                int v = nodeIndexMap.get(neighbor);
-                if (couleurs[v] != -1) {
-                    couleursVoisins[couleurs[v]] = true;
+                int v = mapIndexNoeud.get(neighbor);
+                if (tableauCouleurNoeud[v] != -1) {
+                    couleursVoisins[tableauCouleurNoeud[v]] = true;
                 }
             }
 
@@ -261,22 +256,22 @@ public class Graph extends SingleGraph {
                 i++;
             }
 
-
-            if ( i > this.koptimal) {
+            if (i > this.koptimal) {
                 this.setKoptimal(i);
             }
-    
+
             if (i >= kdonne) {
-                // Si la couleur choisie dépasse kdonne, chercher la couleur avec le moins de collisions
+                // Si la couleur choisie dépasse kdonne, chercher la couleur avec le moins de
+                // collisions
                 int minCollisions = Integer.MAX_VALUE;
                 int bestColor = -1;
                 for (int j = 0; j < this.kdonne; j++) {
                     int collisions = 0;
-                    neighborIterator = maxPtr.node.getNeighborNodeIterator();
+                    neighborIterator = maxPointeur.noeud.getNeighborNodeIterator();
                     while (neighborIterator.hasNext()) {
                         Node neighbor = neighborIterator.next();
-                        int v = nodeIndexMap.get(neighbor);
-                        if (couleurs[v] == j) {
+                        int v = mapIndexNoeud.get(neighbor);
+                        if (tableauCouleurNoeud[v] == j) {
                             collisions++;
                         }
                     }
@@ -288,55 +283,48 @@ public class Graph extends SingleGraph {
                 i = bestColor;
 
                 // Ajoute les voisins ayant la même couleur à volsMemesNiveaux
-                neighborIterator = maxPtr.node.getNeighborNodeIterator();
+                neighborIterator = maxPointeur.noeud.getNeighborNodeIterator();
                 while (neighborIterator.hasNext()) {
                     Node neighbor = neighborIterator.next();
-                    int v = nodeIndexMap.get(neighbor);
-                    if (couleurs[v] == i) {
-                        Vol vol1 = this.getVolsMemesNiveaux().getVolFromNode(maxPtr.node,
+                    int v = mapIndexNoeud.get(neighbor);
+                    if (tableauCouleurNoeud[v] == i) {
+                        Vol vol1 = this.getVolsMemesNiveaux().getVolDepuisNoeud(maxPointeur.noeud,
                                 this.getVolsMemesNiveaux().getListVol());
-                        Vol vol2 = this.getVolsMemesNiveaux().getVolFromNode(neighbor,
+                        Vol vol2 = this.getVolsMemesNiveaux().getVolDepuisNoeud(neighbor,
                                 this.getVolsMemesNiveaux().getListVol());
                         this.getVolsMemesNiveaux().gestionNiveauMaxAtteint(vol1, vol2);
                     }
                 }
             }
 
-            couleurs[u] = i;
-            
-            int col = (int) maxPtr.node.getNumber("color");
-            maxPtr.node.setAttribute("ui.style", "fill-color:rgba(" + cols[i].getRed() + "," + cols[i].getGreen() + "," + cols[i].getBlue() + ",200);");
-            // maxPtr.node.setAttribute("ui.style", "fill-color: " + couleursHex[i] + ";");
+            tableauCouleurNoeud[u] = i;
+
+            maxPointeur.noeud.setAttribute("ui.style", "fill-color:rgba(" + couleursVisuelles[i].getRed() + "," + couleursVisuelles[i].getGreen() + ","
+                    + couleursVisuelles[i].getBlue() + ",200);");
 
             // Réinitialisation de l'itérateur pour les voisins
-            neighborIterator = maxPtr.node.getNeighborNodeIterator();
+            neighborIterator = maxPointeur.noeud.getNeighborNodeIterator();
             while (neighborIterator.hasNext()) {
                 Node neighbor = neighborIterator.next();
-                int v = nodeIndexMap.get(neighbor);
-                if (couleurs[v] != -1) {
-                    couleursVoisins[couleurs[v]] = false;
+                int v = mapIndexNoeud.get(neighbor);
+                if (tableauCouleurNoeud[v] != -1) {
+                    couleursVoisins[tableauCouleurNoeud[v]] = false;
                 }
             }
 
             // Mise à jour des informations de saturation et de degré pour les voisins
-            neighborIterator = maxPtr.node.getNeighborNodeIterator();
+            neighborIterator = maxPointeur.noeud.getNeighborNodeIterator();
             while (neighborIterator.hasNext()) {
                 Node neighbor = neighborIterator.next();
-                int v = nodeIndexMap.get(neighbor);
-                if (couleurs[v] == -1) {
-                    queueDePriorite.remove(new NodeInfo(adjCols[v].size(), degreNoeud[v], neighbor));
-                    adjCols[v].add(couleurs[u]);
+                int v = mapIndexNoeud.get(neighbor);
+                if (tableauCouleurNoeud[v] == -1) {
+                    queueDePriorite.remove(new InfoNoeud(adjCols[v].size(), degreNoeud[v], neighbor));
+                    adjCols[v].add(tableauCouleurNoeud[u]);
                     degreNoeud[v]--;
-                    queueDePriorite.add(new NodeInfo(adjCols[v].size(), degreNoeud[v], neighbor));
+                    queueDePriorite.add(new InfoNoeud(adjCols[v].size(), degreNoeud[v], neighbor));
                 }
             }
         }
-
-        System.out.println("Nombre de coloration optimal : " + this.koptimal);
-        System.out.println("Nombre de niveaux de vols utilisés : " + this.kdonne);
-        System.out.println("Nombre de vols en risque de collision : " + this.getVolsMemesNiveaux().size());
-        System.out.println(this.getVolsMemesNiveaux());
-        System.out.println("Kmax : " + this.kmax);
     }
     // #endregion
 
@@ -347,13 +335,12 @@ public class Graph extends SingleGraph {
      * @author Xavier LACROIX
      */
     public void welshPowell() {
-        WelshPowell wp = new WelshPowell("color");
-        wp.init(this);
-        wp.compute();
-    
-        setKoptimal(wp.getChromaticNumber());
-        System.out.println("Nombre de coloration optimal : " + getKoptimal());
-    
+        WelshPowell colorationWelshPowell = new WelshPowell("color");
+        colorationWelshPowell.init(this);
+        colorationWelshPowell.compute();
+
+        setKoptimal(colorationWelshPowell.getChromaticNumber());
+
         // Display colors
         Color[] cols = new Color[getKdonne()];
         for (int i = 0; i < getKdonne(); i++) {
@@ -361,16 +348,14 @@ public class Graph extends SingleGraph {
         }
         for (Node n : this) {
             int col = (int) n.getNumber("color");
-            n.setAttribute("ui.style", "fill-color:rgba(" + cols[col].getRed() + "," + cols[col].getGreen() + "," + cols[col].getBlue() + ",200);");
+            n.setAttribute("ui.style", "fill-color:rgba(" + cols[col].getRed() + "," + cols[col].getGreen() + ","
+                    + cols[col].getBlue() + ",200);");
         }
     }
 
     // #endregion
 
-
-    
-    
-    public String getColoredGraph() {
+    public String getGrapheColore() {
         String graphInfo = "";
         Pattern pattern = Pattern.compile("fill-color: (.*?);");
         for (Node node : this) {
@@ -385,7 +370,6 @@ public class Graph extends SingleGraph {
         return graphInfo;
     }
 
-
     // #endregion
 
     // #region Remplissage du graphe
@@ -395,51 +379,101 @@ public class Graph extends SingleGraph {
      * 
      * @param file adresse du fichier
      */
-    public void fillFile(String file) {
+
+    public void remplirAvecFichier(String file) throws ExceptionAnalyse, IOException {
         this.clear();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String line;
-            // première ligne => kmax
-            this.kmax = Integer.parseInt(reader.readLine());
-            // deuxième ligne => nombre de noeuds
-            int nbr_noeuds = Integer.parseInt(reader.readLine());
-            // creation des noeuds
-            for (int i = 1; i <= nbr_noeuds; i++) {
-                this.addNode(Integer.toString(i)).addAttribute("ui.label", i); // ajout du label
-            }
-            // creations des arretes
-            while ((line = reader.readLine()) != null) {
+        ArrayList<ExceptionAnalyse> exceptions = new ArrayList<ExceptionAnalyse>();
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line;
+
+        // première ligne => kmax
+        String premiereLigne = reader.readLine();
+        if (premiereLigne == null) {
+            exceptions.add(new ExceptionAnalyse(1, "La première ligne ne doit pas etre vide"));
+        } else if (!premiereLigne.matches("\\d+")) {
+            exceptions.add(new ExceptionAnalyse(1, "La première ligne doit être un entier positif"));
+        }
+        this.kdonne = Integer.parseInt(premiereLigne);
+
+        // deuxième ligne => nombre de noeuds
+        String deuxiemeligne = reader.readLine();
+        if (deuxiemeligne == "") {
+            exceptions.add(new ExceptionAnalyse(2, "La deuxième ligne ne doit pas etre vide"));
+        } else if (!deuxiemeligne.matches("\\d+")) {
+            exceptions.add(new ExceptionAnalyse(2, "La deuxième ligne doit être un entier positif"));
+        }
+        int nbr_noeuds = Integer.parseInt(deuxiemeligne);
+
+        // creation des noeuds
+        for (int i = 1; i <= nbr_noeuds; i++) {
+            this.addNode(Integer.toString(i)).addAttribute("ui.label", i); // ajout du label
+        }
+
+        // creations des arretes
+        int iterateur = 2;
+        while ((line = reader.readLine()) != null) {
+            iterateur++;
+            if (line == "") {
+                exceptions.add(new ExceptionAnalyse(iterateur, "La ligne est vide"));
+            } else {
+                try {
                 String[] parts = line.split(" ");
-                this.addEdge(parts[0] + "," + parts[1], parts[0], parts[1]);
-            }
+                if (parts.length != 2) {
+                    exceptions.add(new ExceptionAnalyse(iterateur, "La ligne doit contenir 2 entiers séparés par un espace"));
+                } else if (!parts[0].matches("\\d+")) {
+                    exceptions.add(new ExceptionAnalyse(iterateur, "la première valeur n'est pas un entier"));
+                } else if (!parts[1].matches("\\d+")) {
+                    exceptions.add(new ExceptionAnalyse(iterateur, "la deuxième valeur n'est pas un entier"));
+                } else if (Integer.parseInt(parts[0]) < 0) {
+                    exceptions.add(new ExceptionAnalyse(iterateur, "le premier entier doit être positif"));
+                } else if (Integer.parseInt(parts[1]) < 0) {
+                    exceptions.add(new ExceptionAnalyse(iterateur, "Le deuxième entier doit être positif"));
+                } else if (Integer.parseInt(parts[0]) > nbr_noeuds) {
+                    exceptions.add(new ExceptionAnalyse(iterateur,
+                            "Le premier entier doit être inférieur ou égal au nombre de noeuds : " + nbr_noeuds));
+                } else if (Integer.parseInt(parts[1]) > nbr_noeuds) {
+                    exceptions.add(new ExceptionAnalyse(iterateur,
+                            "Le deuxième entier doit être inférieur ou égal au nombre de noeuds " + nbr_noeuds));
+                } else if (parts[0].equals(parts[1])) {
+                    exceptions.add(new ExceptionAnalyse(iterateur, "Un noeuds ne peut pas être relié à lui même"));
+                } else if (this.getEdge(parts[0] + "," + parts[1]) == null
+                        && this.getEdge(parts[1] + "," + parts[0]) == null) {
+                    this.addEdge(parts[0] + "," + parts[1], parts[0], parts[1]);
+                }
+            
+        
             reader.close();
+        
         } catch (IOException e) { // erreur de lecture du fichier
             e.printStackTrace();
         }
+    }
+}
+        
     }
 
     /**
      * Rempli le graph des collisions depuis une liste de vol
      * 
-     * @param listVol objet ListVol
+     * @param listeVol objet ListVol
      */
-    public void fillVol(ListVol listVol, int marge) {
+    public void remplirAvecListeVol(ListVol listeVol, int marge) {
         this.clear();
-        this.getVolsMemesNiveaux().setListVol(listVol);
+        this.getVolsMemesNiveaux().setListVol(listeVol);
         ;
         // creation des noeuds
-        for (Vol vol : listVol.getList()) {
+        for (Vol vol : listeVol) {
             this.addNode(vol.getCode()).addAttribute("ui.label", vol.getCode()); // ajout du label
         }
         // creation des arretes
-        for (int i = 0; i < listVol.getList().size(); i++) {
-            for (int j = i + 1; j < listVol.getList().size(); j++) {
+        for (int i = 0; i < listeVol.size(); i++) {
+            for (int j = i + 1; j < listeVol.size(); j++) {
                 // si les vols i et j sont en collision
-                if ((listVol.getVol(i).collision(listVol.getVol(j), marge)) != null) {
-                    this.addEdge(listVol.getVol(i).getCode() + "," + listVol.getVol(j).getCode(),
-                            listVol.getVol(i).getCode(), listVol.getVol(j).getCode()); // code de l'arrete =
-                                                                                       // "codei,codej"
+
+                if ((listeVol.get(i).collision(listeVol.get(j), marge)) != null) {
+                    this.addEdge(listeVol.get(i).getCode() + "," + listeVol.get(j).getCode(),
+                            listeVol.get(i).getCode(), listeVol.get(j).getCode()); // code de l'arrete =
+                                                                                 // "codei,codej"
                 }
             }
         }
@@ -449,19 +483,20 @@ public class Graph extends SingleGraph {
      * Rempli le graph des aeroports et des vols pour une représentation
      * géographique
      * 
-     * @param listAeroport objet ListAeroport
-     * @param listVol      objet ListVol
+     * @param listeAeroport objet ListAeroport
+     * @param listeVol      objet ListVol
      */
-    public void fillMap(ListeAeroport listAeroport, ListVol listVol) {
+
+    public void remplirCarte(ListeAeroport listeAeroport, ListVol listeVol) {
         this.clear();
-        this.getVolsMemesNiveaux().setListVol(listVol);
+        this.getVolsMemesNiveaux().setListVol(listeVol);
         // creation des noeuds
-        for (Aeroport aeroport : listAeroport.getList()) {
+        for (Aeroport aeroport : listeAeroport) {
             Node noeud = this.addNode(aeroport.getCode());
             noeud.addAttribute("ui.label", aeroport.getCode()); // ajout du label
         }
         // creation des arretes
-        for (Vol vol : listVol.getList()) {
+        for (Vol vol : listeVol) {
             // si l'arrete n'existe pas on l'ajoute
             if (this.getNode(vol.getDepart().getCode()).getEdgeBetween(vol.getArrivee().getCode()) == null) {
                 this.addEdge(vol.getCode(), vol.getDepart().getCode(), vol.getArrivee().getCode()); // code de l'arrete
@@ -476,7 +511,7 @@ public class Graph extends SingleGraph {
     /**
      * cache les noeud avec un degrée de 0
      */
-    public void hideSoloNode() {
+    public void cacherNoeudSeul() {
         // parcours de tous les noeuds
         for (Node node : this.getEachNode()) {
             // si le noeud est de degré 0 on le rend non visible

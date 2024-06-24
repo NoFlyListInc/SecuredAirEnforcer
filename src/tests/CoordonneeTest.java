@@ -22,7 +22,7 @@ public class CoordonneeTest {
     public void testCreationCoordonnee() {
         // Vérification des valeurs
         assertNotNull(this.coordonnee);
-        assertEquals(48, this.coordonnee.getDegree());
+        assertEquals(48, this.coordonnee.getDegre());
         assertEquals(2, this.coordonnee.getMinute());
         assertEquals(30, this.coordonnee.getSeconde());
         assertEquals('N', this.coordonnee.getDirection());
@@ -84,7 +84,7 @@ public class CoordonneeTest {
 
     @Test
     public void testGetDecimal() {
-        assertEquals(48.041666666666664, this.coordonnee.obtenirDecimal(), 0.1);
+        assertEquals(48.041666666666664, this.coordonnee.getDecimal(), 0.1);
     }
 
     @Test
