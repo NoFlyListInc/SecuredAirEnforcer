@@ -15,6 +15,12 @@ import src.core.Graph;
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 
+//graphstream imports
+import org.graphstream.graph.Node;
+
+//util imports
+import java.util.ArrayList;
+
 //awt imports
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -32,10 +38,14 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 //io imports
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+
+//nio imports
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.FileAlreadyExistsException;
 //util imports
 
 //#endregion
@@ -58,7 +68,7 @@ public class FenetreImportFolder extends SuperposedFenetre {
 
     //#region Fenetre
         // Base de la fenêtre
-        this.setTitle("Construction Window");
+        this.setTitle("Coloration à la chaine");
         this.setSize(800, 600);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
@@ -83,14 +93,14 @@ public class FenetreImportFolder extends SuperposedFenetre {
 
     //#region Labels
         // Titre de l'importation de dossier
-        JLabel titreFold = new JLabel("<html><center>Charger un dossier</center></html>");
+        JLabel titreFold = new JLabel("<html><center>Charger plusieurs fichiers</center></html>");
         titreFold.setForeground(Color.WHITE);
-        titreFold.setFont(titreFold.getFont().deriveFont(Font.PLAIN, 25));
+        titreFold.setFont(titreFold.getFont().deriveFont(Font.PLAIN, 22));
         titreFold.setHorizontalAlignment(SwingConstants.CENTER);
         titreFold.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Instruction pour l'importation de dossier
-        JLabel instructionFold = new JLabel("<html><center>Veuillez sélectionner un dossier contenant les fichiers .txt</center></html>");
+        JLabel instructionFold = new JLabel("<html><center>Veuillez sélectionner un ou plusieurs fichiers .txt</center></html>");
         instructionFold.setForeground(Color.WHITE);
         instructionFold.setFont(instructionFold.getFont().deriveFont(Font.PLAIN, 15));
         instructionFold.setHorizontalAlignment(SwingConstants.CENTER);
@@ -104,7 +114,7 @@ public class FenetreImportFolder extends SuperposedFenetre {
         boutonFold.setContentAreaFilled(false);
         boutonFold.setFont(boutonFold.getFont().deriveFont(Font.PLAIN, 25));
         boutonFold.setAlignmentX(Component.CENTER_ALIGNMENT);
-        boutonFold.setToolTipText("<html>Charger un dossier contenant des fichiers TXT ou un/des fichier(s) TXT<br>Exemple : <br> kmax <br> nbNoeuds<br> arretes</html>");
+        boutonFold.setToolTipText("<html>Charger un ou des fichier(s) TXT<br>Exemple : <br> kmax <br> nbNoeuds<br> arretes</html>");
 
         // Ajouter les composants au panneau d'importation de dossier
         panFold.add(titreFold);
@@ -118,62 +128,58 @@ public class FenetreImportFolder extends SuperposedFenetre {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 fileChooser.setMultiSelectionEnabled(true);
                 fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Text files", "txt"));
                 int returnValue = fileChooser.showOpenDialog(null);
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    if (fileChooser.getSelectedFile().isDirectory()) {
-                        File[] files = fileChooser.getSelectedFile().listFiles();
-                        for (File file : files) {
-                            if (!file.getName().endsWith(".txt")) {
-                                continue;
-                            }
-                            try {
-                                String Path = file.getAbsolutePath();
-                                Graph graph = new Graph("test");
-                                graph.fillFile(Path);
-
-                                BufferedReader reader = new BufferedReader(new FileReader(Path));
-                                String line = reader.readLine();
-                                int kMAX = Integer.parseInt(line);
-                                reader.close();
-                                graph.setKdonne(kMAX);
-                                graph.dSature();
-
-
-                                String graphInfo = graph.getColoredGraph();
-                                System.out.println(graphInfo);
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                    } else {
-                        
-                    File[] selectedFiles = fileChooser.getSelectedFiles();
-                    for (File files : selectedFiles) {
+                if (returnValue == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFiles().length > 0) {
+                    try {
+                        //creation du dossier resultat
+                        String resultatPath = fileChooser.getSelectedFiles()[0].getParentFile().getAbsolutePath()+"/resulat";
+                        Path dossier = Paths.get(resultatPath);
                         try {
+                            Files.createDirectory(dossier);
+                        } catch (FileAlreadyExistsException ex) {
+                            // si il existe deja on fait rien
+                        }
+                        //fichier coloration-groupe
+                        BufferedWriter writerColorationFile = new BufferedWriter(new FileWriter(resultatPath+"/"+"coloration-groupeLacroixNouvelFernandes.csv"));
+
+                        //on parcours chaque fichier
+                        for (File files : fileChooser.getSelectedFiles()) {
+                            //creation du graph
                             String Path = files.getAbsolutePath();
-                            Graph graph = new Graph("test");
+                            Graph graph = new Graph("graph");
                             try {
                                 graph.fillFile(Path);
                             } catch (Exception ex) {
-                                //TODO je sais pas quoi faire encore
+                                JOptionPane.showMessageDialog(FenetreImportFolder.this, ex.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
                             }
-
-                            BufferedReader reader = new BufferedReader(new FileReader(Path));
-                            String line = reader.readLine();
-                            int kMAX = Integer.parseInt(line);
-                            reader.close();
-                            graph.setKdonne(kMAX);
+                            // coloration                            
                             graph.dSature();
-                        } catch (FileNotFoundException ex) {
-                            ex.printStackTrace();
+
+                            //creation du fichier reponse
+                            BufferedWriter writer = new BufferedWriter(new FileWriter(resultatPath+"/"+files.getName().replace("graph","colo")));
+                            ArrayList<String> couleurList = new ArrayList<String>();
+                            for (Node noeud : graph.getEachNode()) {
+                                int couleur = couleurList.indexOf(noeud.getAttribute("ui.style"));
+                                if (couleur == -1) {
+                                    couleur=couleurList.size();
+                                    couleurList.add(noeud.getAttribute("ui.style"));
+                                }
+                                writer.write(Integer.toString(noeud.getAttribute("ui.label"))+" ; "+(couleur+1));
+                                writer.newLine();
+                            }
+                            writer.close();
+
+                            //nouvelle ligne dans le fichier coloration-groupe
+                            writerColorationFile.write(files.getName().replace("graph","colo")+";"+graph.getVolsMemesNiveaux().size());
+                            writerColorationFile.newLine();
                         }
-                        catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
+                        writerColorationFile.close();
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(FenetreImportFolder.this, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+                        return;
                     }
                     panFold.setBackground(new Color(21, 105, 19));
                 }

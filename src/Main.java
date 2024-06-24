@@ -1,5 +1,4 @@
 package src;
-import org.jxmapviewer.viewer.GeoPosition;
 
 import src.ihm.FenetrePrincipale;
 

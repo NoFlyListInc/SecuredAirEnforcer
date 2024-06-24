@@ -134,7 +134,7 @@ public class Aeroport
     public double getx()
     {
         //6371 * cos(latitude) * sin(longitude)
-        return 6371 * Math.cos(this.latitude.getDecimalRadians()) * Math.sin(this.longitude.getDecimalRadians());
+        return 6371 * Math.sin(this.longitude.getDecimalRadians()) * Math.cos(this.latitude.getDecimalRadians());
     }
 
     /**
@@ -146,8 +146,6 @@ public class Aeroport
         //6371 * cos(latitude) * cos(longitude)
         return 6371 * Math.cos(this.latitude.getDecimalRadians()) * Math.cos(this.longitude.getDecimalRadians());
     }
-
-
 
     //#endregion
 

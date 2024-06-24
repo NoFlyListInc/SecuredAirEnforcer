@@ -412,7 +412,7 @@ public class Graph extends SingleGraph {
         else if (!premiereLigne.matches("\\d+")) {
             exceptions.add(new ParseException(1, "La première ligne doit être un entier positif"));
         }
-        this.kmax = Integer.parseInt(premiereLigne);
+        this.kdonne = Integer.parseInt(premiereLigne);
 
         // deuxième ligne => nombre de noeuds
         String deuxiemeligne = reader.readLine();

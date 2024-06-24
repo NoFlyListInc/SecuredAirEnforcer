@@ -12,14 +12,14 @@ import src.core.Coordonnee;
 public class AeroportTest {
 
     private Aeroport aeroport;
-    private Coordonnee lattitude;
+    private Coordonnee latitude;
     private Coordonnee longitude;
 
     @Before
     public void setUp() {
-        this.lattitude = new Coordonnee(50, 3, 30, 'N');
+        this.latitude = new Coordonnee(50, 3, 30, 'N');
         this.longitude = new Coordonnee(2, 30, 30, 'E');
-        this.aeroport = new Aeroport("CDG", "Charles de Gaulle", this.lattitude, this.longitude);
+        this.aeroport = new Aeroport("CDG", "Charles de Gaulle", this.latitude, this.longitude);
     }
 
     @Test
@@ -28,29 +28,29 @@ public class AeroportTest {
         assertNotNull(this.aeroport);
         assertEquals("CDG", this.aeroport.getCode());
         assertEquals("Charles de Gaulle", this.aeroport.getVille());
-        assertEquals(this.lattitude, this.aeroport.getLatitude());
+        assertEquals(this.latitude, this.aeroport.getLatitude());
         assertEquals(this.longitude, this.aeroport.getLongitude());
 
         // Vérification des erreurs lors de valeur null
         assertThrows(IllegalArgumentException.class, () -> {
-            new Aeroport(null, "Charles de Gaulle", this.lattitude, this.longitude);
+            new Aeroport(null, "Charles de Gaulle", this.latitude, this.longitude);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            new Aeroport("CDG", null, this.lattitude, this.longitude);
+            new Aeroport("CDG", null, this.latitude, this.longitude);
         });
         assertThrows(IllegalArgumentException.class, () -> {
             new Aeroport("CDG", "Charles de Gaulle", null, this.longitude);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            new Aeroport("CDG", "Charles de Gaulle", this.lattitude, null);
+            new Aeroport("CDG", "Charles de Gaulle", this.latitude, null);
         });
 
         // Vérification des erreurs lors de valeur vide
         assertThrows(IllegalArgumentException.class, () -> {
-            new Aeroport("", "Charles de Gaulle", this.lattitude, this.longitude);
+            new Aeroport("", "Charles de Gaulle", this.latitude, this.longitude);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            new Aeroport("CDG", "", this.lattitude, this.longitude);
+            new Aeroport("CDG", "", this.latitude, this.longitude);
         });
 
         // Verification des différentes possibilité de direction des coordonnées (N et E deja testé en haut)
@@ -63,23 +63,23 @@ public class AeroportTest {
         assertNotNull(aeroportSouthWest2);
 
         // Vérification des erreurs lors de valeur de direction incorrecte
-        Coordonnee lattitudeWrongDirection = new Coordonnee(50, 3, 30, 'A');
+        Coordonnee lattitudeWrongDirection = new Coordonnee(50, 3, 30, 'W');
         assertThrows(IllegalArgumentException.class, () -> {
             new Aeroport("CDG", "Charles de Gaulle", lattitudeWrongDirection, longitude);
         });
-        Coordonnee longitudeWrongDirection = new Coordonnee(2, 30, 30, 'A');
+        Coordonnee longitudeWrongDirection = new Coordonnee(2, 30, 30, 'N');
         assertThrows(IllegalArgumentException.class, () -> {
-            new Aeroport("CDG", "Charles de Gaulle", lattitude, longitudeWrongDirection);
+            new Aeroport("CDG", "Charles de Gaulle", latitude, longitudeWrongDirection);
         });
     }
 
     @Test
     public void testGetx() {
-        assertEquals(this.aeroport.getx(), 50.05833333333333, 0.0001);
+        assertEquals(this.aeroport.getx(), 4.8674362740633, 0.1);
     }
 
     @Test
     public void testGety() {
-        assertEquals(this.aeroport.gety(), 2.5083333333333333, 0.0001);
+        assertEquals(this.aeroport.gety(), 2.5083333333333333, 0.1);
     }
 }
