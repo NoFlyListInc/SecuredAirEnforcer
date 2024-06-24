@@ -15,7 +15,7 @@ import src.core.Coordonnee;
 import src.core.ListeAeroport;
 import src.exception.ExceptionAnalyse;
 
-public class ListAeroportTest {
+public class ListeAeroportTest {
 
     private ListeAeroport listAeroport;
 

@@ -3,7 +3,7 @@ package src.ihm;
 import src.core.Graphe;
 import src.core.ListeAeroport;
 
-import src.core.ListVol;
+import src.core.ListeVol;
 //graphstream
 import org.graphstream.ui.swingViewer.Viewer;
 import org.graphstream.ui.swingViewer.View;
@@ -158,7 +158,7 @@ public class FenetreGraphe extends FenetreSuperpose {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
             }
-            ListVol listeVol = new ListVol();
+            ListeVol listeVol = new ListeVol();
             try {
                 listeVol.remplir(this.cheminFichier, listeAeroport);
             } catch (Exception e) {

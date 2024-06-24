@@ -149,7 +149,7 @@ public class Vol
         if (this == other) return true;
         if (other == null || getClass() != other.getClass()) return false;
         Vol otherVol = (Vol) other;
-        if (this.code == otherVol.code && 
+        if (this.code.equals(otherVol.code) && 
             this.depart.equals(otherVol.depart) &&
             this.arrivee.equals(otherVol.arrivee) &&
             this.heureDepart.equals(otherVol.heureDepart) &&

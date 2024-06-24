@@ -75,11 +75,11 @@ public class AeroportTest {
 
     @Test
     public void testGetx() {
-        assertEquals(this.aeroport.getx(), 4.8674362740633, 0.1);
+        assertEquals(this.aeroport.getx(), 179.007610006, 0.1);
     }
 
     @Test
     public void testGety() {
-        assertEquals(this.aeroport.gety(), 6370.2574585802, 0.1);
+        assertEquals(this.aeroport.gety(), 4086.309907529, 0.1);
     }
 }

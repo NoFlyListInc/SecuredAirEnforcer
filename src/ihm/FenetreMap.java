@@ -15,7 +15,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JScrollPane;
 
 //src objects
-import src.core.ListVol;
+import src.core.ListeVol;
 import src.core.Carte;
 import src.core.ListeAeroport;
 
@@ -303,7 +303,7 @@ public class FenetreMap extends FenetreSuperpose
                     JOptionPane.showMessageDialog(null, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
                 }
                 // lecture du fichier vol-test
-                ListVol listVols = new ListVol();
+                ListeVol listVols = new ListeVol();
                 try {
                     listVols.remplir(filePath, listAeroport);
                 } catch (Exception e) {

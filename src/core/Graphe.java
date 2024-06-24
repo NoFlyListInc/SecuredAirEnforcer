@@ -422,7 +422,6 @@ public class Graphe extends SingleGraph {
             if (line == "") {
                 exceptions.add(new ExceptionAnalyse(iterateur, "La ligne est vide"));
             } else {
-                try {
                 String[] parts = line.split(" ");
                 if (parts.length != 2) {
                     exceptions.add(new ExceptionAnalyse(iterateur, "La ligne doit contenir 2 entiers séparés par un espace"));
@@ -446,16 +445,9 @@ public class Graphe extends SingleGraph {
                         && this.getEdge(parts[1] + "," + parts[0]) == null) {
                     this.addEdge(parts[0] + "," + parts[1], parts[0], parts[1]);
                 }
-            
-        
-            reader.close();
-        
-        } catch (IOException e) { // erreur de lecture du fichier
-            e.printStackTrace();
+            }
         }
-    }
-}
-        
+        reader.close();
     }
 
     /**
@@ -463,7 +455,7 @@ public class Graphe extends SingleGraph {
      * 
      * @param listeVol objet ListVol
      */
-    public void remplirAvecListeVol(ListVol listeVol, int marge) {
+    public void remplirAvecListeVol(ListeVol listeVol, int marge) {
         this.clear();
         this.getVolsMemesNiveaux().setListVol(listeVol);
         ;
@@ -493,7 +485,7 @@ public class Graphe extends SingleGraph {
      * @param listeVol      objet ListVol
      */
 
-    public void remplirCarte(ListeAeroport listeAeroport, ListVol listeVol) {
+    public void remplirCarte(ListeAeroport listeAeroport, ListeVol listeVol) {
         this.clear();
         this.getVolsMemesNiveaux().setListVol(listeVol);
         // creation des noeuds

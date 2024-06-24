@@ -68,7 +68,7 @@ public class Carte extends JXMapViewer
     /**
      * liste des vols
      */
-    private ListVol listeVols;
+    private ListeVol listeVols;
 
     /**
      * label pour afficher les informations
@@ -131,7 +131,7 @@ public class Carte extends JXMapViewer
      * retourne la liste des vols
      * @return listVols
      */
-    public ListVol getListeVols() {
+    public ListeVol getListeVols() {
         return listeVols;
     }
 
@@ -143,7 +143,7 @@ public class Carte extends JXMapViewer
      * rajoute les aeroports, les vols et les collisions sur la carte
      * @param listeVol
      */
-    public void addInformation(ListeAeroport listeAeroport, ListVol listeVol, int marge, int kmax) {
+    public void addInformation(ListeAeroport listeAeroport, ListeVol listeVol, int marge, int kmax) {
         //on met à jour les attributs
         this.listeVols = listeVol;
         this.listeAeroport = listeAeroport;

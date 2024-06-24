@@ -7,15 +7,15 @@ import org.graphstream.graph.Node;
 
 public class VolsMemesNiveaux {
     private ArrayList<HashMap<Vol, Vol>> volsMemesNiveaux;
-    private ListVol listVol;
+    private ListeVol listVol;
 
    //Constructeur
     public VolsMemesNiveaux() {
         this.volsMemesNiveaux = new ArrayList<HashMap<Vol, Vol>>();
-        this.listVol = new ListVol();   
+        this.listVol = new ListeVol();   
     }
 
-    public VolsMemesNiveaux(ListVol listVol) {
+    public VolsMemesNiveaux(ListeVol listVol) {
         this.volsMemesNiveaux = new ArrayList<HashMap<Vol, Vol>>();
         this.listVol = listVol;
     }
@@ -24,12 +24,12 @@ public class VolsMemesNiveaux {
     public ArrayList<HashMap<Vol, Vol>> getVolsMemesNiveaux() {
         return this.volsMemesNiveaux;
     }
-    public ListVol getListVol() {
+    public ListeVol getListVol() {
         return this.listVol;
     }
 
     //Setters
-    public void setListVol(ListVol listVol) {
+    public void setListVol(ListeVol listVol) {
         this.listVol = listVol;
     }
 
@@ -61,7 +61,7 @@ public class VolsMemesNiveaux {
         }
     }
 
-    public Vol getVolDepuisNoeud(Node node, ListVol listVol) {
+    public Vol getVolDepuisNoeud(Node node, ListeVol listVol) {
         // parcours de la liste des vols
         for (Vol vol : listVol) {
             // si le code du vol est égal à l'id du noeud

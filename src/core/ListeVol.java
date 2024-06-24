@@ -18,7 +18,7 @@ import java.io.IOException;
  * @methodes addVol, removeVol, getVol, getVolByCode, fill, toString
  * @autor NOUVEL Armand
  */
-public class ListVol extends ArrayList<Vol>
+public class ListeVol extends ArrayList<Vol>
 {
 
     //#region constructeur
@@ -26,7 +26,7 @@ public class ListVol extends ArrayList<Vol>
     /**
      * Constructeur de ListVol
      */
-    public ListVol() {
+    public ListeVol() {
         super();
     }
 

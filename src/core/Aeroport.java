@@ -118,8 +118,8 @@ public class Aeroport
         if (this == autre) return true;
         if (autre == null || getClass() != autre.getClass()) return false;
         Aeroport autreAeroport = (Aeroport) autre;
-        if (this.code == autreAeroport.code &&
-            this.ville == autreAeroport.ville &&
+        if (this.code.equals(autreAeroport.code) &&
+            this.ville.equals(autreAeroport.ville) &&
             this.longitude.equals(autreAeroport.longitude) &&
             this.latitude.equals(autreAeroport.latitude)) {
                 return true;
@@ -134,7 +134,7 @@ public class Aeroport
     public double getx()
     {
         //6371 * cos(latitude) * sin(longitude)
-        return 6371 * Math.sin(this.longitude.getDecimalRadians()) * Math.cos(this.latitude.getDecimalRadians());
+        return (6371 * Math.cos(this.latitude.getDecimalRadians()) * Math.sin(this.longitude.getDecimalRadians()));
     }
 
     /**
@@ -144,7 +144,7 @@ public class Aeroport
     public double gety()
     {
         //6371 * cos(latitude) * cos(longitude)
-        return 6371 * Math.cos(this.latitude.getDecimalRadians()) * Math.cos(this.longitude.getDecimalRadians());
+        return (6371 * Math.cos(this.latitude.getDecimalRadians()) * Math.cos(this.longitude.getDecimalRadians()));
     }
 
     //#endregion

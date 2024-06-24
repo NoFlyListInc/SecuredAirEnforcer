@@ -5,8 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.IOException;
-import java.text.ParseException;
+import java.io.FileNotFoundException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,16 +14,17 @@ import src.core.Aeroport;
 import src.core.Coordonnee;
 import src.core.Horaire;
 import src.core.ListeAeroport;
-import src.core.ListVol;
+import src.core.ListeVol;
 import src.core.Vol;
+import src.exception.ExceptionAnalyse;
 
-public class ListVolTest {
+public class ListeVolTest {
 
-    private ListVol listVol;
+    private ListeVol listVol;
 
     @Before
     public void setUp() {
-        this.listVol = new ListVol();
+        this.listVol = new ListeVol();
     }
 
     @Test
@@ -49,18 +49,18 @@ public class ListVolTest {
             this.listVol.remplir("", listAeroport);
             fail();
         } catch (Exception e) {
-            assertEquals(e.getClass(), IOException.class);
+            assertEquals(e.getClass(), FileNotFoundException.class);
         }
 
         try {
-            this.listVol.remplir("testListVolError.txt", listAeroport);
+            this.listVol.remplir("src/tests/testData/testListVolError.csv", listAeroport);
             fail();
         } catch (Exception e) {
-            assertEquals(e.getClass(), ParseException.class);
+            assertEquals(e.getClass(), ExceptionAnalyse.class);
         }
 
         try {
-            this.listVol.remplir("testListVol.txt", listAeroport);
+            this.listVol.remplir("src/tests/testData/testListVol.csv", listAeroport);
         } catch (Exception e) {
             fail();
         }
