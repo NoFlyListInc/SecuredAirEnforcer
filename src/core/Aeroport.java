@@ -1,9 +1,9 @@
 package src.core;
 
 /**
- * Classe qui défini un Aeroport
+ * <h3>Cette classe définit un aéroport.</h3>
  * @attributs code, ville, latitude, longitude
- * @methodes getx, gety
+ * @methodes getx, gety, equals, toString
  * @author NOUVEL Armand
  */
 public class Aeroport
@@ -11,22 +11,22 @@ public class Aeroport
     //#region Attributs
 
     /**
-     * code unique de l'aeroport
+     * code unique de l'aéroport
      */
     private String code;
 
     /**
-     * ville où se trouve l'aeroport
+     * ville où se trouve l'aéroport
      */
     private String ville;
 
     /**
-     * coordonnee latitude de l'aeroport, (N ou S)
+     * coordonnee latitude de l'aéroport, (N ou S)
      */
     private Coordonnee latitude;
 
     /**
-     * coordonnee longitude de l'aeroport (E ou W/O)
+     * coordonnee longitude de l'aéroport (E ou W/O)
      */
     private Coordonnee longitude;
 
@@ -69,7 +69,7 @@ public class Aeroport
     //#region accesseurs
 
     /**
-     * renvoie le code de l'aeroport
+     * Renvoie le code de l'aéroport
      * @return String
      */
     public String getCode()
@@ -78,7 +78,7 @@ public class Aeroport
     }
 
     /**
-     * renvoie la ville de l'aeroport
+     * Renvoie la ville de l'aéroport
      * @return String
      */
     public String getVille()
@@ -87,7 +87,7 @@ public class Aeroport
     }
 
     /**
-     * renvoie la latitude de l'aeroport
+     * Renvoie la latitude de l'aéroport
      * @return Coordonnee
      */
     public Coordonnee getLatitude()
@@ -96,7 +96,7 @@ public class Aeroport
     }
 
     /**
-     * renvoie la longitude de l'aeroport
+     * Renvoie la longitude de l'aéroport
      * @return Coordonnee
      */
     public Coordonnee getLongitude()
@@ -109,26 +109,26 @@ public class Aeroport
     //#region methodes
 
     /**
-     * vérifie si deux aeroports sont égaux
-     * @param other
+     * vérifie si deux aéroports sont égaux
+     * @param autre
      * @return boolean
      */
     @Override
-    public boolean equals(Object other) {
-        if (this == other) return true;
-        if (other == null || getClass() != other.getClass()) return false;
-        Aeroport otherAeroport = (Aeroport) other;
-        if (this.code == otherAeroport.code &&
-            this.ville == otherAeroport.ville &&
-            this.longitude.equals(otherAeroport.longitude) &&
-            this.latitude.equals(otherAeroport.latitude)) {
+    public boolean equals(Object autre) {
+        if (this == autre) return true;
+        if (autre == null || getClass() != autre.getClass()) return false;
+        Aeroport autreAeroport = (Aeroport) autre;
+        if (this.code == autreAeroport.code &&
+            this.ville == autreAeroport.ville &&
+            this.longitude.equals(autreAeroport.longitude) &&
+            this.latitude.equals(autreAeroport.latitude)) {
                 return true;
             }
         return false;
     }
 
     /**
-     * renvoie la coordonnee x de l'aeroport
+     * Renvoie la coordonnee x de l'aéroport
      * @return double
      */
     public double getx()
@@ -138,7 +138,7 @@ public class Aeroport
     }
 
     /**
-     * renvoie la coordonnee y de l'aeroport
+     * renvoie la coordonnee y de l'aéroport
      * @return double
      */
     public double gety()
@@ -152,7 +152,7 @@ public class Aeroport
     //#region affichage
 
     /**
-     * renvoie une chaine de caractere representant les informations de l'aeroport
+     * renvoie une chaine de caractere representant les informations de l'aéroport
      * @return String
      */
     public String toString()
@@ -163,14 +163,14 @@ public class Aeroport
         Latitude : 45° 43' 35'' N
         Longitude : 5° 5' 27'' E
         */
-        StringBuilder sb = new StringBuilder();
-        sb.append("<html>");
-        sb.append(this.code + "<br>");
-        sb.append(this.ville + "<br>");
-        sb.append(this.latitude.toString() + "<br>");
-        sb.append(this.longitude.toString() + "<br>");
-        sb.append("</html>");
-        return sb.toString();
+        StringBuilder constrChaines = new StringBuilder();
+        constrChaines.append("<html>");
+        constrChaines.append(this.code + "<br>");
+        constrChaines.append(this.ville + "<br>");
+        constrChaines.append(this.latitude.toString() + "<br>");
+        constrChaines.append(this.longitude.toString() + "<br>");
+        constrChaines.append("</html>");
+        return constrChaines.toString();
     }
     
     //#endregion

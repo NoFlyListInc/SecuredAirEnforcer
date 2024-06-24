@@ -3,9 +3,6 @@ package src.core;
 //#region Imports
 //import graphstream class
 import org.graphstream.graph.implementations.SingleGraph;
-
-import src.exception.ParseException;
-
 import org.graphstream.algorithm.coloring.WelshPowell;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
@@ -398,79 +395,27 @@ public class Graph extends SingleGraph {
      * 
      * @param file adresse du fichier
      */
-    public void fillFile(String file) throws ParseException, IOException {
+    public void fillFile(String file) {
         this.clear();
-        ArrayList<ParseException> exceptions = new ArrayList<ParseException>();
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        String line;
-
-        // première ligne => kmax
-        String premiereLigne = reader.readLine();
-        if (premiereLigne == null) {
-            exceptions.add(new ParseException(1, "La première ligne ne doit pas etre vide"));
-        }
-        else if (!premiereLigne.matches("\\d+")) {
-            exceptions.add(new ParseException(1, "La première ligne doit être un entier positif"));
-        }
-        this.kdonne = Integer.parseInt(premiereLigne);
-
-        // deuxième ligne => nombre de noeuds
-        String deuxiemeligne = reader.readLine();
-        if (deuxiemeligne == "") {
-            exceptions.add(new ParseException(2, "La deuxième ligne ne doit pas etre vide"));
-        }
-        else if (!deuxiemeligne.matches("\\d+")) {
-            exceptions.add(new ParseException(2, "La deuxième ligne doit être un entier positif"));
-        }
-        int nbr_noeuds = Integer.parseInt(deuxiemeligne);
-
-        // creation des noeuds
-        for (int i = 1; i <= nbr_noeuds; i++) {
-            this.addNode(Integer.toString(i)).addAttribute("ui.label", i); // ajout du label
-        }
-
-        // creations des arretes
-        int cpt=2;
-        while ((line = reader.readLine()) != null) {
-            cpt++;
-            if (line == "") {
-                exceptions.add(new ParseException(cpt, "La ligne est vide"));
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line;
+            // première ligne => kmax
+            this.kmax = Integer.parseInt(reader.readLine());
+            // deuxième ligne => nombre de noeuds
+            int nbr_noeuds = Integer.parseInt(reader.readLine());
+            // creation des noeuds
+            for (int i = 1; i <= nbr_noeuds; i++) {
+                this.addNode(Integer.toString(i)).addAttribute("ui.label", i); // ajout du label
             }
-            else {
+            // creations des arretes
+            while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(" ");
-                if (parts.length != 2) {
-                    exceptions.add(new ParseException(cpt, "La ligne doit contenir 2 entiers séparés par un espace"));
-                }
-                else if (!parts[0].matches("\\d+") ) {
-                    exceptions.add(new ParseException(cpt, "la première valeur n'est pas un entier"));
-                }
-                else if (!parts[1].matches("\\d+")) {
-                    exceptions.add(new ParseException(cpt, "la deuxième valeur n'est pas un entier"));
-                }
-                else if (Integer.parseInt(parts[0]) < 0) {
-                    exceptions.add(new ParseException(cpt, "le premier entier doit être positif"));
-                }
-                else if (Integer.parseInt(parts[1]) < 0) {
-                    exceptions.add(new ParseException(cpt, "Le deuxième entier doit être positif"));
-                }
-                else if (Integer.parseInt(parts[0]) > nbr_noeuds) {
-                    exceptions.add(new ParseException(cpt, "Le premier entier doit être inférieur ou égal au nombre de noeuds : " + nbr_noeuds));
-                }
-                else if (Integer.parseInt(parts[1]) > nbr_noeuds) {
-                    exceptions.add(new ParseException(cpt, "Le deuxième entier doit être inférieur ou égal au nombre de noeuds " + nbr_noeuds));
-                }
-                else if (parts[0].equals(parts[1])) {
-                    exceptions.add(new ParseException(cpt, "Un noeuds ne peut pas être relié à lui même"));
-                }
-                else if (this.getEdge(parts[0] + "," + parts[1]) == null && this.getEdge(parts[1] + "," + parts[0]) == null) {
-                    this.addEdge(parts[0] + "," + parts[1], parts[0], parts[1]);
-                }
+                this.addEdge(parts[0] + "," + parts[1], parts[0], parts[1]);
             }
-        }
-        reader.close();
-        // gestion des exceptions
-        if (exceptions.size() > 0) {
-            throw new ParseException(file, exceptions);
+            reader.close();
+        } catch (IOException e) { // erreur de lecture du fichier
+            e.printStackTrace();
         }
     }
 
@@ -484,16 +429,16 @@ public class Graph extends SingleGraph {
         this.getVolsMemesNiveaux().setListVol(listVol);
         ;
         // creation des noeuds
-        for (Vol vol : listVol) {
+        for (Vol vol : listVol.getList()) {
             this.addNode(vol.getCode()).addAttribute("ui.label", vol.getCode()); // ajout du label
         }
         // creation des arretes
-        for (int i = 0; i < listVol.size(); i++) {
-            for (int j = i + 1; j < listVol.size(); j++) {
+        for (int i = 0; i < listVol.getList().size(); i++) {
+            for (int j = i + 1; j < listVol.getList().size(); j++) {
                 // si les vols i et j sont en collision
-                if ((listVol.get(i).collision(listVol.get(j), marge)) != null) {
-                    this.addEdge(listVol.get(i).getCode() + "," + listVol.get(j).getCode(),
-                            listVol.get(i).getCode(), listVol.get(j).getCode()); // code de l'arrete =
+                if ((listVol.getVol(i).collision(listVol.getVol(j), marge)) != null) {
+                    this.addEdge(listVol.getVol(i).getCode() + "," + listVol.getVol(j).getCode(),
+                            listVol.getVol(i).getCode(), listVol.getVol(j).getCode()); // code de l'arrete =
                                                                                        // "codei,codej"
                 }
             }
@@ -507,16 +452,16 @@ public class Graph extends SingleGraph {
      * @param listAeroport objet ListAeroport
      * @param listVol      objet ListVol
      */
-    public void fillMap(ListAeroport listAeroport, ListVol listVol) {
+    public void fillMap(ListeAeroport listAeroport, ListVol listVol) {
         this.clear();
         this.getVolsMemesNiveaux().setListVol(listVol);
         // creation des noeuds
-        for (Aeroport aeroport : listAeroport) {
+        for (Aeroport aeroport : listAeroport.getList()) {
             Node noeud = this.addNode(aeroport.getCode());
             noeud.addAttribute("ui.label", aeroport.getCode()); // ajout du label
         }
         // creation des arretes
-        for (Vol vol : listVol) {
+        for (Vol vol : listVol.getList()) {
             // si l'arrete n'existe pas on l'ajoute
             if (this.getNode(vol.getDepart().getCode()).getEdgeBetween(vol.getArrivee().getCode()) == null) {
                 this.addEdge(vol.getCode(), vol.getDepart().getCode(), vol.getArrivee().getCode()); // code de l'arrete

@@ -3,7 +3,7 @@ package src.core;
 //import ArrayList object
 import java.util.ArrayList;
 
-import src.exception.ParseException;
+import src.exception.ExceptionAnalyse;
 
 //import reader files tools
 import java.io.BufferedReader;
@@ -36,38 +36,38 @@ public class ListVol extends ArrayList<Vol>
 
     /**
      * Rempli la liste des vols à partir d'un fichier vol-testxx.csv
-     * @param file adresse du fichier
+     * @param fichier adresse du fichier
      * @param listAeroport liste des aeroports
      */
-    public void fill(String file, ListAeroport listAeroport) throws ParseException ,IOException {
-        ArrayList<ParseException> exceptions = new ArrayList<ParseException>();
-        BufferedReader reader = new BufferedReader(new FileReader(file));
+    public void remplir(String fichier, ListeAeroport listAeroport) throws ExceptionAnalyse ,IOException {
+        ArrayList<ExceptionAnalyse> exceptions = new ArrayList<ExceptionAnalyse>();
+        BufferedReader lecteur = new BufferedReader(new FileReader(fichier));
         String line;
         //lecture des lignes
         int cpt = 0;
-        while ((line = reader.readLine()) != null) {
+        while ((line = lecteur.readLine()) != null) {
             cpt++;
-            String[] parts = line.split(";");
-            if (parts.length != 6) {
-                exceptions.add(new ParseException(cpt, "Le nombre de champs est incorrect"));
+            String[] parties = line.split(";");
+            if (parties.length != 6) {
+                exceptions.add(new ExceptionAnalyse(cpt, "Le nombre de champs est incorrect"));
                 continue;
             }
             //création du vol
             try {
-                Vol vol = new Vol(parts[0],
-                                    listAeroport.getAeroportByCode(parts[1]),
-                                    listAeroport.getAeroportByCode(parts[2]),
-                                    new Horaire(parts[3], parts[4]),
-                                    parts[5]);
+                Vol vol = new Vol(parties[0],
+                                    listAeroport.getAeroportByCode(parties[1]),
+                                    listAeroport.getAeroportByCode(parties[2]),
+                                    new Horaire(parties[3], parties[4]),
+                                    parties[5]);
                 //ajout du vol à la liste
                 this.add(vol);
             } catch (IllegalArgumentException e) {
-                exceptions.add(new ParseException(cpt, e.getMessage()));
+                exceptions.add(new ExceptionAnalyse(cpt, e.getMessage()));
             }
         }
-        reader.close();
+        lecteur.close();
         if (exceptions.size() > 0) {
-            throw new ParseException(file, exceptions);
+            throw new ExceptionAnalyse(fichier, exceptions);
         }
     }
 
@@ -77,15 +77,15 @@ public class ListVol extends ArrayList<Vol>
 
     /**
      * Affiche la liste des vols
-     * @return String
+     * @return Chaine de caractère
      */
     public String toString() {
         //[affiche un vol] saut de ligne .....
-        String str = "";
+        String chaine = "";
         for (Vol vol : this) {
-            str += vol.toString() + "\n\n";
+            chaine += vol.toString() + "\n\n";
         }
-        return str;
+        return chaine;
     }
     
     //#endregion

@@ -61,7 +61,7 @@ public class Map extends JXMapViewer
     /**
      * liste des aeroports
      */
-    private ListAeroport listAeroport;
+    private ListeAeroport listAeroport;
 
     /**
      * liste des vols
@@ -120,7 +120,7 @@ public class Map extends JXMapViewer
      * retourne la liste des aeroports
      * @return listAeroport
      */
-    public ListAeroport getListAeroport() {
+    public ListeAeroport getListAeroport() {
         return listAeroport;
     }
     
@@ -140,18 +140,18 @@ public class Map extends JXMapViewer
      * rajoute les aeroports, les vols et les collisions sur la carte
      * @param listVol
      */
-    public void addInformation(ListAeroport listAeroport, ListVol listVol, int marge, int kmax) {
+    public void addInformation(ListeAeroport listAeroport, ListVol listVol, int marge, int kmax) {
         //on met à jour les attributs
         this.listVols = listVol;
         this.listAeroport = listAeroport;
         //on crée le graph des aeroports
         Graph graphMap = new Graph("graphMap");
-        graphMap.fillMap(listAeroport, listVol);
-        graphMap.hideSoloNode();
+        graphMap.remplirCarte(listAeroport, listVol);
+        graphMap.cacheNoeudSeul();
         //on créée le graph des collisions
         Graph graphCollision = new Graph("graphCollision");
-        graphCollision.fillVol(listVol, marge);
-        graphCollision.setKdonne(kmax);
+        graphCollision.remplirVol(listVol, marge);
+        graphCollision.définirKdonne(kmax);
         graphCollision.dSature();
         // vide les listes de waypoint
         ListAeroportWaypoint.clear();
@@ -163,8 +163,8 @@ public class Map extends JXMapViewer
         //créer les waypoint pour les aeroports
         for (Node node : graphMap) {
             if (!node.hasAttribute("ui.hide")) {
-                Double latitude=this.listAeroport.getAeroportByCode(node.getId()).getLatitude().getDecimal();
-                Double longitude=this.listAeroport.getAeroportByCode(node.getId()).getLongitude().getDecimal();
+                Double latitude=this.listAeroport.getAeroportByCode(node.getId()).getLatitude().obtenirDecimal();
+                Double longitude=this.listAeroport.getAeroportByCode(node.getId()).getLongitude().obtenirDecimal();
                 GeoPosition position = new GeoPosition(latitude, longitude);
                 DefaultWaypoint waypoint = new DefaultWaypoint(position);
                 ListAeroportWaypoint.add(waypoint);
@@ -181,10 +181,10 @@ public class Map extends JXMapViewer
         for (Edge edge : graphMap.getEachEdge()) {
                 Node node1 = edge.getNode0();
                 Node node2 = edge.getNode1();
-                Double latitude1=this.listAeroport.getAeroportByCode(node1.getId()).getLatitude().getDecimal();
-                Double longitude1=this.listAeroport.getAeroportByCode(node1.getId()).getLongitude().getDecimal();
-                Double latitude2=this.listAeroport.getAeroportByCode(node2.getId()).getLatitude().getDecimal();
-                Double longitude2=this.listAeroport.getAeroportByCode(node2.getId()).getLongitude().getDecimal();
+                Double latitude1=this.listAeroport.getAeroportByCode(node1.getId()).getLatitude().obtenirDecimal();
+                Double longitude1=this.listAeroport.getAeroportByCode(node1.getId()).getLongitude().obtenirDecimal();
+                Double latitude2=this.listAeroport.getAeroportByCode(node2.getId()).getLatitude().obtenirDecimal();
+                Double longitude2=this.listAeroport.getAeroportByCode(node2.getId()).getLongitude().obtenirDecimal();
                 GeoPosition position1 = new GeoPosition(latitude1, longitude1);
                 GeoPosition position2 = new GeoPosition(latitude2, longitude2);
                 LineOverlayPainter line = new LineOverlayPainter(position1, position2);

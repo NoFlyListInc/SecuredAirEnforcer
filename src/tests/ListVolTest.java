@@ -14,7 +14,7 @@ import org.junit.Test;
 import src.core.Aeroport;
 import src.core.Coordonnee;
 import src.core.Horaire;
-import src.core.ListAeroport;
+import src.core.ListeAeroport;
 import src.core.ListVol;
 import src.core.Vol;
 
@@ -41,26 +41,26 @@ public class ListVolTest {
         Horaire heureDepart = new Horaire(8, 30);
         Vol vol = new Vol("AF030218", lyon, paris, heureDepart, 90);
 
-        ListAeroport listAeroport = new ListAeroport();
+        ListeAeroport listAeroport = new ListeAeroport();
         listAeroport.add(lyon);
         listAeroport.add(paris);
 
         try{
-            this.listVol.fill("", listAeroport);
+            this.listVol.remplir("", listAeroport);
             fail();
         } catch (Exception e) {
             assertEquals(e.getClass(), IOException.class);
         }
 
         try {
-            this.listVol.fill("testListVolError.txt", listAeroport);
+            this.listVol.remplir("testListVolError.txt", listAeroport);
             fail();
         } catch (Exception e) {
             assertEquals(e.getClass(), ParseException.class);
         }
 
         try {
-            this.listVol.fill("testListVol.txt", listAeroport);
+            this.listVol.remplir("testListVol.txt", listAeroport);
         } catch (Exception e) {
             fail();
         }

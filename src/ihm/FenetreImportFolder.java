@@ -151,7 +151,7 @@ public class FenetreImportFolder extends SuperposedFenetre {
                             String Path = files.getAbsolutePath();
                             Graph graph = new Graph("graph");
                             try {
-                                graph.fillFile(Path);
+                                graph.remplirFichier(Path);
                             } catch (Exception ex) {
                                 JOptionPane.showMessageDialog(FenetreImportFolder.this, ex.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
                             }

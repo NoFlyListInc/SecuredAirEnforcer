@@ -2,13 +2,13 @@ package src.exception;
 
 import java.util.ArrayList;
 
-public class ParseException extends Exception
+public class ExceptionAnalyse extends Exception
 {
-    public ParseException(int ligne, String msg) {
+    public ExceptionAnalyse(int ligne, String msg) {
         super("ligne " + ligne + " : " + msg);
     }
 
-    public ParseException(String file, ArrayList<? extends Exception> exceptions) {
+    public ExceptionAnalyse(String file, ArrayList<? extends Exception> exceptions) {
         super(CombinedException(file, exceptions));
     }
 

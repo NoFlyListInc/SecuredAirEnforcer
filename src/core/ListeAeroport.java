@@ -1,7 +1,7 @@
 package src.core;
 //#region import
 //import exception
-import src.exception.ParseException;
+import src.exception.ExceptionAnalyse;
 //import ArrayList object
 import java.util.ArrayList;
 //import reader files tools
@@ -20,14 +20,14 @@ import org.jxmapviewer.viewer.GeoPosition;
  * @methodes addAeroport, removeAeroport, getAeroport, getAeroportByCode, getAeroportByPosition, fill, toString
  * @autor NOUVEL Armand
  */
-public class ListAeroport extends ArrayList<Aeroport>
+public class ListeAeroport extends ArrayList<Aeroport>
 {
     //#region constructeur
 
     /**
      * Constructeur de ListAeroport
      */
-    public ListAeroport() {
+    public ListeAeroport() {
         super();
     }
 
@@ -64,7 +64,7 @@ public class ListAeroport extends ArrayList<Aeroport>
         //parcours de la liste
         for (Aeroport aeroport : this) {
             //si la position est trouvée
-            if (aeroport.getLatitude().getDecimal()==position.getLatitude() && aeroport.getLongitude().getDecimal()==position.getLongitude()) {
+            if (aeroport.getLatitude().obtenirDecimal()==position.getLatitude() && aeroport.getLongitude().obtenirDecimal()==position.getLongitude()) {
                 return aeroport;
             }
         }
@@ -76,37 +76,37 @@ public class ListAeroport extends ArrayList<Aeroport>
 
     /**
      * Rempli la liste des aeroports depuis un fichier
-     * @param file adresse du fichier
+     * @param fichier adresse du fichier
      * @throws IOException erreur de lecture du fichier
-     * @throws ParseException erreur dans les données du fichier
+     * @throws ExceptionAnalyse erreur dans les données du fichier
      */
-    public void fill(String file) throws ParseException, IOException {
-        ArrayList<ParseException> exceptions = new ArrayList<ParseException>();
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        String line;
+    public void fill(String fichier) throws ExceptionAnalyse, IOException {
+        ArrayList<ExceptionAnalyse> exceptions = new ArrayList<ExceptionAnalyse>();
+        BufferedReader lecteur = new BufferedReader(new FileReader(fichier));
+        String ligne;
         //parcours du fichier ligne par ligne
         int cpt = 0;
-        while ((line = reader.readLine()) != null) {
+        while ((ligne = lecteur.readLine()) != null) {
             cpt++;
-            String[] parts = line.split(";");
-            if (parts.length != 10) {
-                exceptions.add(new ParseException(cpt, "Nombre de champs incorrect"));
+            String[] parties = ligne.split(";");
+            if (parties.length != 10) {
+                exceptions.add(new ExceptionAnalyse(cpt, "Nombre de champs incorrect"));
                 continue;
             }
             try {
                 //création de l'aeroport
-                Aeroport aeroport = new Aeroport(parts[0], parts[1], 
-                        new Coordonnee(parts[2], parts[3], parts[4], parts[5]),
-                        new Coordonnee(parts[6], parts[7], parts[8], parts[9]));
+                Aeroport aeroport = new Aeroport(parties[0], parties[1], 
+                        new Coordonnee(parties[2], parties[3], parties[4], parties[5]),
+                        new Coordonnee(parties[6], parties[7], parties[8], parties[9]));
                 //ajout de l'aeroport à la liste
                 this.add(aeroport);
             } catch(IllegalArgumentException e) {
-                exceptions.add(new ParseException(cpt, e.getMessage()));
+                exceptions.add(new ExceptionAnalyse(cpt, e.getMessage()));
             }
         }
-        reader.close();
+        lecteur.close();
         if (exceptions.size() > 0) {
-            throw new ParseException(file, exceptions);
+            throw new ExceptionAnalyse(fichier, exceptions);
         }
     }
     //#endregion
@@ -119,11 +119,11 @@ public class ListAeroport extends ArrayList<Aeroport>
      */
     public String toString() {
         //[affiche un aeroport] saut de ligne .....
-        StringBuilder sb = new StringBuilder();
+        StringBuilder constrChaines = new StringBuilder();
         for (Aeroport aeroport : this) {
-            sb.append(aeroport.toString()).append("\n\n");
+            constrChaines.append(aeroport.toString()).append("\n\n");
         }
-        return sb.toString();
+        return constrChaines.toString();
     }
     //#endregion
 }

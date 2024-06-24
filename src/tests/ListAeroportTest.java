@@ -13,15 +13,15 @@ import org.junit.Test;
 
 import src.core.Aeroport;
 import src.core.Coordonnee;
-import src.core.ListAeroport;
+import src.core.ListeAeroport;
 
 public class ListAeroportTest {
 
-    private ListAeroport listAeroport;
+    private ListeAeroport listAeroport;
 
     @Before
     public void setUp() {
-        this.listAeroport = new ListAeroport();
+        this.listAeroport = new ListeAeroport();
     }
 
     @Test

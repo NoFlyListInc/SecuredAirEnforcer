@@ -84,7 +84,7 @@ public class CoordonneeTest {
 
     @Test
     public void testGetDecimal() {
-        assertEquals(48.041666666666664, this.coordonnee.getDecimal(), 0.1);
+        assertEquals(48.041666666666664, this.coordonnee.obtenirDecimal(), 0.1);
     }
 
     @Test

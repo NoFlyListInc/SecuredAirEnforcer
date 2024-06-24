@@ -1,7 +1,7 @@
 package src.ihm;
 //#region import
 import src.core.Graph;
-import src.core.ListAeroport;
+import src.core.ListeAeroport;
 import src.core.ListVol;
 //graphstream objects
 import org.graphstream.ui.swingViewer.Viewer;
@@ -148,12 +148,12 @@ public class FenetreGraphe extends SuperposedFenetre {
         this.graph = new Graph(file.getName());
         if (file.getName().endsWith(".txt")) {
             try {
-                this.graph.fillFile(this.cheminFichier);
+                this.graph.remplirFichier(this.cheminFichier);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
             }
         } else if (file.getName().endsWith(".csv")) {
-            ListAeroport listAeroport = new ListAeroport();
+            ListeAeroport listAeroport = new ListeAeroport();
             try {
                 listAeroport.fill("data/aeroports.txt");
             } catch (Exception e) {
@@ -161,11 +161,11 @@ public class FenetreGraphe extends SuperposedFenetre {
             }
             ListVol listVol = new ListVol();
             try {
-                listVol.fill(this.cheminFichier, listAeroport);
+                listVol.remplir(this.cheminFichier, listAeroport);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
             }
-            this.graph.fillVol(listVol, 15);
+            this.graph.remplirVol(listVol, 15);
         }
 
         // Viewer pour zoomer et deplacer
@@ -432,7 +432,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         dsatureButton.setToolTipText("Appliquer la méthode DSature sur le graphe");
         dsatureButton.setBackground(new Color(176, 226, 255));
         dsatureButton.addActionListener((ActionListener) -> {
-            graph.setKdonne(sliderCouleur.getValue());
+            graph.définirKdonne(sliderCouleur.getValue());
             graph.dSature();
 
             retour.doClick();
@@ -452,7 +452,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         welshPowellButton.setToolTipText("Appliquer la méthode WelshPowell sur le graphe");
         welshPowellButton.setBackground(new Color(176, 226, 255));
         welshPowellButton.addActionListener((ActionListener) -> {
-            graph.setKdonne(sliderCouleur.getValue());
+            graph.définirKdonne(sliderCouleur.getValue());
             graph.welshPowell();
             retour.doClick();
             infoLabel.setText(createInfoString());

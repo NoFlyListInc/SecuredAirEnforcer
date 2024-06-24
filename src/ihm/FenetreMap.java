@@ -17,7 +17,7 @@ import javax.swing.JScrollPane;
 //src objects
 import src.core.ListVol;
 import src.core.Map;
-import src.core.ListAeroport;
+import src.core.ListeAeroport;
 
 //awt objects
 import java.awt.Color;
@@ -294,7 +294,7 @@ public class FenetreMap extends SuperposedFenetre
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
                 String filePath = selectedFile.getAbsolutePath();
-                ListAeroport listAeroport = new ListAeroport();
+                ListeAeroport listAeroport = new ListeAeroport();
                 // lecture du fichier aeroport
                 try {
                     listAeroport.fill("data/aeroports.txt");
@@ -304,7 +304,7 @@ public class FenetreMap extends SuperposedFenetre
                 // lecture du fichier vol-test
                 ListVol listVols = new ListVol();
                 try {
-                    listVols.fill(filePath, listAeroport);
+                    listVols.remplir(filePath, listAeroport);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
                 }

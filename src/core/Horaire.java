@@ -34,28 +34,28 @@ public class Horaire
      */
     public Horaire(String heure, String minute) throws IllegalArgumentException {
         // conversion des string en int
-        int heureInt=0;
+        int heureEntier=0;
         try {
-            heureInt = Integer.parseInt(heure);
+            heureEntier = Integer.parseInt(heure);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("l'heure doit être un entier");
         }
-        int minuteInt=0;
+        int minuteEntier=0;
         try {
-            minuteInt = Integer.parseInt(minute);
+            minuteEntier = Integer.parseInt(minute);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("la minute doit être un entier");
         }
         // vérification des valeurs
-        if (minuteInt < 0 || minuteInt > 60) {
+        if (minuteEntier < 0 || minuteEntier > 60) {
             throw new IllegalArgumentException("minute doit être compris entre 0 et 60");
         }
-        if (heureInt < 0) {
+        if (heureEntier < 0) {
             throw new IllegalArgumentException("heure doit être supérieur ou égal à 0");
         }
         // affectation des valeurs
-        this.heure = heureInt;
-        this.minute = minuteInt;
+        this.heure = heureEntier;
+        this.minute = minuteEntier;
     }
 
     /**
@@ -78,7 +78,7 @@ public class Horaire
      * Renvoie l'heure
      * @return int
      */
-    public int getHeure() {
+    public int obtenirHeure() {
         return this.heure;
     }
 
@@ -86,7 +86,7 @@ public class Horaire
      * Renvoie les minutes
      * @return int
      */
-    public int getMinute() {
+    public int obtenirMinute() {
         return this.minute;
     }
 
@@ -96,14 +96,14 @@ public class Horaire
 
     /**
      * vérifie si deux horaires sont égaux
-     * @param other
+     * @param autres
      * @return boolean
      */
     @Override
-    public boolean equals(Object other) {
-        if (this == other) return true;
-        if (other == null || getClass() != other.getClass()) return false;
-        Horaire otherHoraire = (Horaire) other;
+    public boolean equals(Object autres) {
+        if (this == autres) return true;
+        if (autres == null || getClass() != autres.getClass()) return false;
+        Horaire otherHoraire = (Horaire) autres;
         if (this.heure == otherHoraire.heure &&
             this.minute == otherHoraire.minute) {
                 return true;
@@ -115,7 +115,7 @@ public class Horaire
      * Retourne l'horaire en minute
      * @return int
      */
-    public int getEnMinute() {
+    public int obtenirEnMinute() {
         return this.heure * 60 + this.minute;
     }
 
@@ -128,7 +128,7 @@ public class Horaire
         if (minutes < 0) {
             throw new IllegalArgumentException("minutes doit être supérieur ou égal à 0");
         }
-        int totalMinutes = this.getEnMinute() + minutes;
+        int totalMinutes = this.obtenirEnMinute() + minutes;
         this.heure = totalMinutes / 60;
         this.minute = totalMinutes % 60;
     }
