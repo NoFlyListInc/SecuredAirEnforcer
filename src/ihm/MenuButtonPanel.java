@@ -11,7 +11,7 @@ import javax.swing.JLayeredPane;
 
 public class MenuButtonPanel extends RoundedPanel {
     
-    public MenuButtonPanel(int radius, SuperposedFenetre fen) {
+    public MenuButtonPanel(int radius, FenetreSuperpose fen) {
         super(radius);
         this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         this.setBackground(new Color(45, 40, 63));

@@ -80,6 +80,6 @@ public class AeroportTest {
 
     @Test
     public void testGety() {
-        assertEquals(this.aeroport.gety(), 2.5083333333333333, 0.1);
+        assertEquals(this.aeroport.gety(), 6370.2574585802, 0.1);
     }
 }

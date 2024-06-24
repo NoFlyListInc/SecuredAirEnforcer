@@ -35,7 +35,7 @@ public class GraphTest {
             String pathAeroport = "src/tests/testData/testListAeroportFull.txt";
 
             ListeAeroport listAeroport = new ListeAeroport();
-            listAeroport.fill(pathAeroport);
+            listAeroport.remplir(pathAeroport);
 
             ListVol listVol = new ListVol();
             listVol.remplir(pathVol, listAeroport);

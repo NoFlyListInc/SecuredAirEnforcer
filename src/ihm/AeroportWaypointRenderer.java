@@ -1,10 +1,10 @@
 package src.ihm;
 //#region import
-//import JXMapViwer objects
+//import JXMapViwer
 import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.viewer.WaypointRenderer;
 import org.jxmapviewer.JXMapViewer;
-//import awt objects
+//import awt
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
@@ -18,9 +18,9 @@ public class AeroportWaypointRenderer implements WaypointRenderer<DefaultWaypoin
 {
     //#region methodes
     @Override
-    public void paintWaypoint(Graphics2D g, JXMapViewer map, DefaultWaypoint waypoint) {
+    public void paintWaypoint(Graphics2D g, JXMapViewer carte, DefaultWaypoint waypoint) {
         // Convertir les coordonnées du waypoint en coordonnées de pixel
-        Point2D point = map.getTileFactory().geoToPixel(waypoint.getPosition(), map.getZoom());
+        Point2D point = carte.getTileFactory().geoToPixel(waypoint.getPosition(), carte.getZoom());
 
         // Traduire le système de coordonnées graphiques à la position du waypoint
         g.translate((int)point.getX(), (int)point.getY());
@@ -31,11 +31,11 @@ public class AeroportWaypointRenderer implements WaypointRenderer<DefaultWaypoin
         triangle.addPoint(-7, -7); // Coin supérieur gauche
         triangle.addPoint(7, -7); // Coin supérieur droit
 
-        // Dessinez le triangle
+        // Dessine le triangle
         g.setColor(Color.BLACK);
         g.fill(triangle);
 
-        // Réinitialiser la translation
+        // Réalise la translation
         g.translate(-(int)point.getX(), -(int)point.getY());
     }
     //#endregion

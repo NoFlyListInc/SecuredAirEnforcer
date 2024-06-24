@@ -38,7 +38,7 @@ import java.io.File;
  * @extends SuperposedFenetre
  * @autor NOUVEL Armand
  */
-public class FenetreMap extends SuperposedFenetre
+public class FenetreMap extends FenetreSuperpose
 {
     //#region Attributes
     private JLabel infoLabel = new JLabel();
@@ -298,7 +298,7 @@ public class FenetreMap extends SuperposedFenetre
                 ListeAeroport listAeroport = new ListeAeroport();
                 // lecture du fichier aeroport
                 try {
-                    listAeroport.fill("data/aeroports.txt");
+                    listAeroport.remplir("data/aeroports.txt");
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
                 }

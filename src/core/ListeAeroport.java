@@ -80,7 +80,7 @@ public class ListeAeroport extends ArrayList<Aeroport>
      * @throws IOException erreur de lecture du fichier
      * @throws ExceptionAnalyse erreur dans les données du fichier
      */
-    public void fill(String fichier) throws ExceptionAnalyse, IOException {
+    public void remplir(String fichier) throws ExceptionAnalyse, IOException {
         ArrayList<ExceptionAnalyse> exceptions = new ArrayList<ExceptionAnalyse>();
         BufferedReader lecteur = new BufferedReader(new FileReader(fichier));
         String ligne;

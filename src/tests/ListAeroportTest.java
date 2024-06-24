@@ -5,8 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.IOException;
-import java.text.ParseException;
+import java.io.FileNotFoundException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +13,7 @@ import org.junit.Test;
 import src.core.Aeroport;
 import src.core.Coordonnee;
 import src.core.ListeAeroport;
+import src.exception.ExceptionAnalyse;
 
 public class ListAeroportTest {
 
@@ -37,21 +37,21 @@ public class ListAeroportTest {
         Aeroport paris = new Aeroport("CDG", "Paris Charles de Gaulle", new Coordonnee(49, 0, 14, 'N'), new Coordonnee(2, 34, 54, 'E'));
 
         try{
-            this.listAeroport.fill("");
+            this.listAeroport.remplir("");
             fail();
         } catch (Exception e) {
-            assertEquals(e.getClass(), IOException.class);
+            assertEquals(e.getClass(), FileNotFoundException.class);
         }
 
         try {
-            this.listAeroport.fill("testListAeroportError.csv");
+            this.listAeroport.remplir("src/tests/testData/testListAeroportError.txt");
             fail();
         } catch (Exception e) {
-            assertEquals(e.getClass(), ParseException.class);
+            assertEquals(e.getClass(), ExceptionAnalyse.class);
         }
 
         try {
-            this.listAeroport.fill("testListAeroport.csv");
+            this.listAeroport.remplir("src/tests/testData/testListAeroport.txt");
         } catch (Exception e) {
             fail();
         }
