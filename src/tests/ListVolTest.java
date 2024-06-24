@@ -53,14 +53,14 @@ public class ListVolTest {
         }
 
         try {
-            this.listVol.fill("testListVolError.txt", listAeroport);
+            this.listVol.fill("src/tests/testData/testListAeroportError.csv", listAeroport);
             fail();
         } catch (Exception e) {
             assertEquals(e.getClass(), ParseException.class);
         }
 
         try {
-            this.listVol.fill("testListVol.txt", listAeroport);
+            this.listVol.fill("src/tests/testData/testListAeroport.csv", listAeroport);
         } catch (Exception e) {
             fail();
         }

@@ -5,8 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.IOException;
-import java.text.ParseException;
+import java.io.FileNotFoundException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +13,7 @@ import org.junit.Test;
 import src.core.Aeroport;
 import src.core.Coordonnee;
 import src.core.ListAeroport;
+import src.exception.ParseException;
 
 public class ListAeroportTest {
 
@@ -40,18 +40,18 @@ public class ListAeroportTest {
             this.listAeroport.fill("");
             fail();
         } catch (Exception e) {
-            assertEquals(e.getClass(), IOException.class);
+            assertEquals(e.getClass(), FileNotFoundException.class);
         }
 
         try {
-            this.listAeroport.fill("testListAeroportError.csv");
+            this.listAeroport.fill("src/tests/testData/testListAeroportError.txt");
             fail();
         } catch (Exception e) {
             assertEquals(e.getClass(), ParseException.class);
         }
 
         try {
-            this.listAeroport.fill("testListAeroport.csv");
+            this.listAeroport.fill("src/tests/testData/testListAeroport.txt");
         } catch (Exception e) {
             fail();
         }

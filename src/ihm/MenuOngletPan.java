@@ -24,11 +24,11 @@ import java.awt.BorderLayout;
 public class MenuOngletPan extends JPanel
 {
     //#region attributs
-    private SuperposedFenetre fen;
+    private FenetreSuperpose fen;
     //#endregion
 
     //#region constructeur
-    public MenuOngletPan(SuperposedFenetre fen) {
+    public MenuOngletPan(FenetreSuperpose fen) {
         super();
         this.fen=fen;
         this.constrPan();

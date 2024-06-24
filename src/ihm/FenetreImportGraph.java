@@ -10,7 +10,7 @@ import java.awt.event.*;
  * <p>Les fichiers doivent être en format .csv pour la liste de vol et en format .txt pour la liste d'aéroports.</p>
  * @author FERNANDES Thomas & NOUVEL Armand
  */
-public class FenetreImportGraph extends SuperposedFenetre {
+public class FenetreImportGraph extends FenetreSuperpose {
     public FenetreImportGraph() {
         // Base de la fenêtre
         this.setTitle("Import a graph");

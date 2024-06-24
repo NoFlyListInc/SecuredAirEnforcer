@@ -1,10 +1,10 @@
 package src.ihm;
 //#region import
-//import JXMapViewer objects
+//import JXMapViewer
 import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.viewer.WaypointRenderer;
 import org.jxmapviewer.JXMapViewer;
-//import awt objects
+//import awt
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
@@ -21,45 +21,45 @@ public class CollisionWaypointRenderer implements WaypointRenderer<DefaultWaypoi
 {
     //#region methodes
     @Override
-    public void paintWaypoint(Graphics2D g, JXMapViewer map, DefaultWaypoint waypoint) {
+    public void paintWaypoint(Graphics2D g, JXMapViewer carte, DefaultWaypoint waypoint) {
         // Convertir les coordonnées du waypoint en coordonnées de pixel
-        Point2D point = map.getTileFactory().geoToPixel(waypoint.getPosition(), map.getZoom());
+        Point2D point = carte.getTileFactory().geoToPixel(waypoint.getPosition(), carte.getZoom());
 
         // Traduire le système de coordonnées graphiques à la position du waypoint
         g.translate((int)point.getX(), (int)point.getY());
 
         // Crée un carré
-        Polygon square1 = new Polygon();
-        square1.addPoint(-5, -5); // Coin supérieur gauche
-        square1.addPoint(5, -5); // Coin supérieur droit
-        square1.addPoint(5, 5); // Coin inférieur droit
-        square1.addPoint(-5, 5); // Coin inférieur gauche
+        Polygon carre1 = new Polygon();
+        carre1.addPoint(-5, -5); // Coin supérieur gauche
+        carre1.addPoint(5, -5); // Coin supérieur droit
+        carre1.addPoint(5, 5); // Coin inférieur droit
+        carre1.addPoint(-5, 5); // Coin inférieur gauche
 
         // Crée un deuxième carré et le tourne de 45 degrés
-        Polygon square2 = new Polygon();
-        square2.addPoint(-5, -5); // Coin supérieur gauche
-        square2.addPoint(5, -5); // Coin supérieur droit
-        square2.addPoint(5, 5); // Coin inférieur droit
-        square2.addPoint(-5, 5); // Coin inférieur gauche
-        AffineTransform transform = new AffineTransform();
-        transform.rotate(Math.toRadians(45), 0, 0);
-        Path2D rotatedSquare = (Path2D) transform.createTransformedShape(square2);
-        PathIterator iterator = rotatedSquare.getPathIterator(null);
+        Polygon carre2 = new Polygon();
+        carre2.addPoint(-5, -5); // Coin supérieur gauche
+        carre2.addPoint(5, -5); // Coin supérieur droit
+        carre2.addPoint(5, 5); // Coin inférieur droit
+        carre2.addPoint(-5, 5); // Coin inférieur gauche
+        AffineTransform transformation = new AffineTransform();
+        transformation.rotate(Math.toRadians(45), 0, 0);
+        Path2D carreTourne = (Path2D) transformation.createTransformedShape(carre2);
+        PathIterator iterateur = carreTourne.getPathIterator(null);
         float[] coords = new float[5];
-        while (!iterator.isDone()) {
-            int type = iterator.currentSegment(coords);
+        while (!iterateur.isDone()) {
+            int type = iterateur.currentSegment(coords);
             if (type != PathIterator.SEG_CLOSE) {
-                square2.addPoint((int)coords[0], (int)coords[1]);
+                carre2.addPoint((int)coords[0], (int)coords[1]);
             }
-            iterator.next();
+            iterateur.next();
         }
 
-        // Dessinez les carrés
+        // Dessine les carrés
         g.setColor(Color.RED);
-        g.fill(square1);
-        g.fill(square2);
+        g.fill(carre1);
+        g.fill(carre2);
 
-        // Réinitialiser la translation
+        // Réalise la translation
         g.translate(-(int)point.getX(), -(int)point.getY());
     }
     //#endregion

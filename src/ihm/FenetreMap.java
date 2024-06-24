@@ -37,7 +37,7 @@ import java.io.File;
  * @extends SuperposedFenetre
  * @autor NOUVEL Armand
  */
-public class FenetreMap extends SuperposedFenetre
+public class FenetreMap extends FenetreSuperpose
 {
     //#region Attributes
     private JLabel infoLabel = new JLabel();

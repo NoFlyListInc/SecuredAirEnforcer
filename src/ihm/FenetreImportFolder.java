@@ -57,7 +57,7 @@ import java.nio.file.FileAlreadyExistsException;
  * <p>Les fichiers doivent être en format .txt.</p>
  * @autor FERNANDES Thomas
  */
-public class FenetreImportFolder extends SuperposedFenetre {
+public class FenetreImportFolder extends FenetreSuperpose {
 
     /**
      * Constructeur de la fenêtre d'importation de dossier.

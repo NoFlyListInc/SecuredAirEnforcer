@@ -412,15 +412,20 @@ public class Graph extends SingleGraph {
         else if (!premiereLigne.matches("\\d+")) {
             exceptions.add(new ParseException(1, "La première ligne doit être un entier positif"));
         }
-        this.kdonne = Integer.parseInt(premiereLigne);
+        else {
+            this.kdonne = Integer.parseInt(premiereLigne);
+        }
+        
 
         // deuxième ligne => nombre de noeuds
         String deuxiemeligne = reader.readLine();
         if (deuxiemeligne == "") {
-            exceptions.add(new ParseException(2, "La deuxième ligne ne doit pas etre vide"));
+            reader.close();
+            throw new ParseException(2, "<html>La deuxième ligne ne doit pas etre vide<br>Le graph sera vide</html>");
         }
         else if (!deuxiemeligne.matches("\\d+")) {
-            exceptions.add(new ParseException(2, "La deuxième ligne doit être un entier positif"));
+            reader.close();
+            throw new ParseException(2, "<html>La deuxième ligne doit être un entier positif<br>Le graph sera vide</html>");
         }
         int nbr_noeuds = Integer.parseInt(deuxiemeligne);
 

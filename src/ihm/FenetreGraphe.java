@@ -3,13 +3,12 @@ package src.ihm;
 import src.core.Graph;
 import src.core.ListAeroport;
 import src.core.ListVol;
-//graphstream objects
+//graphstream
 import org.graphstream.ui.swingViewer.Viewer;
 import org.graphstream.ui.swingViewer.View;
 import org.graphstream.ui.swingViewer.util.Camera;
 import org.graphstream.ui.swingViewer.util.DefaultMouseManager;
-import org.graphstream.ui.geom.Point3;
-//swing objects
+//swing
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,7 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.Box;
 import javax.swing.JFrame;
-//awt objects
+//awt
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.BorderLayout;
@@ -31,11 +30,9 @@ import java.awt.Color;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.Point;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.awt.Cursor;
-//io objects
+//io
 import java.io.File;
 //#endregion
 
@@ -46,7 +43,7 @@ import java.io.File;
  * @extends SuperposedFenetre
  * @autor NOUVEL Armand et FERNANDES Thomas
  */
-public class FenetreGraphe extends SuperposedFenetre {
+public class FenetreGraphe extends FenetreSuperpose {
 
     //#region Attributs
 
@@ -56,19 +53,19 @@ public class FenetreGraphe extends SuperposedFenetre {
     private String cheminFichier;
 
     /**
-     * JPanel du setting menu
+     * JPanel du parametre menu
      */
-    private JPanel settingMenuPosition = new JPanel();
+    private JPanel parametreMenuPosition = new JPanel();
 
     /**
-     * JButton du setting menu
+     * JButton du parametre menu
      */
-    private JButton settingButton;
+    private JButton boutonParametre;
 
     /**
      * le graph qui sera affiché
      */
-    private Graph graph;
+    private Graph graphe;
 
     /**
      * JLabel des infos du graph
@@ -78,7 +75,7 @@ public class FenetreGraphe extends SuperposedFenetre {
     /**
      * JPanel du graph
      */
-    private JPanel panGraph;
+    private JPanel panGraphe;
 
     /**
      * JPanel des boutons
@@ -109,10 +106,10 @@ public class FenetreGraphe extends SuperposedFenetre {
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                Dimension size = getContentPane().getSize();
-                panGraph.setBounds(0, 0, size.width, size.height);
-                panBouton.setBounds(0, 0, size.width, size.height);
-                menu.setBounds(0, 0, size.width, size.height);
+                Dimension taille = getContentPane().getSize();
+                panGraphe.setBounds(0, 0, taille.width, taille.height);
+                panBouton.setBounds(0, 0, taille.width, taille.height);
+                menu.setBounds(0, 0, taille.width, taille.height);
             }
         });
     }
@@ -125,13 +122,13 @@ public class FenetreGraphe extends SuperposedFenetre {
         this.setLayout(new BorderLayout());
         this.superposePan.setPreferredSize(new Dimension(800, 600));
 
-        this.panGraph = this.constrGraphPan();
-        this.superposePan.add(this.panGraph, JLayeredPane.DEFAULT_LAYER);
+        this.panGraphe = this.constrGraphPan();
+        this.superposePan.add(this.panGraphe, JLayeredPane.DEFAULT_LAYER);
 
         this.panBouton = this.constrBoutonPan();
         this.superposePan.add(panBouton, JLayeredPane.PALETTE_LAYER);
 
-        this.constrSettingMenu();
+        this.constrParametreMenu();
 
         this.setContentPane(superposePan);
     }
@@ -145,35 +142,35 @@ public class FenetreGraphe extends SuperposedFenetre {
         // creation du graph
         File file = new File(this.cheminFichier);
 
-        this.graph = new Graph(file.getName());
+        this.graphe = new Graph(file.getName());
         if (file.getName().endsWith(".txt")) {
             try {
-                this.graph.fillFile(this.cheminFichier);
+                this.graphe.fillFile(this.cheminFichier);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
             }
         } else if (file.getName().endsWith(".csv")) {
-            ListAeroport listAeroport = new ListAeroport();
+            ListAeroport listeAeroport = new ListAeroport();
             try {
-                listAeroport.fill("data/aeroports.txt");
+                listeAeroport.fill("data/aeroports.txt");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
             }
-            ListVol listVol = new ListVol();
+            ListVol listeVol = new ListVol();
             try {
-                listVol.fill(this.cheminFichier, listAeroport);
+                listeVol.fill(this.cheminFichier, listeAeroport);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
             }
-            this.graph.fillVol(listVol, 15);
+            this.graphe.fillVol(listeVol, 15);
         }
 
         // Viewer pour zoomer et deplacer
-        Viewer vue = new Viewer(this.graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD); // Créer un viewer
-        vue.enableAutoLayout();
-        View view = vue.addDefaultView(false);
-        view.setMouseManager(new DefaultMouseManager() {
-                private Point lastMousePosition;
+        Viewer visualisation = new Viewer(this.graphe, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD); // Créer un viewer
+        visualisation.enableAutoLayout();
+        View vue = visualisation.addDefaultView(false);
+        vue.setMouseManager(new DefaultMouseManager() {
+                private Point dernierePosition;
 
                 //deplacement
                 @Override
@@ -181,17 +178,17 @@ public class FenetreGraphe extends SuperposedFenetre {
                     if (curElement != null) {
                         elementMoving(curElement, e);
                     } else {
-                        Point currentMousePosition = e.getPoint();
+                        Point positionActuelle = e.getPoint();
                         Camera camera = view.getCamera();
                         double dx, dy;
 
-                        if (lastMousePosition != null) {
-                            dx = lastMousePosition.getX() - currentMousePosition.getX();
-                            dy = lastMousePosition.getY() - currentMousePosition.getY();
+                        if (dernierePosition != null) {
+                            dx = dernierePosition.getX() - positionActuelle.getX();
+                            dy = dernierePosition.getY() - positionActuelle.getY();
                         }
                         else {
-                            dx = -currentMousePosition.getX();
-                            dy = -currentMousePosition.getY();
+                            dx = -positionActuelle.getX();
+                            dy = -positionActuelle.getY();
                         }
 
                         camera.setViewCenter(
@@ -200,35 +197,35 @@ public class FenetreGraphe extends SuperposedFenetre {
                                 camera.getViewCenter().z
                                 
                         );
-                        lastMousePosition = currentMousePosition;
+                        dernierePosition = positionActuelle;
                     }
                 }
 
                 @Override
                 public void mousePressed(MouseEvent e) {
                     setCursor(new Cursor(Cursor.MOVE_CURSOR));
-                    lastMousePosition = e.getPoint();
+                    dernierePosition = e.getPoint();
                 }
 
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                    lastMousePosition = null;
+                    dernierePosition = null;
                 }
 
             });
 
             // ecouteur pour zoomer
-            view.addMouseWheelListener(new MouseWheelListener() {
+            vue.addMouseWheelListener(new MouseWheelListener() {
                 @Override
                 public void mouseWheelMoved(MouseWheelEvent e) {
-                    Camera camera = view.getCamera();
-                    double zoomFactor = 1.1;
+                    Camera camera = vue.getCamera();
+                    double zoomFacteur = 1.1;
                     if (e.getWheelRotation() < 0) {
-                        camera.setViewPercent(camera.getViewPercent() / zoomFactor);
+                        camera.setViewPercent(camera.getViewPercent() / zoomFacteur);
                     }
                     else {
-                        camera.setViewPercent(camera.getViewPercent() * zoomFactor);
+                        camera.setViewPercent(camera.getViewPercent() * zoomFacteur);
                     }
                 }
             });
@@ -238,7 +235,7 @@ public class FenetreGraphe extends SuperposedFenetre {
         pan.setLayout(new BorderLayout());
         pan.setOpaque(true);
         pan.setBounds(0, 0, 800, 600);
-        pan.add(view, BorderLayout.CENTER);
+        pan.add(vue, BorderLayout.CENTER);
 
         return pan;
     }
@@ -249,31 +246,31 @@ public class FenetreGraphe extends SuperposedFenetre {
     */
     private JPanel constrBoutonPan() {
         // JPanel des boutons
-        JPanel buttonPan = new JPanel();
-        buttonPan.setBounds(0, 0, 800, 600);
-        buttonPan.setOpaque(false);
-        buttonPan.setLayout(new BorderLayout());
+        JPanel boutonPan = new JPanel();
+        boutonPan.setBounds(0, 0, 800, 600);
+        boutonPan.setOpaque(false);
+        boutonPan.setLayout(new BorderLayout());
 
-        JPanel settingPan = new JPanel();
-        settingPan.setOpaque(false);
-        settingPan.setLayout(new BoxLayout(settingPan, BoxLayout.PAGE_AXIS));
-        Image settingImage = new ImageIcon("image/parametre.png").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-        this.settingButton = new JButton(new ImageIcon(settingImage));
-        this.settingButton.setBorderPainted(false);
-        this.settingButton.setContentAreaFilled(false);
-        this.settingButton.setFocusPainted(false);
-        this.settingButton.addActionListener((ActionListener) -> {
-            Dimension size = getContentPane().getSize();
-            settingMenuPosition.setBounds(0, 0, size.width, size.height);
-            getSuperposePan().add(settingMenuPosition, JLayeredPane.MODAL_LAYER);
-            settingButton.setVisible(false);
+        JPanel parametrePan = new JPanel();
+        parametrePan.setOpaque(false);
+        parametrePan.setLayout(new BoxLayout(parametrePan, BoxLayout.PAGE_AXIS));
+        Image parametreImage = new ImageIcon("image/parametre.png").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+        this.boutonParametre = new JButton(new ImageIcon(parametreImage));
+        this.boutonParametre.setBorderPainted(false);
+        this.boutonParametre.setContentAreaFilled(false);
+        this.boutonParametre.setFocusPainted(false);
+        this.boutonParametre.addActionListener((ActionListener) -> {
+            Dimension taille = getContentPane().getSize();
+            parametreMenuPosition.setBounds(0, 0, taille.width, taille.height);
+            getSuperposePan().add(parametreMenuPosition, JLayeredPane.MODAL_LAYER);
+            boutonParametre.setVisible(false);
             getSuperposePan().revalidate();
             getSuperposePan().repaint();
         });
-        settingPan.add(settingButton);
-        settingPan.add(Box.createVerticalGlue());
-        settingButton.setToolTipText("Ouvrir les paramètres");
-        buttonPan.add(settingPan, BorderLayout.EAST);
+        parametrePan.add(boutonParametre);
+        parametrePan.add(Box.createVerticalGlue());
+        boutonParametre.setToolTipText("Ouvrir les paramètres");
+        boutonPan.add(parametrePan, BorderLayout.EAST);
 
         JPanel menuPan = new JPanel();
         menuPan.setOpaque(false);
@@ -287,33 +284,33 @@ public class FenetreGraphe extends SuperposedFenetre {
         infoPan.add(this.infoLabel, BorderLayout.WEST);
         menuPan.add(infoLabel, BorderLayout.NORTH);
 
-        JPanel menuButtonPan = new JPanel();
-        menuButtonPan.setOpaque(false);
-        menuButtonPan.setLayout(new BoxLayout(menuButtonPan, BoxLayout.LINE_AXIS));
+        JPanel menuBoutonPan = new JPanel();
+        menuBoutonPan.setOpaque(false);
+        menuBoutonPan.setLayout(new BoxLayout(menuBoutonPan, BoxLayout.LINE_AXIS));
         this.menuButton.setMaximumSize(new Dimension(121, 30));
-        menuButtonPan.add(this.menuButton, BorderLayout.WEST);
-        menuPan.add(menuButtonPan, BorderLayout.SOUTH);
+        menuBoutonPan.add(this.menuButton, BorderLayout.WEST);
+        menuPan.add(menuBoutonPan, BorderLayout.SOUTH);
 
-        buttonPan.add(menuPan, BorderLayout.WEST);
+        boutonPan.add(menuPan, BorderLayout.WEST);
 
-        return buttonPan;
+        return boutonPan;
     }
 
     /**
-     * Construit le JPanel du setting menu
+     * Construit le JPanel du parametre menu
      * @return  JPanel
      */
-    private void constrSettingMenu() {
-        //parametre le panel border pour positionner le settingMenu
-        this.settingMenuPosition.setLayout(new BorderLayout());
-        this.settingMenuPosition.setOpaque(false);
+    private void constrParametreMenu() {
+        //parametre le panel border pour positionner le parametreMenu
+        this.parametreMenuPosition.setLayout(new BorderLayout());
+        this.parametreMenuPosition.setOpaque(false);
 
-        //panel du popUp setting
-        RoundedPanel settingPopUp = new RoundedPanel(12);
-        settingPopUp.setBackground(Color.WHITE);
-        settingPopUp.setLayout(new BoxLayout(settingPopUp, BoxLayout.PAGE_AXIS));
+        //panel du popUp parametre
+        RoundedPanel parametrePopUp = new RoundedPanel(12);
+        parametrePopUp.setBackground(Color.WHITE);
+        parametrePopUp.setLayout(new BoxLayout(parametrePopUp, BoxLayout.PAGE_AXIS));
 
-        //panel du retour et du label SETTING
+        //panel du retour et du label parametre
         JPanel retourPan = new JPanel();
         retourPan.setOpaque(false);
         retourPan.setLayout(new BoxLayout(retourPan, BoxLayout.LINE_AXIS));
@@ -325,106 +322,106 @@ public class FenetreGraphe extends SuperposedFenetre {
         retour.setContentAreaFilled(false);
         retour.setFocusPainted(false);
         retour.addActionListener((ActionListener) -> {
-            getSuperposePan().remove(settingMenuPosition);
-            settingButton.setVisible(true);
+            getSuperposePan().remove(parametreMenuPosition);
+            boutonParametre.setVisible(true);
             getSuperposePan().revalidate();
             getSuperposePan().repaint();
         });
         retourPan.add(Box.createRigidArea(new Dimension(10,0)));
         retourPan.add(retour);
         retourPan.add(Box.createHorizontalGlue());
-        //label SETTING
-        JLabel settingLabel = new JLabel("SETTING");
-        settingLabel.setForeground(Color.BLACK);
-        retourPan.add(settingLabel);
+        //label parametre
+        JLabel parametreLabel = new JLabel("parametre");
+        parametreLabel.setForeground(Color.BLACK);
+        retourPan.add(parametreLabel);
         retourPan.add(Box.createHorizontalGlue());
         retourPan.add(Box.createHorizontalGlue());
-        //ajout du retour et du label dans le settingPopUp
-        settingPopUp.add(Box.createRigidArea(new Dimension(0,10)));
-        settingPopUp.add(retourPan);
-        settingPopUp.add(Box.createRigidArea(new Dimension(0,10)));
+        //ajout du retour et du label dans le parametrePopUp
+        parametrePopUp.add(Box.createRigidArea(new Dimension(0,10)));
+        parametrePopUp.add(retourPan);
+        parametrePopUp.add(Box.createRigidArea(new Dimension(0,10)));
 
 
         //button import vol
         JPanel importVolPan = new JPanel();
         importVolPan.setOpaque(false);
         importVolPan.setLayout(new BoxLayout(importVolPan, BoxLayout.LINE_AXIS));
-        RoundedButton importVolButton = new RoundedButton("importer une liste de vols");
-        importVolButton.setToolTipText("<html>Charger un fichier CSV <br> Exemple : <br> ID_vol ; ID_aéro_départ ; ID_aéro_départ ; Heure_départ ; Min_départ ; duration</html>");
-        importVolButton.addActionListener((ActionListener) -> {
-            JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Fichiers CSV", "csv"));
-                int returnValue = fileChooser.showOpenDialog(null);
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    String cheminFichier = fileChooser.getSelectedFile().getPath();
+        RoundedButton importVolBouton = new RoundedButton("importer une liste de vols");
+        importVolBouton.setToolTipText("<html>Charger un fichier CSV <br> Exemple : <br> ID_vol ; ID_aéro_départ ; ID_aéro_départ ; Heure_départ ; Min_départ ; duration</html>");
+        importVolBouton.addActionListener((ActionListener) -> {
+            JFileChooser selectionFichier = new JFileChooser();
+                selectionFichier.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                selectionFichier.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Fichiers CSV", "csv"));
+                int valeurRetourne = selectionFichier.showOpenDialog(null);
+                if (valeurRetourne == JFileChooser.APPROVE_OPTION) {
+                    String cheminFichier = selectionFichier.getSelectedFile().getPath();
                     // Créer une nouvelle fenêtre FenetreGraphe en passant le chemin du fichier CSV
                     FenetreGraphe fen = new FenetreGraphe(cheminFichier);
                     fen.setVisible(true);
                     dispose();
                 }
         });
-        importVolButton.setBackground(new Color(176, 226, 255));
+        importVolBouton.setBackground(new Color(176, 226, 255));
         importVolPan.add(Box.createHorizontalGlue());
-        importVolPan.add(importVolButton);
+        importVolPan.add(importVolBouton);
         importVolPan.add(Box.createHorizontalGlue());
-        //ajout du button import dans le settingPopUp
-        settingPopUp.add(importVolPan);
-        settingPopUp.add(Box.createRigidArea(new Dimension(0,5)));
+        //ajout du button import dans le parametrePopUp
+        parametrePopUp.add(importVolPan);
+        parametrePopUp.add(Box.createRigidArea(new Dimension(0,5)));
 
         //button import prefait
         JPanel importPrefaitPan = new JPanel();
         importPrefaitPan.setOpaque(false);
         importPrefaitPan.setLayout(new BoxLayout(importPrefaitPan, BoxLayout.LINE_AXIS));
-        RoundedButton importPrefaitButton = new RoundedButton("importer un graphe préfait");
-        importPrefaitButton.setToolTipText("<html>Charger un fichier TXT <br> Exemple : <br> kmax <br> nbNoeuds<br> arretes</html>");
-        importPrefaitButton.addActionListener((ActionListener) -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Fichiers TXT", "txt"));
-            int returnValue = fileChooser.showOpenDialog(null);
-            if (returnValue == JFileChooser.APPROVE_OPTION) {
-                String cheminFichier = fileChooser.getSelectedFile().getPath();
+        RoundedButton importPrefaitBouton = new RoundedButton("importer un graphe préfait");
+        importPrefaitBouton.setToolTipText("<html>Charger un fichier TXT <br> Exemple : <br> kmax <br> nbNoeuds<br> arretes</html>");
+        importPrefaitBouton.addActionListener((ActionListener) -> {
+            JFileChooser selectionFichier = new JFileChooser();
+            selectionFichier.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            selectionFichier.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Fichiers TXT", "txt"));
+            int valeurRetourne = selectionFichier.showOpenDialog(null);
+            if (valeurRetourne == JFileChooser.APPROVE_OPTION) {
+                String cheminFichier = selectionFichier.getSelectedFile().getPath();
                 // Créer une nouvelle fenêtre FenetreGraphe en passant le chemin du fichier TXT
                 FenetreGraphe fen = new FenetreGraphe(cheminFichier);
                 fen.setVisible(true);
                 dispose();
             }
         });
-        importPrefaitButton.setBackground(new Color(176, 226, 255));
+        importPrefaitBouton.setBackground(new Color(176, 226, 255));
         importPrefaitPan.add(Box.createHorizontalGlue());
-        importPrefaitPan.add(importPrefaitButton);
+        importPrefaitPan.add(importPrefaitBouton);
         importPrefaitPan.add(Box.createHorizontalGlue());
-        //ajout du button import dans le settingPopUp
-        settingPopUp.add(importPrefaitPan);
-        settingPopUp.add(Box.createRigidArea(new Dimension(0,15)));
+        //ajout du button import dans le parametrePopUp
+        parametrePopUp.add(importPrefaitPan);
+        parametrePopUp.add(Box.createRigidArea(new Dimension(0,15)));
 
 
         // coloration (kmax)
-        //slider Pan
-        JPanel sliderCouleurPan = new JPanel();
-        sliderCouleurPan.setMaximumSize(new Dimension(200, 50));
-        sliderCouleurPan.setOpaque(false);
-        sliderCouleurPan.setLayout(new BoxLayout(sliderCouleurPan, BoxLayout.LINE_AXIS));
+        //barre Pan
+        JPanel barreCouleurPan = new JPanel();
+        barreCouleurPan.setMaximumSize(new Dimension(200, 50));
+        barreCouleurPan.setOpaque(false);
+        barreCouleurPan.setLayout(new BoxLayout(barreCouleurPan, BoxLayout.LINE_AXIS));
         //JLabel
-        sliderCouleurPan.add(Box.createHorizontalGlue());
-        sliderCouleurPan.add(new JLabel("kmax : "));
-        sliderCouleurPan.add(Box.createRigidArea(new Dimension(10,0)));
-        //slider
-        JSlider sliderCouleur = new JSlider(JSlider.HORIZONTAL, 1, 20, 12);
-        sliderCouleurPan.add(sliderCouleur);
-        sliderCouleurPan.add(Box.createRigidArea(new Dimension(10,0)));
+        barreCouleurPan.add(Box.createHorizontalGlue());
+        barreCouleurPan.add(new JLabel("kmax : "));
+        barreCouleurPan.add(Box.createRigidArea(new Dimension(10,0)));
+        //barre
+        JSlider barreCouleur = new JSlider(JSlider.HORIZONTAL, 1, 20, 12);
+        barreCouleurPan.add(barreCouleur);
+        barreCouleurPan.add(Box.createRigidArea(new Dimension(10,0)));
         //JLabel int
         JLabel intLabel = new JLabel("12");
-        sliderCouleur.addChangeListener((ChangeEvent) -> {
-            intLabel.setText(Integer.toString(sliderCouleur.getValue()));
+        barreCouleur.addChangeListener((ChangeEvent) -> {
+            intLabel.setText(Integer.toString(barreCouleur.getValue()));
         });
-        //ajout du slider et du label dans le settingPopUp
-        sliderCouleurPan.add(intLabel);
-        sliderCouleurPan.add(Box.createHorizontalGlue());
-        settingPopUp.add(sliderCouleurPan);
+        //ajout de la barre et du label dans le parametrePopUp
+        barreCouleurPan.add(intLabel);
+        barreCouleurPan.add(Box.createHorizontalGlue());
+        parametrePopUp.add(barreCouleurPan);
 
-        // Dsature button
+        // Dsature bouton
         JPanel dsaturePan = new JPanel();
         dsaturePan.setOpaque(false);
         dsaturePan.setLayout(new BoxLayout(dsaturePan, BoxLayout.LINE_AXIS));
@@ -432,8 +429,8 @@ public class FenetreGraphe extends SuperposedFenetre {
         dsatureButton.setToolTipText("Appliquer la méthode DSature sur le graphe");
         dsatureButton.setBackground(new Color(176, 226, 255));
         dsatureButton.addActionListener((ActionListener) -> {
-            graph.setKdonne(sliderCouleur.getValue());
-            graph.dSature();
+            graphe.setKdonne(barreCouleur.getValue());
+            graphe.dSature();
 
             retour.doClick();
             infoLabel.setText(createInfoString());
@@ -441,10 +438,10 @@ public class FenetreGraphe extends SuperposedFenetre {
         dsaturePan.add(Box.createHorizontalGlue());
         dsaturePan.add(dsatureButton);
         dsaturePan.add(Box.createHorizontalGlue());
-        //ajout du button dans le settingPopUp
-        settingPopUp.add(dsaturePan);
-        settingPopUp.add(Box.createRigidArea(new Dimension(0,5)));
-        // WelshPowell button
+        //ajout du buouton dans le parametrePopUp
+        parametrePopUp.add(dsaturePan);
+        parametrePopUp.add(Box.createRigidArea(new Dimension(0,5)));
+        // WelshPowell bouton
         JPanel welshPowellPan = new JPanel();
         welshPowellPan.setOpaque(false);
         welshPowellPan.setLayout(new BoxLayout(welshPowellPan, BoxLayout.LINE_AXIS));
@@ -452,36 +449,36 @@ public class FenetreGraphe extends SuperposedFenetre {
         welshPowellButton.setToolTipText("Appliquer la méthode WelshPowell sur le graphe");
         welshPowellButton.setBackground(new Color(176, 226, 255));
         welshPowellButton.addActionListener((ActionListener) -> {
-            graph.setKdonne(sliderCouleur.getValue());
-            graph.welshPowell();
+            graphe.setKdonne(barreCouleur.getValue());
+            graphe.welshPowell();
             retour.doClick();
             infoLabel.setText(createInfoString());
         });
         welshPowellPan.add(Box.createHorizontalGlue());
         welshPowellPan.add(welshPowellButton);
         welshPowellPan.add(Box.createHorizontalGlue());
-        //ajout du button dans le settingPopUp
-        settingPopUp.add(welshPowellPan);
-        settingPopUp.add(Box.createRigidArea(new Dimension(0,15)));
+        //ajout du bouton dans le parametrePopUp
+        parametrePopUp.add(welshPowellPan);
+        parametrePopUp.add(Box.createRigidArea(new Dimension(0,15)));
 
 
-        //panel du settingPopUp
-        JPanel settingMenuPan = new JPanel();
-        settingMenuPan.setOpaque(false);
-        settingMenuPan.setLayout(new BoxLayout(settingMenuPan, BoxLayout.PAGE_AXIS));
-        settingMenuPan.add(settingPopUp);
-        settingMenuPan.add(Box.createVerticalGlue());
+        //panel du parametrePopUp
+        JPanel parametreMenuPan = new JPanel();
+        parametreMenuPan.setOpaque(false);
+        parametreMenuPan.setLayout(new BoxLayout(parametreMenuPan, BoxLayout.PAGE_AXIS));
+        parametreMenuPan.add(parametrePopUp);
+        parametreMenuPan.add(Box.createVerticalGlue());
 
-        settingMenuPosition.add(settingMenuPan, BorderLayout.EAST);
+        parametreMenuPosition.add(parametreMenuPan, BorderLayout.EAST);
     }
 
     private String createInfoString() {
         StringBuilder info = new StringBuilder();
         info.append("<html>");
-        info.append("file : ").append(this.graph.getId()).append("<br>");
-        info.append("nbr noeuds : ").append(this.graph.getNodeCount()).append("<br>");
-        info.append("nbr arêtes : ").append(this.graph.getEdgeCount()).append("<br>");
-        info.append("nbr couleurs : ").append(this.graph.getKoptimal()).append("<br>");
+        info.append("file : ").append(this.graphe.getId()).append("<br>");
+        info.append("nbr noeuds : ").append(this.graphe.getNodeCount()).append("<br>");
+        info.append("nbr arêtes : ").append(this.graphe.getEdgeCount()).append("<br>");
+        info.append("nbr couleurs : ").append(this.graphe.getKoptimal()).append("<br>");
         info.append("</html>");
         return info.toString();
     }
