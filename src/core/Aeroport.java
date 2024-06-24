@@ -1,7 +1,7 @@
 package src.core;
 
 /**
- * <h3>Cette classe définit un aéroport.</h3>
+ * <h3>Cette classe définit les aéroports.</h3>
  * @attributs code, ville, latitude, longitude
  * @methodes getx, gety, equals, toString
  * @author NOUVEL Armand

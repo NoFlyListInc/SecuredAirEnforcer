@@ -215,7 +215,7 @@ public class Graphe extends SingleGraph {
         int[] degreNoeud = new int[nombreNoeud]; // Tableau pour les degrés des nœuds
         HashSet<Integer>[] adjCols = new HashSet[nombreNoeud]; // Tableau de sets pour les couleurs adjacentes
         PriorityQueue<InfoNoeud> queueDePriorite = new PriorityQueue<>(new MaxSat()); // File de priorité pour les nœuds
-        HashMap<Node, Integer> mapIndexNoeud = new HashMap<>(); // Map pour associer les nœuds à leurs indices
+        HashMap<Node, Integer> carteIndiceNoeud = new HashMap<>(); // Map pour associer les nœuds à leurs indices
         Node[] mapNoeudIndex = new Node[nombreNoeud]; // Tableau pour associer les indices aux nœuds
 
         int index = 0;
@@ -225,7 +225,7 @@ public class Graphe extends SingleGraph {
             tableauCouleurNoeud[index] = -1;
             degreNoeud[index] = node.getDegree();
             adjCols[index] = new HashSet<>();
-            mapIndexNoeud.put(node, index);
+            carteIndiceNoeud.put(node, index);
             mapNoeudIndex[index] = node;
             queueDePriorite.add(new InfoNoeud(0, degreNoeud[index], node));
             index++;
@@ -233,16 +233,16 @@ public class Graphe extends SingleGraph {
 
         while (!queueDePriorite.isEmpty()) {
             InfoNoeud maxPointeur = queueDePriorite.poll();
-            int u = mapIndexNoeud.get(maxPointeur.noeud);
+            int u = carteIndiceNoeud.get(maxPointeur.noeud);
 
             // Réinitialiser le tableau couleursVoisins pour chaque nœud
             // Arrays.fill(couleursVoisins, false);
 
             // Utilisation de l'itérateur pour les voisins
-            Iterator<Node> neighborIterator = maxPointeur.noeud.getNeighborNodeIterator();
-            while (neighborIterator.hasNext()) {
-                Node neighbor = neighborIterator.next();
-                int v = mapIndexNoeud.get(neighbor);
+            Iterator<Node> itérateurVoisin = maxPointeur.noeud.getNeighborNodeIterator();
+            while (itérateurVoisin.hasNext()) {
+                Node neighbor = itérateurVoisin.next();
+                int v = carteIndiceNoeud.get(neighbor);
                 if (tableauCouleurNoeud[v] != -1) {
                     couleursVoisins[tableauCouleurNoeud[v]] = true;
                 }
@@ -264,29 +264,29 @@ public class Graphe extends SingleGraph {
                 // Si la couleur choisie dépasse kdonne, chercher la couleur avec le moins de
                 // collisions
                 int minCollisions = Integer.MAX_VALUE;
-                int bestColor = -1;
+                int meilleurCouleur = -1;
                 for (int j = 0; j < this.kdonne; j++) {
                     int collisions = 0;
-                    neighborIterator = maxPointeur.noeud.getNeighborNodeIterator();
-                    while (neighborIterator.hasNext()) {
-                        Node neighbor = neighborIterator.next();
-                        int v = mapIndexNoeud.get(neighbor);
+                    itérateurVoisin = maxPointeur.noeud.getNeighborNodeIterator();
+                    while (itérateurVoisin.hasNext()) {
+                        Node voisin = itérateurVoisin.next();
+                        int v = carteIndiceNoeud.get(voisin);
                         if (tableauCouleurNoeud[v] == j) {
                             collisions++;
                         }
                     }
                     if (collisions < minCollisions) {
                         minCollisions = collisions;
-                        bestColor = j;
+                        meilleurCouleur = j;
                     }
                 }
-                i = bestColor;
+                i = meilleurCouleur;
 
                 // Ajoute les voisins ayant la même couleur à volsMemesNiveaux
-                neighborIterator = maxPointeur.noeud.getNeighborNodeIterator();
-                while (neighborIterator.hasNext()) {
-                    Node neighbor = neighborIterator.next();
-                    int v = mapIndexNoeud.get(neighbor);
+                itérateurVoisin = maxPointeur.noeud.getNeighborNodeIterator();
+                while (itérateurVoisin.hasNext()) {
+                    Node neighbor = itérateurVoisin.next();
+                    int v = carteIndiceNoeud.get(neighbor);
                     if (tableauCouleurNoeud[v] == i) {
                         Vol vol1 = this.getVolsMemesNiveaux().getVolDepuisNoeud(maxPointeur.noeud,
                                 this.getVolsMemesNiveaux().getListVol());
@@ -303,20 +303,20 @@ public class Graphe extends SingleGraph {
                     + couleursVisuelles[i].getBlue() + ",200);");
 
             // Réinitialisation de l'itérateur pour les voisins
-            neighborIterator = maxPointeur.noeud.getNeighborNodeIterator();
-            while (neighborIterator.hasNext()) {
-                Node neighbor = neighborIterator.next();
-                int v = mapIndexNoeud.get(neighbor);
+            itérateurVoisin = maxPointeur.noeud.getNeighborNodeIterator();
+            while (itérateurVoisin.hasNext()) {
+                Node voisin = itérateurVoisin.next();
+                int v = carteIndiceNoeud.get(voisin);
                 if (tableauCouleurNoeud[v] != -1) {
                     couleursVoisins[tableauCouleurNoeud[v]] = false;
                 }
             }
 
             // Mise à jour des informations de saturation et de degré pour les voisins
-            neighborIterator = maxPointeur.noeud.getNeighborNodeIterator();
-            while (neighborIterator.hasNext()) {
-                Node neighbor = neighborIterator.next();
-                int v = mapIndexNoeud.get(neighbor);
+            itérateurVoisin = maxPointeur.noeud.getNeighborNodeIterator();
+            while (itérateurVoisin.hasNext()) {
+                Node neighbor = itérateurVoisin.next();
+                int v = carteIndiceNoeud.get(neighbor);
                 if (tableauCouleurNoeud[v] == -1) {
                     queueDePriorite.remove(new InfoNoeud(adjCols[v].size(), degreNoeud[v], neighbor));
                     adjCols[v].add(tableauCouleurNoeud[u]);

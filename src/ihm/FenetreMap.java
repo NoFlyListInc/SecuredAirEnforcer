@@ -268,7 +268,7 @@ public class FenetreMap extends FenetreSuperpose
         button.setToolTipText("Appliquer les paramètres sur la carte");
         button.setEnabled(false);
         button.addActionListener((ActionListener) -> {
-            map.addInformation(map.getListAeroport(), map.getListeVols(), sliderMarge.getValue(), sliderHauteur.getValue());
+            map.ajouterInformation(map.getListeAeroport(), map.getListeVols(), sliderMarge.getValue(), sliderHauteur.getValue());
         });
         buttonPan.add(Box.createHorizontalGlue());
         buttonPan.add(button);
@@ -309,7 +309,7 @@ public class FenetreMap extends FenetreSuperpose
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
                 }
-                map.addInformation(listAeroport, listVols, 15, 1);
+                map.ajouterInformation(listAeroport, listVols, 15, 1);
                 sliderHauteur.setEnabled(true);
                 sliderMarge.setEnabled(true);
                 sliderHauteur.setValue(1);

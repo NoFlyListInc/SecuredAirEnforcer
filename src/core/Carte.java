@@ -5,6 +5,7 @@ import src.ihm.AeroportWaypointRenderer;
 import src.ihm.CollisionWaypointRenderer;
 import src.ihm.LineOverlayPainter;
 //import JXMapViewer objects
+
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
@@ -16,6 +17,7 @@ import org.jxmapviewer.viewer.WaypointPainter;
 import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.painter.CompoundPainter;
+
 //import awt objects
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -27,9 +29,11 @@ import java.awt.geom.Point2D;
 
 //import swing objects
 import javax.swing.JLabel;
+
 //import graphstream objects
 import org.graphstream.graph.Node;
 import org.graphstream.graph.Edge;
+
 //import util objects
 import java.util.HashSet;
 import java.util.Set;
@@ -38,10 +42,12 @@ import java.util.List;
 //#endregion
 
 /**
- * Class Map
- * Permet de gérer une carte
- * @attributs ListeAeroportWaypoint, ListCollisionWaypoint, listeAeroport, listVols, label
- * @methodes Map, addInformation, getListeAeroport, getListVols, setListeAeroport, setListVols
+ * <h3>Classe CARTES</h3>
+ * <p>La classe Carte permet de créer une carte avec des aéroports, des vols et des collisions.</p>
+ *  <p>La carte est une carte OpenStreetMap avec des aéroports représentés par des triangles et des collisions représentées par des points.</p>
+ * @extends JXMapViewer
+ * @attributs ListeAeroportWaypoint, ListeCollisionWaypoint, listeAeroport, listeVols, label
+ * @methodes Map, ajouterInformation, getListeAeroport, getListeVols
  * @autor NOUVEL Armand
  */
 public class Carte extends JXMapViewer
@@ -120,16 +126,16 @@ public class Carte extends JXMapViewer
 
     /**
      * retourne la liste des aeroports
-     * @return listAeroport
+     * @return listeAeroport
      */
-    public ListeAeroport getListAeroport() {
+    public ListeAeroport getListeAeroport() {
         return listeAeroport;
 
     }
     
     /**
      * retourne la liste des vols
-     * @return listVols
+     * @return listeVols
      */
     public ListeVol getListeVols() {
         return listeVols;
@@ -143,7 +149,7 @@ public class Carte extends JXMapViewer
      * rajoute les aeroports, les vols et les collisions sur la carte
      * @param listeVol
      */
-    public void addInformation(ListeAeroport listeAeroport, ListeVol listeVol, int marge, int kmax) {
+    public void ajouterInformation(ListeAeroport listeAeroport, ListeVol listeVol, int marge, int kmax) {
         //on met à jour les attributs
         this.listeVols = listeVol;
         this.listeAeroport = listeAeroport;
@@ -162,7 +168,7 @@ public class Carte extends JXMapViewer
         ListeCollisionWaypoint.clear();
 
         //contenant des éléments à dessiner
-        List<Painter<JXMapViewer>> painters = new ArrayList<>();
+        List<Painter<JXMapViewer>> peintres = new ArrayList<>();
 
         //créer les waypoint pour les aeroports
 
@@ -180,21 +186,20 @@ public class Carte extends JXMapViewer
         WaypointPainter<DefaultWaypoint> waypointAeoroportPainter = new WaypointPainter<>();
         waypointAeoroportPainter.setRenderer(new AeroportWaypointRenderer());
         waypointAeoroportPainter.setWaypoints(ListeAeroportWaypoint);
-        painters.add(waypointAeoroportPainter);
+        peintres.add(waypointAeoroportPainter);
 
         //créer des droites pour les vols
-
         for (Edge arete : carteGraph.getEachEdge()) {
-                Node node1 = arete.getNode0();
-                Node node2 = arete.getNode1();
-                Double latitude1=this.listeAeroport.getAeroportByCode(node1.getId()).getLatitude().getDecimal();
-                Double longitude1=this.listeAeroport.getAeroportByCode(node1.getId()).getLongitude().getDecimal();
-                Double latitude2=this.listeAeroport.getAeroportByCode(node2.getId()).getLatitude().getDecimal();
-                Double longitude2=this.listeAeroport.getAeroportByCode(node2.getId()).getLongitude().getDecimal();
+                Node noeud1 = arete.getNode0();
+                Node noeud2 = arete.getNode1();
+                Double latitude1=this.listeAeroport.getAeroportByCode(noeud1.getId()).getLatitude().getDecimal();
+                Double longitude1=this.listeAeroport.getAeroportByCode(noeud1.getId()).getLongitude().getDecimal();
+                Double latitude2=this.listeAeroport.getAeroportByCode(noeud2.getId()).getLatitude().getDecimal();
+                Double longitude2=this.listeAeroport.getAeroportByCode(noeud2.getId()).getLongitude().getDecimal();
                 GeoPosition position1 = new GeoPosition(latitude1, longitude1);
                 GeoPosition position2 = new GeoPosition(latitude2, longitude2);
                 LineOverlayPainter ligne = new LineOverlayPainter(position1, position2);
-                painters.add(ligne);
+                peintres.add(ligne);
         }
 
         //créer les waypoint pour les collisions
@@ -213,11 +218,11 @@ public class Carte extends JXMapViewer
         WaypointPainter<DefaultWaypoint> waypointCollisionPainter = new WaypointPainter<>();
         waypointCollisionPainter.setRenderer(new CollisionWaypointRenderer());
         waypointCollisionPainter.setWaypoints(ListeCollisionWaypoint);
-        painters.add(waypointCollisionPainter);
+        peintres.add(waypointCollisionPainter);
 
         //affiche sur la carte
-        CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter<>(painters);
-        this.setOverlayPainter(compoundPainter);
+        CompoundPainter<JXMapViewer> compositeur = new CompoundPainter<>(peintres);
+        this.setOverlayPainter(compositeur);
 
     }
     //#endregion

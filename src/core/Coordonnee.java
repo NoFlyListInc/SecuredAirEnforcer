@@ -3,7 +3,7 @@ package src.core;
 /**
  * <h3>Cette classe définit une coordonnée.</h3>
  * @attributs degree, minute, seconde, direction
- * @methodes getDecimal, getDecimalRadians
+ * @methodes getDecimal, getDecimalRadians, equals, toString
  * @author NOUVEL Armand
  */
 public class Coordonnee 
@@ -51,20 +51,24 @@ public class Coordonnee
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("le degré doit être un entier");
         }
+
         int minuteEntier=0;
         try {
             minuteEntier = Integer.parseInt(minute);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("la minute doit être un entier");
         }
+
         int secondeEntier=0;
         try {
             secondeEntier = Integer.parseInt(seconde);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("la seconde doit être un entier");
         }
+
         //conversion de la direction en char
         char directionChar = direction.charAt(0);
+
         //vérification des valeurs
         if (degreeEntier < 0 || degreeEntier > 180){
             throw new IllegalArgumentException("Le degré doit être compris entre 0 et 180");
@@ -141,7 +145,7 @@ public class Coordonnee
     //#region methodes
 
     /**
-     * vérifie si deux coordonnees sont égaux
+     * Vérifie si deux coordonnées sont égales
      * @param autre
      * @return boolean
      */
@@ -189,7 +193,7 @@ public class Coordonnee
     //#region affichage
  
     /**
-     * renvoie une chaine de caractere representant la coordonnee
+     * Renvoie la coordonnée sous forme de chaine de caractères
      * @return String
      */
     public String toString()
