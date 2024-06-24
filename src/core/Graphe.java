@@ -16,8 +16,8 @@ import java.util.ArrayList;
 //import list class
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet; 
-import java.util.PriorityQueue; 
+import java.util.HashSet;
+import java.util.PriorityQueue;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -206,12 +206,13 @@ public class Graphe extends SingleGraph {
     public void dSature() {
         this.setKoptimal(0);
         int nombreNoeud = this.getNodeCount(); // Nombre de nœuds dans le graphe
-        boolean[] couleursVoisins = new boolean[nombreNoeud]; // Tableau pour vérifier les couleurs utilisées par les voisins
+        boolean[] couleursVoisins = new boolean[nombreNoeud]; // Tableau pour vérifier les couleurs utilisées par les
+                                                              // voisins
         int[] tableauCouleurNoeud = new int[nombreNoeud]; // Tableau pour les couleurs des nœuds
         Color[] couleursVisuelles = new Color[getKdonne()];
         for (int i = 0; i < getKdonne(); i++) {
             couleursVisuelles[i] = Color.getHSBColor((float) (Math.random()), 0.8f, 0.9f);
-        } //couleurs visuelles à afficher pour chaque niveau de vol
+        } // couleurs visuelles à afficher pour chaque niveau de vol
         int[] degreNoeud = new int[nombreNoeud]; // Tableau pour les degrés des nœuds
         HashSet<Integer>[] adjCols = new HashSet[nombreNoeud]; // Tableau de sets pour les couleurs adjacentes
         PriorityQueue<InfoNoeud> queueDePriorite = new PriorityQueue<>(new MaxSat()); // File de priorité pour les nœuds
@@ -299,8 +300,9 @@ public class Graphe extends SingleGraph {
 
             tableauCouleurNoeud[u] = i;
 
-            maxPointeur.noeud.setAttribute("ui.style", "fill-color:rgba(" + couleursVisuelles[i].getRed() + "," + couleursVisuelles[i].getGreen() + ","
-                    + couleursVisuelles[i].getBlue() + ",200);");
+            maxPointeur.noeud.setAttribute("ui.style",
+                    "fill-color:rgba(" + couleursVisuelles[i].getRed() + "," + couleursVisuelles[i].getGreen() + ","
+                            + couleursVisuelles[i].getBlue() + ",200);");
 
             // Réinitialisation de l'itérateur pour les voisins
             itérateurVoisin = maxPointeur.noeud.getNeighborNodeIterator();
@@ -335,21 +337,26 @@ public class Graphe extends SingleGraph {
      * @author Xavier LACROIX
      */
     public void welshPowell() {
-        WelshPowell colorationWelshPowell = new WelshPowell("color");
-        colorationWelshPowell.init(this);
-        colorationWelshPowell.compute();
+        if (this.getKdonne() == Integer.MAX_VALUE) {
+            WelshPowell colorationWelshPowell = new WelshPowell("color");
+            colorationWelshPowell.init(this);
+            colorationWelshPowell.compute();
 
-        setKoptimal(colorationWelshPowell.getChromaticNumber());
+            this.setKoptimal(colorationWelshPowell.getChromaticNumber());
 
-        // Display colors
-        Color[] cols = new Color[getKdonne()];
-        for (int i = 0; i < getKdonne(); i++) {
-            cols[i] = Color.getHSBColor((float) (Math.random()), 0.8f, 0.9f);
+            // Display colors
+            Color[] cols = new Color[100];
+            for (int i = 0; i < this.getKdonne(); i++) {
+                cols[i] = Color.getHSBColor((float) (Math.random()), 0.8f, 0.9f);
+            }
+            for (Node n : this) {
+                int col = (int) n.getNumber("color");
+                n.setAttribute("ui.style", "fill-color:rgba(" + cols[col].getRed() + "," + cols[col].getGreen() + ","
+                        + cols[col].getBlue() + ",200);");
+            }
         }
-        for (Node n : this) {
-            int col = (int) n.getNumber("color");
-            n.setAttribute("ui.style", "fill-color:rgba(" + cols[col].getRed() + "," + cols[col].getGreen() + ","
-                    + cols[col].getBlue() + ",200);");
+        else {
+            this.dSature();
         }
     }
 
@@ -392,21 +399,19 @@ public class Graphe extends SingleGraph {
             exceptions.add(new ExceptionAnalyse(1, "La première ligne ne doit pas etre vide"));
         } else if (!premiereLigne.matches("\\d+")) {
             exceptions.add(new ExceptionAnalyse(1, "La première ligne doit être un entier positif"));
-        }
-        else {
+        } else {
             this.kdonne = Integer.parseInt(premiereLigne);
         }
-        
 
         // deuxième ligne => nombre de noeuds
         String deuxiemeligne = reader.readLine();
         if (deuxiemeligne == "") {
             reader.close();
             throw new ExceptionAnalyse(2, "<html>La deuxième ligne ne doit pas etre vide<br>Le graph sera vide</html>");
-        }
-        else if (!deuxiemeligne.matches("\\d+")) {
+        } else if (!deuxiemeligne.matches("\\d+")) {
             reader.close();
-            throw new ExceptionAnalyse(2, "<html>La deuxième ligne doit être un entier positif<br>Le graph sera vide</html>");
+            throw new ExceptionAnalyse(2,
+                    "<html>La deuxième ligne doit être un entier positif<br>Le graph sera vide</html>");
         }
         int nbr_noeuds = Integer.parseInt(deuxiemeligne);
 
@@ -424,7 +429,8 @@ public class Graphe extends SingleGraph {
             } else {
                 String[] parts = line.split(" ");
                 if (parts.length != 2) {
-                    exceptions.add(new ExceptionAnalyse(iterateur, "La ligne doit contenir 2 entiers séparés par un espace"));
+                    exceptions.add(
+                            new ExceptionAnalyse(iterateur, "La ligne doit contenir 2 entiers séparés par un espace"));
                 } else if (!parts[0].matches("\\d+")) {
                     exceptions.add(new ExceptionAnalyse(iterateur, "la première valeur n'est pas un entier"));
                 } else if (!parts[1].matches("\\d+")) {
@@ -471,7 +477,7 @@ public class Graphe extends SingleGraph {
                 if ((listeVol.get(i).collision(listeVol.get(j), marge)) != null) {
                     this.addEdge(listeVol.get(i).getCode() + "," + listeVol.get(j).getCode(),
                             listeVol.get(i).getCode(), listeVol.get(j).getCode()); // code de l'arrete =
-                                                                                 // "codei,codej"
+                                                                                   // "codei,codej"
                 }
             }
         }
