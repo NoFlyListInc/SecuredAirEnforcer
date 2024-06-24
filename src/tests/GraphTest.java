@@ -1,97 +1,101 @@
-/*
 package src.tests;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
+import org.graphstream.graph.Node;
 import org.junit.Before;
 import org.junit.Test;
-import org.graphstream.graph.Node;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import src.core.Aeroport;
-import src.core.Coordonnee;
-import src.core.Graph;
 import src.core.Horaire;
-import src.core.ListAeroport;
+import src.core.Graphe;
 import src.core.ListVol;
-import src.core.Vol;
-
-import static org.junit.Assert.*;
+import src.core.ListAeroport;
 
 public class GraphTest {
-    private Graph graph;
+    private Graphe graph;
+    private Graphe graphVol;
+    private Graphe littleGraph;
 
     @Before
     public void setUp() {
-        graph = new Graph("testGraph");
+        try {
+            this.graph = new Graphe("test");
+            String path = "src/tests/testData/testGraph.txt";
+            this.graph.remplirAvecFichier(path);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            this.graphVol = new Graphe("test");
+            String pathVol = "src/tests/testData/testListVol2.txt";
+            String pathAeroport = "src/tests/testData/testListAeroportFull.txt";
+
+            ListAeroport listAeroport = new ListAeroport();
+            listAeroport.fill(pathAeroport);
+
+            ListVol listVol = new ListVol();
+            listVol.fill(pathVol, listAeroport);
+
+            this.graphVol.remplirCarte(listAeroport, listVol);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            this.littleGraph = new Graphe("littleTest");
+            littleGraph.addEdge("1-2", "1", "2");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Test
     public void testGetKmax() {
-        assertEquals(20, graph.getKmax());
+        int testKmax = 11;
+        assertEquals(testKmax, graph.getKmax());
     }
 
     @Test
-    public void testSetKmax() {
-        graph.setKmax(30);
-        assertEquals(30, graph.getKmax());
+    public void testWelshPowellColoring() {
+        graph.setKdonne(5);
+        graph.welshPowell();
+        assertEquals(4, graph.getKoptimal());
     }
 
     @Test
-    public void testGetKoptimal() {
-        assertEquals(1, graph.getKoptimal());
-    }
-
-    @Test
-    public void testSetKoptimal() {
-        graph.setKoptimal(5);
-        assertEquals(5, graph.getKoptimal());
-    }
-
-    @Test
-    public void testGetVolsMemesNiveaux() {
-        assertTrue(graph.getVolsMemesNiveaux().isEmpty());
+    public void testDsaturColoring() {
+        graph.setKdonne(5);
+        graph.dSature();
+        assertEquals(3, graph.getKoptimal());
     }
 
     @Test
     public void testGestionNiveauMaxAtteint() {
-        //Set up aéroport
-        Coordonnee lattitude1 = new Coordonnee(50, 3, 30, 'N');
-        Coordonnee longitude1 = new Coordonnee(2, 30, 30, 'E');
-        Aeroport aeroport1 = new Aeroport("CDG", "Charles de Gaulle", lattitude1, longitude1);
-        Coordonnee lattitude2 = new Coordonnee(48, 2, 30, 'N');
-        Coordonnee longitude2 = new Coordonnee(2, 30, 30, 'E');
-        Aeroport aeroport2 = new Aeroport("ORY", "Orly", lattitude2, longitude2);
-        
-        //Set up listVol
-        ListVol listVol = new ListVol();
-        Horaire horaire1 = new Horaire(12, 0);
-        Horaire horaire2 = new Horaire(12, 2);
-        Vol vol1 = new Vol("Vol1", aeroport1, aeroport2, horaire1, 5);
-        Vol vol2 = new Vol("Vol2", aeroport2, aeroport1, horaire2, 6);
-        listVol.add(vol1);
-        listVol.add(vol2);
-        
-        //Set up graph
-        graph.fillVol(listVol, 5);
+        try {
+            ListVol listVol2 = new ListVol();
+            listVol2.fill("src/tests/testData/testListVol2.txt", new ListAeroport());
 
-        graph.gestionNiveauMaxAtteint(vol1, vol2);
-        ArrayList<HashMap<Vol, Vol>> volsMemesNiveaux = graph.getVolsMemesNiveaux();
-        assertEquals(1, volsMemesNiveaux.size());
-        assertTrue(volsMemesNiveaux.get(0).containsKey(vol1));
-        assertTrue(volsMemesNiveaux.get(0).containsValue(vol2));
+            this.graphVol.remplirAvecListeVol(null, 15);
+            int volsMemesNiveauxSize = graph.getVolsMemesNiveaux().getVolsMemesNiveaux().size();
+            assertEquals(5, volsMemesNiveauxSize);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     public void testHideSoloNode() {
-        Node node1 = graph.addNode("1");
-        Node node2 = graph.addNode("2");
-        Node node3 = graph.addNode("3");
-        graph.addEdge("1-2", "1", "2");
 
-        graph.hideSoloNode();
+        littleGraph.cacherNoeudSeul();
 
+        Node node1 = littleGraph.addNode("1");
+        Node node2 = littleGraph.addNode("2");
+        Node node3 = littleGraph.addNode("3");
         assertTrue(node1.hasAttribute("ui.hide") == false);
         assertTrue(node2.hasAttribute("ui.hide") == false);
         assertTrue(node3.hasAttribute("ui.hide"));
@@ -102,12 +106,9 @@ public class GraphTest {
         GraphTest test = new GraphTest();
         test.setUp();
         test.testGetKmax();
-        test.testSetKmax();
-        test.testGetKoptimal();
-        test.testSetKoptimal();
-        test.testGetVolsMemesNiveaux();
+        test.testWelshPowellColoring();
+        test.testDsaturColoring();
         test.testGestionNiveauMaxAtteint();
         test.testHideSoloNode();
     }
 }
-*/

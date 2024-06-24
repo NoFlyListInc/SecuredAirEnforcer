@@ -44,29 +44,29 @@ import java.util.List;
  * @methodes Map, addInformation, getListAeroport, getListVols, setListAeroport, setListVols
  * @autor NOUVEL Armand
  */
-public class Map extends JXMapViewer
+public class Carte extends JXMapViewer
 {
     //#region attributs
 
     /**
      * liste des waypoints d'aeroports
      */
-    private Set<DefaultWaypoint> ListAeroportWaypoint = new HashSet<>();
+    private Set<DefaultWaypoint> ListeAeroportWaypoint = new HashSet<>();
 
     /**
      * liste des waypoints de collisions
      */
-    private Set<DefaultWaypoint> ListCollisionWaypoint = new HashSet<>();
+    private Set<DefaultWaypoint> ListeCollisionWaypoint = new HashSet<>();
 
     /**
      * liste des aeroports
      */
-    private ListAeroport listAeroport;
+    private ListAeroport listeAeroport;
 
     /**
      * liste des vols
      */
-    private ListVol listVols;
+    private ListVol listeVols;
 
     /**
      * label pour afficher les informations
@@ -81,7 +81,7 @@ public class Map extends JXMapViewer
      * Constructeur de Map
      * @param label, JLabel, label pour afficher les informations
      */
-    public Map(JLabel label) {
+    public Carte(JLabel label) {
         super();
         this.label = label;
 
@@ -120,16 +120,16 @@ public class Map extends JXMapViewer
      * retourne la liste des aeroports
      * @return listAeroport
      */
-    public ListAeroport getListAeroport() {
-        return listAeroport;
+    public ListAeroport getListeAeroport() {
+        return listeAeroport;
     }
     
     /**
      * retourne la liste des vols
      * @return listVols
      */
-    public ListVol getListVols() {
-        return listVols;
+    public ListVol getListeVols() {
+        return listeVols;
     }
 
     //#endregion
@@ -138,67 +138,67 @@ public class Map extends JXMapViewer
 
     /**
      * rajoute les aeroports, les vols et les collisions sur la carte
-     * @param listVol
+     * @param listeVol
      */
-    public void addInformation(ListAeroport listAeroport, ListVol listVol, int marge, int kmax) {
+    public void addInformation(ListAeroport listeAeroport, ListVol listeVol, int marge, int kmax) {
         //on met à jour les attributs
-        this.listVols = listVol;
-        this.listAeroport = listAeroport;
+        this.listeVols = listeVol;
+        this.listeAeroport = listeAeroport;
         //on crée le graph des aeroports
-        Graph graphMap = new Graph("graphMap");
-        graphMap.fillMap(listAeroport, listVol);
-        graphMap.hideSoloNode();
+        Graphe carteGraph = new Graphe("graphMap");
+        carteGraph.remplirCarte(listeAeroport, listeVol);
+        carteGraph.cacherNoeudSeul();
         //on créée le graph des collisions
-        Graph graphCollision = new Graph("graphCollision");
-        graphCollision.fillVol(listVol, marge);
-        graphCollision.setKdonne(kmax);
-        graphCollision.dSature();
+        Graphe grapheCollision = new Graphe("graphCollision");
+        grapheCollision.remplirAvecListeVol(listeVol, marge);
+        grapheCollision.setKdonne(kmax);
+        grapheCollision.dSature();
         // vide les listes de waypoint
-        ListAeroportWaypoint.clear();
-        ListCollisionWaypoint.clear();
+        ListeAeroportWaypoint.clear();
+        ListeCollisionWaypoint.clear();
 
         //contenant des éléments à dessiner
         List<Painter<JXMapViewer>> painters = new ArrayList<>();
 
         //créer les waypoint pour les aeroports
-        for (Node node : graphMap) {
-            if (!node.hasAttribute("ui.hide")) {
-                Double latitude=this.listAeroport.getAeroportByCode(node.getId()).getLatitude().getDecimal();
-                Double longitude=this.listAeroport.getAeroportByCode(node.getId()).getLongitude().getDecimal();
+        for (Node noeud : carteGraph) {
+            if (!noeud.hasAttribute("ui.hide")) {
+                Double latitude=this.listeAeroport.getAeroportByCode(noeud.getId()).getLatitude().getDecimal();
+                Double longitude=this.listeAeroport.getAeroportByCode(noeud.getId()).getLongitude().getDecimal();
                 GeoPosition position = new GeoPosition(latitude, longitude);
                 DefaultWaypoint waypoint = new DefaultWaypoint(position);
-                ListAeroportWaypoint.add(waypoint);
+                ListeAeroportWaypoint.add(waypoint);
             }
         }
 
         //défini le design des waypoint et l'ajoute a painters
         WaypointPainter<DefaultWaypoint> waypointAeoroportPainter = new WaypointPainter<>();
         waypointAeoroportPainter.setRenderer(new AeroportWaypointRenderer());
-        waypointAeoroportPainter.setWaypoints(ListAeroportWaypoint);
+        waypointAeoroportPainter.setWaypoints(ListeAeroportWaypoint);
         painters.add(waypointAeoroportPainter);
 
         //créer des droites pour les vols
-        for (Edge edge : graphMap.getEachEdge()) {
-                Node node1 = edge.getNode0();
-                Node node2 = edge.getNode1();
-                Double latitude1=this.listAeroport.getAeroportByCode(node1.getId()).getLatitude().getDecimal();
-                Double longitude1=this.listAeroport.getAeroportByCode(node1.getId()).getLongitude().getDecimal();
-                Double latitude2=this.listAeroport.getAeroportByCode(node2.getId()).getLatitude().getDecimal();
-                Double longitude2=this.listAeroport.getAeroportByCode(node2.getId()).getLongitude().getDecimal();
+        for (Edge arete : carteGraph.getEachEdge()) {
+                Node node1 = arete.getNode0();
+                Node node2 = arete.getNode1();
+                Double latitude1=this.listeAeroport.getAeroportByCode(node1.getId()).getLatitude().getDecimal();
+                Double longitude1=this.listeAeroport.getAeroportByCode(node1.getId()).getLongitude().getDecimal();
+                Double latitude2=this.listeAeroport.getAeroportByCode(node2.getId()).getLatitude().getDecimal();
+                Double longitude2=this.listeAeroport.getAeroportByCode(node2.getId()).getLongitude().getDecimal();
                 GeoPosition position1 = new GeoPosition(latitude1, longitude1);
                 GeoPosition position2 = new GeoPosition(latitude2, longitude2);
-                LineOverlayPainter line = new LineOverlayPainter(position1, position2);
-                painters.add(line);
+                LineOverlayPainter ligne = new LineOverlayPainter(position1, position2);
+                painters.add(ligne);
         }
 
         //créer les waypoint pour les collisions
-        for (int i = 0; i < listVol.size(); i++) {
-            for (int j = i+1; j < listVol.size(); j++) {
+        for (int i = 0; i < listeVol.size(); i++) {
+            for (int j = i+1; j < listeVol.size(); j++) {
                 //si les vols i et j sont en collision et de meme couleur
-                GeoPosition collisionPoint=(listVol.get(i).collision(listVol.get(j), marge));
-                if (collisionPoint!=null && graphCollision.getNode(listVol.get(i).getCode()).getAttribute("ui.style").equals(graphCollision.getNode(listVol.get(j).getCode()).getAttribute("ui.style"))) {
-                    DefaultWaypoint waypoint = new DefaultWaypoint(collisionPoint);
-                    ListCollisionWaypoint.add(waypoint);
+                GeoPosition pointDeCollision=(listeVol.get(i).collision(listeVol.get(j), marge));
+                if (pointDeCollision!=null && grapheCollision.getNode(listeVol.get(i).getCode()).getAttribute("ui.style").equals(grapheCollision.getNode(listeVol.get(j).getCode()).getAttribute("ui.style"))) {
+                    DefaultWaypoint waypoint = new DefaultWaypoint(pointDeCollision);
+                    ListeCollisionWaypoint.add(waypoint);
                 }
             }
         }
@@ -206,7 +206,7 @@ public class Map extends JXMapViewer
         //défini le design des waypoint est l'ajoute à painters
         WaypointPainter<DefaultWaypoint> waypointCollisionPainter = new WaypointPainter<>();
         waypointCollisionPainter.setRenderer(new CollisionWaypointRenderer());
-        waypointCollisionPainter.setWaypoints(ListCollisionWaypoint);
+        waypointCollisionPainter.setWaypoints(ListeCollisionWaypoint);
         painters.add(waypointCollisionPainter);
 
         //affiche sur la carte
@@ -230,11 +230,11 @@ public class Map extends JXMapViewer
             Rectangle rect = new Rectangle(point.x - 8, point.y - 10, 16, 24);
             
             //on cherche si un waypoint d'aeroport est dans le rectangle
-            for (DefaultWaypoint waypoint : ListAeroportWaypoint) {
+            for (DefaultWaypoint waypoint : ListeAeroportWaypoint) {
                 Point2D waypointPosition = convertGeoPositionToPoint(waypoint.getPosition());
                 if (rect.contains(waypointPosition)) {
                     // Récupérer l'aéroport correspondant au waypoint
-                    Aeroport aeroport = listAeroport.getAeroportByPosition(waypoint.getPosition());
+                    Aeroport aeroport = listeAeroport.getAeroportByPosition(waypoint.getPosition());
                     if (aeroport != null) {
                         // Afficher les informations sur l'aéroport
                         label.setText(aeroport.toString());
@@ -257,16 +257,16 @@ public class Map extends JXMapViewer
             Rectangle rect = new Rectangle(point.x - 8, point.y - 10, 16, 24);
             
             //on cherche si un waypoint de collision est dans le rectangle
-            for (DefaultWaypoint waypoint : ListCollisionWaypoint) {
+            for (DefaultWaypoint waypoint : ListeCollisionWaypoint) {
                 Point2D waypointPosition = convertGeoPositionToPoint(waypoint.getPosition());
                 if (rect.contains(waypointPosition)) {
-                    for(int i=0; i<listVols.size(); i++){
+                    for(int i=0; i<listeVols.size(); i++){
                         //parcours les vols pour trouver la collision
-                        for(int j=i+1; j<listVols.size(); j++){
-                            GeoPosition collisionPoint=(listVols.get(i).collision(listVols.get(j), 15));
+                        for(int j=i+1; j<listeVols.size(); j++){
+                            GeoPosition collisionPoint=(listeVols.get(i).collision(listeVols.get(j), 15));
                             if(collisionPoint!=null && collisionPoint.equals(waypoint.getPosition())){
                                 // Afficher les informations sur la collision
-                                label.setText(listVols.get(i).getCode() + " <=> " + listVols.get(j).getCode());
+                                label.setText(listeVols.get(i).getCode() + " <=> " + listeVols.get(j).getCode());
                             }
                         }
                     }

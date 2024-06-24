@@ -1,6 +1,6 @@
 package src.ihm;
 //#region import
-import src.core.Graph;
+import src.core.Graphe;
 import src.core.ListAeroport;
 import src.core.ListVol;
 //graphstream objects
@@ -68,7 +68,7 @@ public class FenetreGraphe extends SuperposedFenetre {
     /**
      * le graph qui sera affiché
      */
-    private Graph graph;
+    private Graphe graph;
 
     /**
      * JLabel des infos du graph
@@ -145,10 +145,10 @@ public class FenetreGraphe extends SuperposedFenetre {
         // creation du graph
         File file = new File(this.cheminFichier);
 
-        this.graph = new Graph(file.getName());
+        this.graph = new Graphe(file.getName());
         if (file.getName().endsWith(".txt")) {
             try {
-                this.graph.fillFile(this.cheminFichier);
+                this.graph.remplirAvecFichier(this.cheminFichier);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
             }
@@ -165,7 +165,7 @@ public class FenetreGraphe extends SuperposedFenetre {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
             }
-            this.graph.fillVol(listVol, 15);
+            this.graph.remplirAvecListeVol(listVol, 15);
         }
 
         // Viewer pour zoomer et deplacer
