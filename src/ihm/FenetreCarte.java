@@ -3,6 +3,7 @@ package src.ihm;
 //swing objects
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JButton;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
@@ -21,6 +22,7 @@ import javax.swing.SpinnerNumberModel;
 import src.core.ListeVol;
 import src.core.Carte;
 import src.core.ListeAeroport;
+import src.core.Horaire;
 
 
 //awt objects
@@ -53,6 +55,11 @@ public class FenetreCarte extends FenetreSuperpose
     private JSlider sliderHauteur;
     private JSpinner spinnerNiveau;
     private JPanel spinnerNiveauPan;
+    private JSpinner spinnerHeure;
+    private JSpinner spinnerMinute;
+    private JPanel heurePan;
+    private JRadioButton heureBouton = new JRadioButton();
+    private JPanel infoLabelPan;
     //#endregion
 
     //#region Constructeur
@@ -124,7 +131,9 @@ public class FenetreCarte extends FenetreSuperpose
         this.spinnerNiveauPan.setLayout(new BoxLayout(spinnerNiveauPan, BoxLayout.LINE_AXIS));
         //JLabel
         this.spinnerNiveauPan.add(Box.createHorizontalGlue());
-        this.spinnerNiveauPan.add(new JLabel("hauteur :"));
+        JLabel niveauLabel = new JLabel("hauteur :");
+        niveauLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        this.spinnerNiveauPan.add(niveauLabel);
         this.spinnerNiveauPan.add(Box.createRigidArea(new Dimension(3,0)));
         //spinner
         this.spinnerNiveau = new JSpinner(new SpinnerNumberModel(0, 0, 0, 1));                
@@ -138,8 +147,69 @@ public class FenetreCarte extends FenetreSuperpose
 
         //changeListener
         this.spinnerNiveau.addChangeListener((ChangeEvent) -> {
-            map.ajouterInformation(map.getListeAeroport(), map.getListeVols(), sliderMarge.getValue(), sliderHauteur.getValue(), (int)spinnerNiveau.getValue());
+            Horaire heure = null;
+            if (this.heureBouton.isSelected()) {
+                heure = new Horaire((int)spinnerHeure.getValue(), (int)spinnerMinute.getValue());
+            }
+            map.ajouterInformation(map.getListeAeroport(), map.getListeVols(), sliderMarge.getValue(), sliderHauteur.getValue(), (int)spinnerNiveau.getValue(), heure);
         });
+
+        //ajout de la fonctionnalité d'afficher chaque vol à une heure donnée
+        //heure Pan
+        this.heurePan = new JPanel();
+        this.heurePan.setVisible(false);
+        this.heurePan.setOpaque(false);
+        this.heurePan.setMaximumSize(new Dimension(1000,30));
+        this.heurePan.setLayout(new BoxLayout(this.heurePan, BoxLayout.LINE_AXIS));
+        //bouton
+        this.heurePan.add(Box.createHorizontalGlue());
+        this.heurePan.add(this.heureBouton);
+        this.heurePan.add(Box.createRigidArea(new Dimension(5,0)));
+        this.heureBouton.setEnabled(false);
+        this.heureBouton.setOpaque(false);
+        this.heureBouton.addActionListener((ActionListener) -> {
+            if (this.heureBouton.isSelected()) {
+                this.map.ajouterInformation(map.getListeAeroport(), map.getListeVols(), sliderMarge.getValue(), sliderHauteur.getValue(), (int)spinnerNiveau.getValue(), new Horaire((int)spinnerHeure.getValue(), (int)spinnerMinute.getValue()));
+            } else {
+                this.map.ajouterInformation(map.getListeAeroport(), map.getListeVols(), sliderMarge.getValue(), sliderHauteur.getValue(), (int)spinnerNiveau.getValue(), null);
+            }
+        });
+        //spinner heure
+        this.spinnerHeure = new JSpinner(new SpinnerNumberModel(0, -1, 24, 1));
+        this.spinnerHeure.addChangeListener((ChangeEvent) -> {
+            if (this.spinnerHeure.getNextValue() == null) {
+                this.spinnerHeure.setValue(0);
+            }
+            else if (this.spinnerHeure.getPreviousValue() == null) {
+                this.spinnerHeure.setValue(23);
+            }
+            if (this.heureBouton.isSelected()) {
+                this.map.ajouterInformation(map.getListeAeroport(), map.getListeVols(), sliderMarge.getValue(), sliderHauteur.getValue(), (int)spinnerNiveau.getValue(), new Horaire((int)spinnerHeure.getValue(), (int)spinnerMinute.getValue()));
+            }
+        });
+        this.heurePan.add(this.spinnerHeure);
+        this.heurePan.add(Box.createRigidArea(new Dimension(5,0)));
+        JLabel heureLabel = new JLabel("H");
+        heureLabel.setForeground(Color.BLACK);
+        this.heurePan.add(heureLabel);
+        this.heurePan.add(Box.createRigidArea(new Dimension(5,0)));
+        //spinner minute
+        this.spinnerMinute = new JSpinner(new SpinnerNumberModel(0, -1, 60, 1));
+        this.spinnerMinute.addChangeListener((ChangeEvent) -> {
+            if (this.spinnerMinute.getNextValue() == null) {
+                this.spinnerMinute.setValue(0);
+            }
+            else if (this.spinnerMinute.getPreviousValue() == null) {
+                this.spinnerMinute.setValue(59);
+            }
+            if (this.heureBouton.isSelected()) {
+                this.map.ajouterInformation(map.getListeAeroport(), map.getListeVols(), sliderMarge.getValue(), sliderHauteur.getValue(), (int)spinnerNiveau.getValue(), new Horaire((int)spinnerHeure.getValue(), (int)spinnerMinute.getValue()));
+            }
+        });
+        this.heurePan.add(this.spinnerMinute);
+        this.heurePan.add(Box.createRigidArea(new Dimension(3,0)));
+        settingPan.add(this.heurePan);
+        settingPan.add(Box.createRigidArea(new Dimension(0,3)));
 
 
         buttonPan.add(settingPan, BorderLayout.EAST);
@@ -148,16 +218,17 @@ public class FenetreCarte extends FenetreSuperpose
         menuLabelPan.setOpaque(false);
         menuLabelPan.setLayout(new BoxLayout(menuLabelPan, BoxLayout.PAGE_AXIS));
         //Label
-        JPanel infoLabelPan = new JPanel();
-        infoLabelPan.setOpaque(true);
-        infoLabelPan.setLayout(new BoxLayout(infoLabelPan, BoxLayout.LINE_AXIS));
-        infoLabelPan.setBorder(BorderFactory.createCompoundBorder(
+        this.infoLabelPan = new JPanel();
+        this.infoLabelPan.setVisible(false);
+        this.infoLabelPan.setOpaque(true);
+        this.infoLabelPan.setLayout(new BoxLayout(this.infoLabelPan, BoxLayout.LINE_AXIS));
+        this.infoLabelPan.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(Color.BLACK),
             BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         this.infoLabel.setFont(new Font("Arial", Font.BOLD, 14));
         this.infoLabel.setBackground(Color.WHITE);
-        infoLabelPan.add(this.infoLabel);
-        infoLabelPan.add(Box.createHorizontalGlue());
+        this.infoLabelPan.add(this.infoLabel);
+        this.infoLabelPan.add(Box.createHorizontalGlue());
         
 
         // button menu
@@ -310,7 +381,11 @@ public class FenetreCarte extends FenetreSuperpose
         button.setEnabled(false);
         button.addActionListener((ActionListener) -> {
             if ((int)spinnerNiveau.getValue() == 0) {
-                map.ajouterInformation(map.getListeAeroport(), map.getListeVols(), sliderMarge.getValue(), sliderHauteur.getValue(), 0);
+                Horaire heure = null;
+                if (this.heureBouton.isSelected()) {
+                    heure = new Horaire((int)spinnerHeure.getValue(), (int)spinnerMinute.getValue());
+                }
+                map.ajouterInformation(map.getListeAeroport(), map.getListeVols(), sliderMarge.getValue(), sliderHauteur.getValue(), 0, heure);
             } else {
                 spinnerNiveau.setValue(0); 
             }
@@ -356,7 +431,11 @@ public class FenetreCarte extends FenetreSuperpose
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
                 }
-                map.ajouterInformation(listAeroport, listVols, 15, 1, 0);
+                Horaire heure = null;
+                if (this.heureBouton.isSelected()) {
+                    heure = new Horaire((int)spinnerHeure.getValue(), (int)spinnerMinute.getValue());
+                }
+                map.ajouterInformation(listAeroport, listVols, 15, 1, 0, heure);
                 sliderHauteur.setEnabled(true);
                 this.sliderMarge.setEnabled(true);
                 sliderHauteur.setValue(1);
@@ -367,11 +446,12 @@ public class FenetreCarte extends FenetreSuperpose
                 spinnerNiveauPan.setVisible(true);
                 spinnerNiveau.setEnabled(true);
                 spinnerNiveau.setModel(new SpinnerNumberModel(0, 0, 0, 1));
+                heurePan.setVisible(true);
+                heureBouton.setEnabled(true);
+                infoLabelPan.setVisible(true);
+                infoLabel.setText("Cliquez sur un élément");
                 retour.doClick();
-            } else {
-                
-            }
-            infoLabel.setText("Cliquez sur un élément");
+            } 
         });
     }
 }

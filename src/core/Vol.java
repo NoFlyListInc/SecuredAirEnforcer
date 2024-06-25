@@ -139,6 +139,10 @@ public class Vol
 
     //#region méthodes
 
+    public boolean estEnVol(Horaire heure) {
+        return this.heureDepart.getEnMinute() <= heure.getEnMinute() && this.getHeureArrivee().getEnMinute() >= heure.getEnMinute();
+    }
+
     /**
      * vérifie si deux vols sont égaux
      * @param other

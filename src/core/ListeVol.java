@@ -32,6 +32,23 @@ public class ListeVol extends ArrayList<Vol>
 
     //#endregion
 
+    //#region methode
+
+    /**
+     * renvoie le vol correspondant au code
+     * @param String code
+     */
+    public Vol getVolByCode(String code) {
+        for (Vol vol : this) {
+            if (vol.getCode().equals(code)) {
+                return vol;
+            }
+        }
+        return null;
+    }
+
+    //#endregion
+
     //#region fill with a file
 
     /**

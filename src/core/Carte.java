@@ -150,12 +150,11 @@ public class Carte extends JXMapViewer
      * rajoute les aeroports, les vols et les collisions sur la carte
      * @param listeVol
      */
-    public void ajouterInformation(ListeAeroport listeAeroport, ListeVol listeVol, int marge, int kmax, int hauteur) {
+    public void ajouterInformation(ListeAeroport listeAeroport, ListeVol listeVol, int marge, int kmax, int hauteur, Horaire heure) {
         //on met à jour les attributs
         this.listeVols = listeVol;
         this.listeAeroport = listeAeroport;
         //on crée le graph des aeroports
-
         Graphe carteGraph = new Graphe("graphMap");
         carteGraph.remplirCarte(listeAeroport, listeVol);
         carteGraph.cacherNoeudSeul();
@@ -205,34 +204,38 @@ public class Carte extends JXMapViewer
 
         //créer des droites pour les vols
         for (Edge arrete : carteGraph.getEachEdge()) {
-            if(hauteur == 0 || grapheCollision.getNode(arrete.getId()).getAttribute("ui.style").equals(colorList.get(hauteur-1))) {
-                Node noeud1 = arrete.getNode0();
-                Node noeud2 = arrete.getNode1();
-                Double latitude1=this.listeAeroport.getAeroportByCode(noeud1.getId()).getLatitude().getDecimal();
-                Double longitude1=this.listeAeroport.getAeroportByCode(noeud1.getId()).getLongitude().getDecimal();
-                Double latitude2=this.listeAeroport.getAeroportByCode(noeud2.getId()).getLatitude().getDecimal();
-                Double longitude2=this.listeAeroport.getAeroportByCode(noeud2.getId()).getLongitude().getDecimal();
-                GeoPosition position1 = new GeoPosition(latitude1, longitude1);
-                GeoPosition position2 = new GeoPosition(latitude2, longitude2);
-                LineOverlayPainter ligne = new LineOverlayPainter(position1, position2);
-                int indiceCouleur = colorList.indexOf(grapheCollision.getNode(arrete.getId()).getAttribute("ui.style"));
-                if(kmax > 1) {
-                    float hsb = (float)(indiceCouleur+1)/(float)(colorList.size()+1);
-                    ligne.setColor(new Color(Color.HSBtoRGB(hsb, 0.9f, 0.6f)));
+            if (heure==null || listeVol.getVolByCode(arrete.getId()).estEnVol(heure)) {
+                if(hauteur == 0 || grapheCollision.getNode(arrete.getId()).getAttribute("ui.style").equals(colorList.get(hauteur-1))) {
+                    Node noeud1 = arrete.getNode0();
+                    Node noeud2 = arrete.getNode1();
+                    Double latitude1=this.listeAeroport.getAeroportByCode(noeud1.getId()).getLatitude().getDecimal();
+                    Double longitude1=this.listeAeroport.getAeroportByCode(noeud1.getId()).getLongitude().getDecimal();
+                    Double latitude2=this.listeAeroport.getAeroportByCode(noeud2.getId()).getLatitude().getDecimal();
+                    Double longitude2=this.listeAeroport.getAeroportByCode(noeud2.getId()).getLongitude().getDecimal();
+                    GeoPosition position1 = new GeoPosition(latitude1, longitude1);
+                    GeoPosition position2 = new GeoPosition(latitude2, longitude2);
+                    LineOverlayPainter ligne = new LineOverlayPainter(position1, position2);
+                    int indiceCouleur = colorList.indexOf(grapheCollision.getNode(arrete.getId()).getAttribute("ui.style"));
+                    if(kmax > 1) {
+                        float hsb = (float)(indiceCouleur+1)/(float)(colorList.size()+1);
+                        ligne.setColor(new Color(Color.HSBtoRGB(hsb, 0.9f, 0.6f)));
+                    }
+                    peintres.add(ligne);
                 }
-                peintres.add(ligne);
             }
         }
 
         //créer les waypoint pour les collisions
         for (int i = 0; i < listeVol.size(); i++) {
             for (int j = i+1; j < listeVol.size(); j++) {
-                if (hauteur == 0 || grapheCollision.getNode(listeVol.get(i).getCode()).getAttribute("ui.style").equals(colorList.get(hauteur-1)) && grapheCollision.getNode(listeVol.get(j).getCode()).getAttribute("ui.style").equals(colorList.get(hauteur-1))) {
-                    //si les vols i et j sont en collision et de meme couleur
-                    GeoPosition pointDeCollision=(listeVol.get(i).collision(listeVol.get(j), marge));
-                    if (pointDeCollision!=null && grapheCollision.getNode(listeVol.get(i).getCode()).getAttribute("ui.style").equals(grapheCollision.getNode(listeVol.get(j).getCode()).getAttribute("ui.style"))) {
-                        DefaultWaypoint waypoint = new DefaultWaypoint(pointDeCollision);
-                        ListeCollisionWaypoint.add(waypoint);
+                if (heure==null || (listeVol.get(i).estEnVol(heure) && listeVol.get(j).estEnVol(heure))) {
+                    if (hauteur == 0 || grapheCollision.getNode(listeVol.get(i).getCode()).getAttribute("ui.style").equals(colorList.get(hauteur-1)) && grapheCollision.getNode(listeVol.get(j).getCode()).getAttribute("ui.style").equals(colorList.get(hauteur-1))) {
+                        //si les vols i et j sont en collision et de meme couleur
+                        GeoPosition pointDeCollision=(listeVol.get(i).collision(listeVol.get(j), marge));
+                        if (pointDeCollision!=null && grapheCollision.getNode(listeVol.get(i).getCode()).getAttribute("ui.style").equals(grapheCollision.getNode(listeVol.get(j).getCode()).getAttribute("ui.style"))) {
+                            DefaultWaypoint waypoint = new DefaultWaypoint(pointDeCollision);
+                            ListeCollisionWaypoint.add(waypoint);
+                        }
                     }
                 }
             }
