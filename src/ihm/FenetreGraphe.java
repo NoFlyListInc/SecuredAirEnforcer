@@ -464,6 +464,27 @@ public class FenetreGraphe extends FenetreSuperpose {
         parametrePopUp.add(welshPowellPan);
         parametrePopUp.add(Box.createRigidArea(new Dimension(0,15)));
 
+        //RLF bouton
+        JPanel rlfPan = new JPanel();
+        rlfPan.setOpaque(false);
+        rlfPan.setLayout(new BoxLayout(rlfPan, BoxLayout.LINE_AXIS));
+        RoundedButton rlfButton = new RoundedButton("Colorier avec RLF");
+        rlfButton.setToolTipText("Appliquer la méthode RLF sur le graphe");
+        rlfButton.setBackground(new Color(176, 226, 255));
+        rlfButton.addActionListener((ActionListener) -> {
+            graphe.setKdonne(barreCouleur.getValue());
+            graphe.rlf();
+            retour.doClick();
+            infoLabel.setText(createInfoString());
+        });
+        rlfPan.add(Box.createHorizontalGlue());
+        rlfPan.add(rlfButton);
+        rlfPan.add(Box.createHorizontalGlue());
+        //ajout du bouton dans le parametrePopUp
+        parametrePopUp.add(rlfPan);
+        parametrePopUp.add(Box.createRigidArea(new Dimension(0,15)));
+             
+
 
         //panel du parametrePopUp
         JPanel parametreMenuPan = new JPanel();
@@ -475,6 +496,7 @@ public class FenetreGraphe extends FenetreSuperpose {
         parametreMenuPosition.add(parametreMenuPan, BorderLayout.EAST);
     }
 
+
     private String createInfoString() {
         StringBuilder info = new StringBuilder();
         info.append("<html>");
@@ -482,6 +504,9 @@ public class FenetreGraphe extends FenetreSuperpose {
         info.append("nbr noeuds : ").append(this.graphe.getNodeCount()).append("<br>");
         info.append("nbr arêtes : ").append(this.graphe.getEdgeCount()).append("<br>");
         info.append("nbr couleurs : ").append(this.graphe.getKoptimal()).append("<br>");
+        if(this.graphe.getVolsMemesNiveaux().getVolsMemesNiveaux().size() > 0) {
+            info.append("nbr collisions : ").append(this.graphe.getVolsMemesNiveaux().getVolsMemesNiveaux().size()).append("<br>");
+        }
         info.append("</html>");
         return info.toString();
     }

@@ -6,23 +6,24 @@ import org.graphstream.graph.implementations.SingleGraph;
 
 import src.exception.ExceptionAnalyse;
 
-import org.graphstream.algorithm.coloring.WelshPowell;
 import org.graphstream.graph.Node;
 //import reader files class 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 //import list class
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
-
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import java.util.Iterator;
+import java.util.List;
 import java.awt.Color;
 
 //#endregion
@@ -221,6 +222,9 @@ public class Graphe extends SingleGraph {
 
         int index = 0;
 
+        // Réinitialiser la liste de vols en risque de collisions
+        this.getVolsMemesNiveaux().getVolsMemesNiveaux().clear();
+
         // Instancier tous les noeuds à une couleur nulle (-1)
         for (Node node : this) {
             tableauCouleurNoeud[index] = -1;
@@ -332,35 +336,299 @@ public class Graphe extends SingleGraph {
 
     // #region Welsh-Powell
     /**
-     * Coloration du graphe selon l'algorithme de Welsh-Powell
+     * Procédure colorant le graphe selon l'algorithme de coloration Welsh et
+     * Powell.
+     * Cette méthode utilise l'algorithme Welsh et Powell pour attribuer une couleur
+     * à chaque nœud du graphe. Chaque couleur représente un niveau de vol.
      * 
-     * @author Xavier LACROIX
+     * L'algorithme Welsh et Powell fonctionne de la manière suivante :
+     * 1. Trie les nœuds du graphe par ordre décroissant de degrés.
+     * 2. Parcourt les nœuds triés.
+     * 3. Pour chaque nœud, attribue la première couleur disponible qui n'est pas
+     * utilisée par ses voisins.
+     * 4. Met à jour les structures de données en conséquence.
+     * 5. Répète les étapes 3 et 4 jusqu'à ce que tous les nœuds soient colorés.
+     * 
+     * @param kdonne niveau.x de vol.s à utiliser au maximum
+     * 
+     *               Après l'exécution de cette méthode, chaque nœud du graphe sera
+     *               coloré et le niveau de vol correspondant sera affiché.
+     *               Le nombre de coloration optimal est stocké dans la variable
+     *               koptimal
+     * @autheur Xavier LACROIX
      */
     public void welshPowell() {
-        if (this.getKdonne() == Integer.MAX_VALUE) {
-            WelshPowell colorationWelshPowell = new WelshPowell("color");
-            colorationWelshPowell.init(this);
-            colorationWelshPowell.compute();
+        this.setKoptimal(0);
+        int nombreNoeud = this.getNodeCount(); // Nombre de nœuds dans le graphe
+        boolean[] couleursVoisins = new boolean[nombreNoeud]; // Tableau pour vérifier les couleurs utilisées par les
+                                                              // voisins
+        int[] tableauCouleurNoeud = new int[nombreNoeud]; // Tableau pour les couleurs des nœuds
+        Color[] couleursVisuelles = new Color[getKdonne()];
+        for (int i = 0; i < getKdonne(); i++) {
+            couleursVisuelles[i] = Color.getHSBColor((float) (Math.random()), 0.8f, 0.9f);
+        } // couleurs visuelles à afficher pour chaque niveau de vol
+        int[] degreNoeud = new int[nombreNoeud]; // Tableau pour les degrés des nœuds
+        HashMap<Node, Integer> carteIndiceNoeud = new HashMap<>(); // Map pour associer les nœuds à leurs indices
+        Node[] mapNoeudIndex = new Node[nombreNoeud]; // Tableau pour associer les indices aux nœuds
 
-            this.setKoptimal(colorationWelshPowell.getChromaticNumber());
+        int index = 0;
+        for (Node node : this) {
+            tableauCouleurNoeud[index] = -1;
+            degreNoeud[index] = node.getDegree();
+            carteIndiceNoeud.put(node, index);
+            mapNoeudIndex[index] = node;
+            index++;
+        }
 
-            // Display colors
-            Color[] cols = new Color[100];
-            for (int i = 0; i < this.getKdonne(); i++) {
-                cols[i] = Color.getHSBColor((float) (Math.random()), 0.8f, 0.9f);
+        // Trie les nœuds par ordre décroissant de degrés
+        Arrays.sort(mapNoeudIndex, (n1, n2) -> Integer.compare(degreNoeud[carteIndiceNoeud.get(n2)],
+                degreNoeud[carteIndiceNoeud.get(n1)]));
+
+        for (Node node : mapNoeudIndex) {
+            int u = carteIndiceNoeud.get(node);
+
+            // Réinitialiser le tableau couleursVoisins pour chaque nœud
+            Arrays.fill(couleursVoisins, false);
+
+            // Utilisation de l'itérateur pour les voisins
+            Iterator<Node> itérateurVoisin = node.getNeighborNodeIterator();
+            while (itérateurVoisin.hasNext()) {
+                Node neighbor = itérateurVoisin.next();
+                int v = carteIndiceNoeud.get(neighbor);
+                if (tableauCouleurNoeud[v] != -1) {
+                    couleursVoisins[tableauCouleurNoeud[v]] = true;
+                }
             }
-            for (Node n : this) {
-                int col = (int) n.getNumber("color");
-                n.setAttribute("ui.style", "fill-color:rgba(" + cols[col].getRed() + "," + cols[col].getGreen() + ","
-                        + cols[col].getBlue() + ",200);");
+
+            int i = 0;
+            while (i < couleursVoisins.length) {
+                if (!couleursVoisins[i]) {
+                    break;
+                }
+                i++;
+            }
+
+            if (i > this.koptimal) {
+                this.setKoptimal(i);
+            }
+
+            if (i >= kdonne) {
+                // Trouver la couleur avec le moins de collisions
+                int minCollisions = Integer.MAX_VALUE;
+                int meilleurCouleur = -1;
+                for (int j = 0; j < this.kdonne; j++) {
+                    int collisions = 0;
+                    itérateurVoisin = node.getNeighborNodeIterator();
+                    while (itérateurVoisin.hasNext()) {
+                        Node voisin = itérateurVoisin.next();
+                        int v = carteIndiceNoeud.get(voisin);
+                        if (tableauCouleurNoeud[v] == j) {
+                            collisions++;
+                        }
+                    }
+                    if (collisions < minCollisions) {
+                        minCollisions = collisions;
+                        meilleurCouleur = j;
+                    }
+                }
+                i = meilleurCouleur;
+            }
+
+            tableauCouleurNoeud[u] = i;
+
+            node.setAttribute("ui.style",
+                    "fill-color:rgba(" + couleursVisuelles[i].getRed() + "," + couleursVisuelles[i].getGreen() + ","
+                            + couleursVisuelles[i].getBlue() + ",200);");
+
+            // Mise à jour des informations de couleurs pour les voisins
+            itérateurVoisin = node.getNeighborNodeIterator();
+            while (itérateurVoisin.hasNext()) {
+                Node neighbor = itérateurVoisin.next();
+                int v = carteIndiceNoeud.get(neighbor);
+                if (tableauCouleurNoeud[v] != -1) {
+                    couleursVoisins[tableauCouleurNoeud[v]] = false;
+                }
             }
         }
-        else {
-            this.dSature();
+    }
+    // #endregion
+    // #region RLF
+
+    /**
+     * Procédure colorant le graphe selon l'algorithme de coloration RLF (Recursive
+     * Largest First).
+     * Cette méthode utilise l'algorithme RLF pour attribuer une couleur à chaque
+     * nœud du graphe.
+     * Chaque couleur représente un niveau de vol.
+     * L'algo ne dépasse pas le kdonne donné par l'utilisateur.
+     * 
+     * L'algorithme RLF fonctionne de la manière suivante :
+     * 1. Sélectionne le nœud de plus haut degré.
+     * 2. Crée un groupe avec ce nœud et ses voisins non adjacents.
+     * 3. Colorie tous les nœuds du groupe avec la même couleur.
+     * 4. Répète les étapes 1 à 3 pour les nœuds restants.
+     * 5. Si le nombre de couleurs dépasse kdonne, sélectionne la couleur avec le
+     * moins de collisions.
+     * 6. Ajoute les voisins ayant la même couleur à volsMemesNiveaux.
+     * 
+     * Après l'exécution de cette méthode, chaque nœud du graphe sera
+     * coloré et le niveau de vol correspondant sera affiché.
+     * Le nombre de coloration optimal est stocké dans la variable
+     * koptimal
+     * 
+     * @autheur Xavier LACROIX
+     */
+    public void rlf() {
+        this.setKoptimal(0);
+        int nombreNoeud = this.getNodeCount(); // Nombre de nœuds dans le graphe
+        int[] tableauCouleurNoeud = new int[nombreNoeud]; // Tableau pour les couleurs des nœuds
+        Color[] couleursVisuelles = new Color[getKdonne()];
+        for (int i = 0; i < getKdonne(); i++) {
+            couleursVisuelles[i] = Color.getHSBColor((float) (Math.random()), 0.8f, 0.9f);
+        } // couleurs visuelles à afficher pour chaque niveau de vol
+        int[] degreNoeud = new int[nombreNoeud]; // Tableau pour les degrés des nœuds
+        HashMap<Node, Integer> carteIndiceNoeud = new HashMap<>(); // Map pour associer les nœuds à leurs indices
+        Node[] mapNoeudIndex = new Node[nombreNoeud]; // Tableau pour associer les indices aux nœuds
+
+        int index = 0;
+
+        // Réinitialiser la liste de vols en risque de collisions
+        this.getVolsMemesNiveaux().getVolsMemesNiveaux().clear();
+
+        for (Node node : this) {
+            tableauCouleurNoeud[index] = -1;
+            degreNoeud[index] = node.getDegree();
+            carteIndiceNoeud.put(node, index);
+            mapNoeudIndex[index] = node;
+            index++;
         }
+
+        int currentColor = 0;
+        while (true) {
+            Node maxDegreeNode = null;
+            int maxDegree = -1;
+
+            // Trouver le nœud de plus haut degré non coloré
+            for (int i = 0; i < nombreNoeud; i++) {
+                if (tableauCouleurNoeud[i] == -1 && degreNoeud[i] > maxDegree) {
+                    maxDegree = degreNoeud[i];
+                    maxDegreeNode = mapNoeudIndex[i];
+                }
+            }
+
+            if (maxDegreeNode == null) {
+                break; // Tous les nœuds ont été colorés
+            }
+
+            Set<Node> group = new HashSet<>();
+            group.add(maxDegreeNode);
+            List<Node> nonAdjacentNodes = new ArrayList<>();
+
+            // Créer le groupe de nœuds non adjacents
+            for (Node node : this) {
+                if (node != maxDegreeNode && tableauCouleurNoeud[carteIndiceNoeud.get(node)] == -1) {
+                    boolean isNonAdjacent = true;
+                    for (Node groupNode : group) {
+                        if (groupNode.hasEdgeBetween(node)) {
+                            isNonAdjacent = false;
+                            break;
+                        }
+                    }
+                    if (isNonAdjacent) {
+                        group.add(node);
+                    } else {
+                        nonAdjacentNodes.add(node);
+                    }
+                }
+            }
+
+            // Colorer le groupe de nœuds
+            for (Node node : group) {
+                int u = carteIndiceNoeud.get(node);
+                tableauCouleurNoeud[u] = currentColor;
+                node.setAttribute("ui.style",
+                        "fill-color:rgba(" + couleursVisuelles[currentColor].getRed() + ","
+                                + couleursVisuelles[currentColor].getGreen() + ","
+                                + couleursVisuelles[currentColor].getBlue() + ",200);");
+            }
+
+            // Mettre à jour la couleur actuelle et le nombre optimal de couleurs
+            currentColor++;
+            if (currentColor > this.koptimal) {
+                this.setKoptimal(currentColor);
+            }
+
+            if (currentColor >= kdonne) {
+                // Trouver la couleur avec le moins de collisions
+                for (Node node : nonAdjacentNodes) {
+                    int u = carteIndiceNoeud.get(node);
+                    int minCollisions = Integer.MAX_VALUE;
+                    int meilleurCouleur = -1;
+                    for (int j = 0; j < this.kdonne; j++) {
+                        int collisions = 0;
+                        Iterator<Node> itérateurVoisin = node.getNeighborNodeIterator();
+                        while (itérateurVoisin.hasNext()) {
+                            Node voisin = itérateurVoisin.next();
+                            int v = carteIndiceNoeud.get(voisin);
+                            if (tableauCouleurNoeud[v] == j) {
+                                collisions++;
+                            }
+                        }
+                        if (collisions < minCollisions) {
+                            minCollisions = collisions;
+                            meilleurCouleur = j;
+                        }
+                    }
+                    tableauCouleurNoeud[u] = meilleurCouleur;
+                    node.setAttribute("ui.style",
+                            "fill-color:rgba(" + couleursVisuelles[meilleurCouleur].getRed() + ","
+                                    + couleursVisuelles[meilleurCouleur].getGreen() + ","
+                                    + couleursVisuelles[meilleurCouleur].getBlue() + ",200);");
+
+                    // Ajoute les voisins ayant la même couleur à volsMemesNiveaux
+                    Iterator<Node> itérateurVoisin = node.getNeighborNodeIterator();
+                    while (itérateurVoisin.hasNext()) {
+                        Node neighbor = itérateurVoisin.next();
+                        int v = carteIndiceNoeud.get(neighbor);
+                        if (tableauCouleurNoeud[v] == meilleurCouleur) {
+                            Vol vol1 = this.getVolsMemesNiveaux().getVolDepuisNoeud(node,
+                                    this.getVolsMemesNiveaux().getListVol());
+                            Vol vol2 = this.getVolsMemesNiveaux().getVolDepuisNoeud(neighbor,
+                                    this.getVolsMemesNiveaux().getListVol());
+                            if (vol1 != null && vol2 != null) {
+                                this.getVolsMemesNiveaux().gestionNiveauMaxAtteint(vol1, vol2);
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+        }
+
+        // Ajoute les voisins ayant la même couleur à volsMemesNiveaux pour les nœuds
+        // déjà colorés
+        for (Node node : this) {
+            int u = carteIndiceNoeud.get(node);
+            Iterator<Node> itérateurVoisin = node.getNeighborNodeIterator();
+            while (itérateurVoisin.hasNext()) {
+                Node neighbor = itérateurVoisin.next();
+                int v = carteIndiceNoeud.get(neighbor);
+                if (tableauCouleurNoeud[v] == tableauCouleurNoeud[u] && tableauCouleurNoeud[u] != -1) {
+                    Vol vol1 = this.getVolsMemesNiveaux().getVolDepuisNoeud(node,
+                            this.getVolsMemesNiveaux().getListVol());
+                    Vol vol2 = this.getVolsMemesNiveaux().getVolDepuisNoeud(neighbor,
+                            this.getVolsMemesNiveaux().getListVol());
+                    if (vol1 != null && vol2 != null) {
+                        this.getVolsMemesNiveaux().gestionNiveauMaxAtteint(vol1, vol2);
+                    }
+                }
+            }
+        }
+
     }
 
     // #endregion
+    
 
     public String getGrapheColore() {
         String graphInfo = "";

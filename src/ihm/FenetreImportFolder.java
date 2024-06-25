@@ -135,7 +135,7 @@ public class FenetreImportFolder extends FenetreSuperpose {
                 if (returnValue == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFiles().length > 0) {
                     try {
                         //création du dossier resultat
-                        String resultatPath = fileChooser.getSelectedFiles()[0].getParentFile().getAbsolutePath()+"/resulat";
+                        String resultatPath = fileChooser.getSelectedFiles()[0].getParentFile().getAbsolutePath()+"/resultat";
                         Path dossier = Paths.get(resultatPath);
                         try {
                             Files.createDirectory(dossier);
