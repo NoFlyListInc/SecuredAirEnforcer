@@ -9,11 +9,13 @@ import javax.swing.JOptionPane;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JSlider;
+import javax.swing.JSpinner;
 import javax.swing.JFileChooser;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.BoxLayout;
 import javax.swing.JScrollPane;
+import javax.swing.SpinnerNumberModel;
 
 //src objects
 import src.core.ListeVol;
@@ -29,6 +31,7 @@ import java.awt.Dimension;
 import java.awt.BorderLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+
 //File object
 import java.io.File;
 //#endregion
@@ -46,6 +49,10 @@ public class FenetreCarte extends FenetreSuperpose
     private Carte map = new Carte(this.infoLabel);
     private JPanel settingMenuPosition = new JPanel();
     private JButton settingButton = new JButton();
+    private JSlider sliderMarge;
+    private JSlider sliderHauteur;
+    private JSpinner spinnerNiveau;
+    private JPanel spinnerNiveauPan;
     //#endregion
 
     //#region Constructeur
@@ -77,7 +84,7 @@ public class FenetreCarte extends FenetreSuperpose
     
     private void constrPan() {
         //construie la map
-        JScrollPane mapPan = new JScrollPane(this.map);
+        JScrollPane mapPan = new JScrollPane(this.map);        
         superposePan.add(mapPan, JLayeredPane.DEFAULT_LAYER);
 
         //panel border des boutons (setting et menu)
@@ -108,36 +115,31 @@ public class FenetreCarte extends FenetreSuperpose
         settingPan.add(this.settingButton);
         settingPan.add(Box.createVerticalGlue());
 
-        //ajout de la fonctionnalité de chaque vol dans un niveau de vol
-        //slider Pan
-        JPanel sliderNiveauPan = new JPanel();
-        sliderNiveauPan.setMaximumSize(new Dimension(200, 50));
-        sliderNiveauPan.setOpaque(false);
-        sliderNiveauPan.setLayout(new BoxLayout(sliderNiveauPan, BoxLayout.LINE_AXIS));
+        //ajout de la fonctionnalité d'afficher chaque vol dans un niveau de vol donne
+        //spinner Pan
+        this.spinnerNiveauPan = new JPanel();
+        this.spinnerNiveauPan.setVisible(false);
+        this.spinnerNiveauPan.setMaximumSize(new Dimension(1000,30));
+        this.spinnerNiveauPan.setOpaque(false);
+        this.spinnerNiveauPan.setLayout(new BoxLayout(spinnerNiveauPan, BoxLayout.LINE_AXIS));
         //JLabel
-        sliderNiveauPan.add(Box.createHorizontalGlue());
-        sliderNiveauPan.add(new JLabel("Niveau de vol :"));
-        sliderNiveauPan.add(Box.createRigidArea(new Dimension(10,0)));
-        //slider
-        JSlider sliderNiveau = new JSlider(JSlider.HORIZONTAL, 1, 20, 1);
-        sliderNiveau.setEnabled(false);
-        sliderNiveauPan.add(sliderNiveau);
-        sliderNiveauPan.add(Box.createRigidArea(new Dimension(10,0)));
-        //JLabel int
-        JLabel HauteurIntLabel = new JLabel("1");
-        sliderNiveau.addChangeListener((ChangeEvent) -> {
-            HauteurIntLabel.setText(Integer.toString(sliderNiveau.getValue()));
+        this.spinnerNiveauPan.add(Box.createHorizontalGlue());
+        this.spinnerNiveauPan.add(new JLabel("hauteur :"));
+        this.spinnerNiveauPan.add(Box.createRigidArea(new Dimension(3,0)));
+        //spinner
+        this.spinnerNiveau = new JSpinner(new SpinnerNumberModel(0, 0, 1, 1));                
+        this.spinnerNiveau.setOpaque(false);
+        this.spinnerNiveau.setEnabled(false);
+        this.spinnerNiveauPan.add(this.spinnerNiveau);
+        this.spinnerNiveauPan.add(Box.createRigidArea(new Dimension(3,0)));
+        //ajout du spinner dans le settingPan
+        settingPan.add(this.spinnerNiveauPan);
+        settingPan.add(Box.createRigidArea(new Dimension(0,3)));
+
+        //changeListener
+        this.spinnerNiveau.addChangeListener((ChangeEvent) -> {
+            map.ajouterInformation(map.getListeAeroport(), map.getListeVols(), sliderMarge.getValue(), sliderHauteur.getValue(), (int)spinnerNiveau.getValue());
         });
-        //ajout du slider et du label dans le settingPopUp
-        sliderNiveauPan.add(HauteurIntLabel);
-        sliderNiveauPan.add(Box.createHorizontalGlue());
-        this.add(sliderNiveauPan);
-
-
-
-
-
-
 
 
         buttonPan.add(settingPan, BorderLayout.EAST);
@@ -256,9 +258,9 @@ public class FenetreCarte extends FenetreSuperpose
         sliderHauteurPan.add(new JLabel("hmax : "));
         sliderHauteurPan.add(Box.createRigidArea(new Dimension(10,0)));
         //slider
-        JSlider sliderHauteur = new JSlider(JSlider.HORIZONTAL, 1, 20, 1);
-        sliderHauteur.setEnabled(false);
-        sliderHauteurPan.add(sliderHauteur);
+        this.sliderHauteur = new JSlider(JSlider.HORIZONTAL, 1, 20, 1);
+        this.sliderHauteur.setEnabled(false);
+        sliderHauteurPan.add(this.sliderHauteur);
         sliderHauteurPan.add(Box.createRigidArea(new Dimension(10,0)));
         //JLabel int
         JLabel HauteurIntLabel = new JLabel("1");
@@ -282,14 +284,14 @@ public class FenetreCarte extends FenetreSuperpose
         sliderMargePan.add(new JLabel("marge : "));
         sliderMargePan.add(Box.createRigidArea(new Dimension(10,0)));
         //slider
-        JSlider sliderMarge = new JSlider(JSlider.HORIZONTAL, 1, 60, 15);
-        sliderMarge.setEnabled(false);
-        sliderMargePan.add(sliderMarge);
+        this.sliderMarge = new JSlider(JSlider.HORIZONTAL, 1, 60, 15);
+        this.sliderMarge.setEnabled(false);
+        sliderMargePan.add(this.sliderMarge);
         sliderMargePan.add(Box.createRigidArea(new Dimension(10,0)));
         //JLabel int
         JLabel margeIntLabel = new JLabel("15");
-        sliderMarge.addChangeListener((ChangeEvent) -> {
-            margeIntLabel.setText(Integer.toString(sliderMarge.getValue()));
+        this.sliderMarge.addChangeListener((ChangeEvent) -> {
+            margeIntLabel.setText(Integer.toString(this.sliderMarge.getValue()));
         });
         sliderMargePan.add(margeIntLabel);
         sliderMargePan.add(Box.createHorizontalGlue());
@@ -307,7 +309,13 @@ public class FenetreCarte extends FenetreSuperpose
         button.setToolTipText("Appliquer les paramètres sur la carte");
         button.setEnabled(false);
         button.addActionListener((ActionListener) -> {
-            map.ajouterInformation(map.getListeAeroport(), map.getListeVols(), sliderMarge.getValue(), sliderHauteur.getValue());
+            if ((int)spinnerNiveau.getValue() == 0) {
+                map.ajouterInformation(map.getListeAeroport(), map.getListeVols(), sliderMarge.getValue(), sliderHauteur.getValue(), 0);
+            } else {
+                spinnerNiveau.setValue(0); 
+            }
+            spinnerNiveau.setModel(new SpinnerNumberModel((Number)spinnerNiveau.getValue(), 0, sliderHauteur.getValue(), 1));
+            retour.doClick();
         });
         buttonPan.add(Box.createHorizontalGlue());
         buttonPan.add(button);
@@ -348,14 +356,17 @@ public class FenetreCarte extends FenetreSuperpose
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, e.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
                 }
-                map.ajouterInformation(listAeroport, listVols, 15, 1);
+                map.ajouterInformation(listAeroport, listVols, 15, 1, 0);
                 sliderHauteur.setEnabled(true);
-                sliderMarge.setEnabled(true);
+                this.sliderMarge.setEnabled(true);
                 sliderHauteur.setValue(1);
                 HauteurIntLabel.setText("1");
-                sliderMarge.setValue(15);
+                this.sliderMarge.setValue(15);
                 margeIntLabel.setText("15");
                 button.setEnabled(true);
+                spinnerNiveauPan.setVisible(true);
+                spinnerNiveau.setEnabled(true);
+                spinnerNiveau.setModel(new SpinnerNumberModel((Number)spinnerNiveau.getValue(), 0, sliderHauteur.getValue(), 1));
                 retour.doClick();
             } else {
                 

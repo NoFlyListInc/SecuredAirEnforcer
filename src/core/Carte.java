@@ -4,8 +4,8 @@ package src.core;
 import src.ihm.AeroportWaypointRenderer;
 import src.ihm.CollisionWaypointRenderer;
 import src.ihm.LineOverlayPainter;
-//import JXMapViewer objects
 
+//import JXMapViewer objects
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
@@ -23,6 +23,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
@@ -118,7 +119,7 @@ public class Carte extends JXMapViewer
 
         // Ajouter un listener pour les clics sur aeroport
         addMouseListener(new MouseClickAeroportListener());
-        addMouseListener(new MouseClickCollisionListener());
+        addMouseListener(new MouseClickCollisionListener());               
     }
     //#endregion
 
@@ -185,19 +186,6 @@ public class Carte extends JXMapViewer
                 GeoPosition position = new GeoPosition(latitude, longitude);
                 DefaultWaypoint waypoint = new DefaultWaypoint(position);
                 ListeAeroportWaypoint.add(waypoint);
-            } 
-            else if (hauteur > 0) {
-                for(Edge arrete : noeud.getEachEdge()){
-                    Node noeudCollision = grapheCollision.getNode(arrete.getAttribute("ui.label"));
-                    if(noeudCollision.getAttribute("ui.style").equals(colorList.get(hauteur))){
-                        Double latitude=this.listeAeroport.getAeroportByCode(noeud.getId()).getLatitude().getDecimal();
-                        Double longitude=this.listeAeroport.getAeroportByCode(noeud.getId()).getLongitude().getDecimal();
-                        GeoPosition position = new GeoPosition(latitude, longitude);
-                        DefaultWaypoint waypoint = new DefaultWaypoint(position);
-                        ListeAeroportWaypoint.add(waypoint);
-                        break;
-                    }
-                }
             }
         }
 
@@ -207,11 +195,19 @@ public class Carte extends JXMapViewer
         waypointAeoroportPainter.setWaypoints(ListeAeroportWaypoint);
         peintres.add(waypointAeoroportPainter);
 
+        //si hauteur trop grand on affiche que les aeroports
+        if(kmax>1 && hauteur+1 > colorList.size()) {
+            CompoundPainter<JXMapViewer> compositeur = new CompoundPainter<>(peintres);
+            this.setOverlayPainter(compositeur);
+            return ;
+        }
+
+
         //créer des droites pour les vols
-        for (Edge arete : carteGraph.getEachEdge()) {
-            if(hauteur > 0 && grapheCollision.getNode(arete.getAttribute("ui.label")).getAttribute("ui.style").equals(colorList.get(hauteur))) {
-                Node noeud1 = arete.getNode0();
-                Node noeud2 = arete.getNode1();
+        for (Edge arrete : carteGraph.getEachEdge()) {
+            if(hauteur == 0 || grapheCollision.getNode(arrete.getId()).getAttribute("ui.style").equals(colorList.get(hauteur-1))) {
+                Node noeud1 = arrete.getNode0();
+                Node noeud2 = arrete.getNode1();
                 Double latitude1=this.listeAeroport.getAeroportByCode(noeud1.getId()).getLatitude().getDecimal();
                 Double longitude1=this.listeAeroport.getAeroportByCode(noeud1.getId()).getLongitude().getDecimal();
                 Double latitude2=this.listeAeroport.getAeroportByCode(noeud2.getId()).getLatitude().getDecimal();
@@ -219,6 +215,11 @@ public class Carte extends JXMapViewer
                 GeoPosition position1 = new GeoPosition(latitude1, longitude1);
                 GeoPosition position2 = new GeoPosition(latitude2, longitude2);
                 LineOverlayPainter ligne = new LineOverlayPainter(position1, position2);
+                int indiceCouleur = colorList.indexOf(grapheCollision.getNode(arrete.getId()).getAttribute("ui.style"));
+                if(kmax > 1) {
+                    float hsb = (float)(indiceCouleur+1)/(float)(colorList.size()+1);
+                    ligne.setColor(new Color(Color.HSBtoRGB(hsb, 0.9f, 0.6f)));
+                }
                 peintres.add(ligne);
             }
         }
@@ -226,10 +227,10 @@ public class Carte extends JXMapViewer
         //créer les waypoint pour les collisions
         for (int i = 0; i < listeVol.size(); i++) {
             for (int j = i+1; j < listeVol.size(); j++) {
-                if (grapheCollision.getNode(listeVol.get(i).getCode()).getAttribute("ui.style").equals(colorList.get(hauteur)) && grapheCollision.getNode(listeVol.get(j).getCode()).getAttribute("ui.style").equals(colorList.get(hauteur))) {
+                if (hauteur == 0 || grapheCollision.getNode(listeVol.get(i).getCode()).getAttribute("ui.style").equals(colorList.get(hauteur-1)) && grapheCollision.getNode(listeVol.get(j).getCode()).getAttribute("ui.style").equals(colorList.get(hauteur-1))) {
                     //si les vols i et j sont en collision et de meme couleur
                     GeoPosition pointDeCollision=(listeVol.get(i).collision(listeVol.get(j), marge));
-                    if (pointDeCollision!=null) {
+                    if (pointDeCollision!=null && grapheCollision.getNode(listeVol.get(i).getCode()).getAttribute("ui.style").equals(grapheCollision.getNode(listeVol.get(j).getCode()).getAttribute("ui.style"))) {
                         DefaultWaypoint waypoint = new DefaultWaypoint(pointDeCollision);
                         ListeCollisionWaypoint.add(waypoint);
                     }

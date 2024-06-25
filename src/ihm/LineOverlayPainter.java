@@ -15,6 +15,7 @@ public class LineOverlayPainter implements Painter<JXMapViewer> {
     //#region attributs
     private GeoPosition point1;
     private GeoPosition point2;
+    private Color color = Color.GRAY;
     //#endregion
 
     //#region constructeurs
@@ -25,6 +26,10 @@ public class LineOverlayPainter implements Painter<JXMapViewer> {
     //#endregion
 
     //#region methodes
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     @Override
     public void paint(Graphics2D g, JXMapViewer map, int w, int h) {
         // Convertir les coordonnées géographiques en coordonnées de pixel
@@ -32,7 +37,7 @@ public class LineOverlayPainter implements Painter<JXMapViewer> {
         Point2D pt2 = map.convertGeoPositionToPoint(point2);
 
         // Dessiner la ligne
-        g.setColor(Color.GRAY);
+        g.setColor(this.color);
         g.setStroke(new BasicStroke(2));
         g.drawLine((int)pt1.getX(), (int)pt1.getY(), (int)pt2.getX(), (int)pt2.getY());
     }
