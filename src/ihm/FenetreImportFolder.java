@@ -178,7 +178,7 @@ public class FenetreImportFolder extends FenetreSuperpose {
                             auteur.close();
 
                             //nouvelle ligne dans le fichier coloration-groupe
-                            auteurColorationFile.write(files.getName().replace("graph","colo")+";"+graph.getVolsMemesNiveaux().taille());
+                            auteurColorationFile.write(files.getName().replace("graph","colo")+";"+graph.getNoeudsMemesNiveaux().taille());
                             auteurColorationFile.newLine();
                         }
                         auteurColorationFile.close();

@@ -5,24 +5,24 @@ import java.util.HashMap;
 
 import org.graphstream.graph.Node;
 
-public class VolsMemesNiveaux {
-    private ArrayList<HashMap<Vol, Vol>> volsMemesNiveaux;
+public class NoeudsMemesNiveaux {
+    private ArrayList<HashMap<Node, Node>> noeudsMemesNiveaux;
     private ListeVol listVol;
 
    //Constructeur
-    public VolsMemesNiveaux() {
-        this.volsMemesNiveaux = new ArrayList<HashMap<Vol, Vol>>();
-        this.listVol = new ListeVol();   
+    public NoeudsMemesNiveaux() {
+        this.noeudsMemesNiveaux = new ArrayList<HashMap<Node, Node>> ();
+        this.listVol = new ListeVol();
     }
 
-    public VolsMemesNiveaux(ListeVol listVol) {
-        this.volsMemesNiveaux = new ArrayList<HashMap<Vol, Vol>>();
+    public NoeudsMemesNiveaux(ListeVol listVol) {
+        this.noeudsMemesNiveaux = new ArrayList<HashMap<Node, Node>> ();
         this.listVol = listVol;
     }
 
     //Getters
-    public ArrayList<HashMap<Vol, Vol>> getVolsMemesNiveaux() {
-        return this.volsMemesNiveaux;
+    public ArrayList<HashMap<Node, Node>>  getNoeudsMemesNiveaux() {
+        return this.noeudsMemesNiveaux;
     }
     public ListeVol getListVol() {
         return this.listVol;
@@ -36,10 +36,10 @@ public class VolsMemesNiveaux {
     //Méthodes
     public String toString() {
         String str = "";
-        for (HashMap<Vol, Vol> paire : this.volsMemesNiveaux) {
-            for (Vol vol1 : paire.keySet()) {
-                for (Vol vol2 : paire.values()) {
-                    str += vol1 + " et " + vol2 + "\n";
+        for (HashMap<Node, Node> paire : this.noeudsMemesNiveaux) {
+            for (Node noeud1 : paire.keySet()) {
+                for (Node noeud2 : paire.values()) {
+                    str += noeud1 + " et " + noeud2 + "\n";
                 }
             }
         }
@@ -50,14 +50,14 @@ public class VolsMemesNiveaux {
      * de collision
      * et que kmax à été atteint
      * 
-     * @param vol1 premier vol
-     * @param vol2 deuxième vol, qui est en risque de collision avec le premier
+     * @param noeud1 premier vol
+     * @param noeud2 deuxième vol, qui est en risque de collision avec le premier
      */
-    public void gestionNiveauMaxAtteint(Vol vol1, Vol vol2) {
-        HashMap<Vol, Vol> paireCollision = new HashMap<Vol, Vol>();
-        paireCollision.put(vol1, vol2);
-        if (!this.contient(vol1, vol2)) {
-            this.volsMemesNiveaux.add(paireCollision);
+    public void gestionNiveauMaxAtteint(Node noeud1, Node noeud2) {
+        HashMap<Node, Node> paireCollision = new HashMap<Node, Node>();
+        paireCollision.put(noeud1, noeud2);
+        if (!this.contient(noeud1, noeud2)) {
+            this.noeudsMemesNiveaux.add(paireCollision);
         }
     }
 
@@ -77,7 +77,7 @@ public class VolsMemesNiveaux {
      * @return
      */
     public int taille() {
-        return this.volsMemesNiveaux.size();
+        return this.noeudsMemesNiveaux.size();
     }
 
     /**
@@ -86,8 +86,8 @@ public class VolsMemesNiveaux {
      * @param vol2
      * @return boolean
      */
-    public boolean contient(Vol vol1, Vol vol2) {
-        for (HashMap<Vol, Vol> paire : this.volsMemesNiveaux) {
+    public boolean contient(Node vol1, Node vol2) {
+        for (HashMap<Node, Node> paire : this.noeudsMemesNiveaux) {
             if (paire.containsKey(vol1) && paire.containsValue(vol2)) {
                 return true;
             }

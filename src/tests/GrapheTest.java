@@ -107,7 +107,7 @@ public class GrapheTest {
             this.graphVol.remplirAvecListeVol(listVol2, 15);
             graphVol.setKdonne(1);
             graphVol.dSature();
-            int volsMemesNiveauxSize = graphVol.getVolsMemesNiveaux().getVolsMemesNiveaux().size();
+            int volsMemesNiveauxSize = graphVol.getNoeudsMemesNiveaux().getNoeudsMemesNiveaux().size();
             assertEquals(5, volsMemesNiveauxSize);
         } catch (Exception e) {
             e.printStackTrace();

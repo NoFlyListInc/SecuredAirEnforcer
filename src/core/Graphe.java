@@ -58,7 +58,7 @@ public class Graphe extends SingleGraph {
     /**
      * Liste des vols en risque de collision et qui ont le même niveau de vol
      */
-    private VolsMemesNiveaux volsMemesNiveaux;
+    private NoeudsMemesNiveaux noeudsMemesNiveaux;
 
     // #endregion
 
@@ -74,7 +74,7 @@ public class Graphe extends SingleGraph {
         this.kmax = 20; // nombre max de niveaux de vols possibles par défaut
         this.koptimal = 1;
         this.kdonne = Integer.MAX_VALUE;
-        this.volsMemesNiveaux = new VolsMemesNiveaux();
+        this.noeudsMemesNiveaux = new NoeudsMemesNiveaux();
 
     }
     // #endregion
@@ -113,8 +113,8 @@ public class Graphe extends SingleGraph {
      * 
      * @return VolsMemesNiveaux
      */
-    public VolsMemesNiveaux getVolsMemesNiveaux() {
-        return this.volsMemesNiveaux;
+    public NoeudsMemesNiveaux getNoeudsMemesNiveaux() {
+        return this.noeudsMemesNiveaux;
     }
 
     // #endregion
@@ -183,18 +183,26 @@ public class Graphe extends SingleGraph {
     // #region DSature
 
     /**
-     * Procédure colorant le graphe selon l'algorithme de coloration DSATURE.
-     * Cette méthode utilise l'algorithme DSATURE pour attribuer une couleur à
-     * chaque nœud du graphe.
-     * Chaque couleur représente un niveau de vol.
+     * Procédure vérifiant s'il les collisions entre les vols après la coloration.
      * 
-     * L'algorithme DSATURE fonctionne de la manière suivante :
-     * 1. Initialise les structures de données nécessaires.
-     * 2. Parcourt les nœuds du graphe dans un ordre spécifique.
-     * 3. Pour chaque nœud, vérifie les couleurs utilisées par ses voisins.
-     * 4. Sélectionne la première couleur disponible pour le nœud courant.
-     * 5. Met à jour les structures de données en conséquence.
-     * 6. Répète les étapes 3 à 5 jusqu'à ce que tous les nœuds soient colorés.
+     * @author Xavier LACROIX
+     */
+    public void verifierCollisions() {
+        // WIP
+    }
+
+    /**
+     * Procédure colorant le graphe selon l'algorithme de coloration dSature.
+     * Cette méthode utilise l'algorithme dSature pour attribuer une couleur
+     * à chaque nœud du graphe. Chaque couleur représente un niveau de vol.
+     * 
+     * L'algorithme dSature fonctionne de la manière suivante :
+     * 1. Trie les nœuds par ordre décroissant de degrés.
+     * 2. Sélectionne le nœud avec le plus haut degré de saturation.
+     * 3. Attribue la première couleur disponible qui n'est pas utilisée par ses
+     * voisins.
+     * 4. Met à jour le degré de saturation des nœuds voisins.
+     * 5. Répète les étapes 2 à 4 jusqu'à ce que tous les nœuds soient colorés.
      * 
      * @param kdonne niveau.x de vol.s à utiliser au maximum
      * 
@@ -202,10 +210,11 @@ public class Graphe extends SingleGraph {
      *               coloré et le niveau de vol correspondant sera affiché.
      *               Le nombre de coloration optimal est stocké dans la variable
      *               koptimal
-     * @author Xavier LACROIX
+     * @autheur Xavier LACROIX
      */
     public void dSature() {
         this.setKoptimal(0);
+
         int nombreNoeud = this.getNodeCount(); // Nombre de nœuds dans le graphe
         boolean[] couleursVoisins = new boolean[nombreNoeud]; // Tableau pour vérifier les couleurs utilisées par les
                                                               // voisins
@@ -223,7 +232,7 @@ public class Graphe extends SingleGraph {
         int index = 0;
 
         // Réinitialiser la liste de vols en risque de collisions
-        this.getVolsMemesNiveaux().getVolsMemesNiveaux().clear();
+        this.getNoeudsMemesNiveaux().getNoeudsMemesNiveaux().clear();
 
         // Instancier tous les noeuds à une couleur nulle (-1)
         for (Node node : this) {
@@ -290,14 +299,10 @@ public class Graphe extends SingleGraph {
                 // Ajoute les voisins ayant la même couleur à volsMemesNiveaux
                 itérateurVoisin = maxPointeur.noeud.getNeighborNodeIterator();
                 while (itérateurVoisin.hasNext()) {
-                    Node neighbor = itérateurVoisin.next();
-                    int v = carteIndiceNoeud.get(neighbor);
+                    Node voisin = itérateurVoisin.next();
+                    int v = carteIndiceNoeud.get(voisin);
                     if (tableauCouleurNoeud[v] == i) {
-                        Vol vol1 = this.getVolsMemesNiveaux().getVolDepuisNoeud(maxPointeur.noeud,
-                                this.getVolsMemesNiveaux().getListVol());
-                        Vol vol2 = this.getVolsMemesNiveaux().getVolDepuisNoeud(neighbor,
-                                this.getVolsMemesNiveaux().getListVol());
-                        this.getVolsMemesNiveaux().gestionNiveauMaxAtteint(vol1, vol2);
+                        this.getNoeudsMemesNiveaux().gestionNiveauMaxAtteint(maxPointeur.noeud, voisin);
                     }
                 }
             }
@@ -372,6 +377,10 @@ public class Graphe extends SingleGraph {
         Node[] mapNoeudIndex = new Node[nombreNoeud]; // Tableau pour associer les indices aux nœuds
 
         int index = 0;
+
+        // Réinitialiser la liste de vols en risque de collisions
+        this.getNoeudsMemesNiveaux().getNoeudsMemesNiveaux().clear();
+
         for (Node node : this) {
             tableauCouleurNoeud[index] = -1;
             degreNoeud[index] = node.getDegree();
@@ -384,16 +393,16 @@ public class Graphe extends SingleGraph {
         Arrays.sort(mapNoeudIndex, (n1, n2) -> Integer.compare(degreNoeud[carteIndiceNoeud.get(n2)],
                 degreNoeud[carteIndiceNoeud.get(n1)]));
 
-        for (Node node : mapNoeudIndex) {
-            int u = carteIndiceNoeud.get(node);
+        for (Node noeud : mapNoeudIndex) {
+            int u = carteIndiceNoeud.get(noeud);
 
             // Réinitialiser le tableau couleursVoisins pour chaque nœud
             Arrays.fill(couleursVoisins, false);
 
             // Utilisation de l'itérateur pour les voisins
-            Iterator<Node> itérateurVoisin = node.getNeighborNodeIterator();
-            while (itérateurVoisin.hasNext()) {
-                Node neighbor = itérateurVoisin.next();
+            Iterator<Node> iterateurVoisin = noeud.getNeighborNodeIterator();
+            while (iterateurVoisin.hasNext()) {
+                Node neighbor = iterateurVoisin.next();
                 int v = carteIndiceNoeud.get(neighbor);
                 if (tableauCouleurNoeud[v] != -1) {
                     couleursVoisins[tableauCouleurNoeud[v]] = true;
@@ -418,9 +427,9 @@ public class Graphe extends SingleGraph {
                 int meilleurCouleur = -1;
                 for (int j = 0; j < this.kdonne; j++) {
                     int collisions = 0;
-                    itérateurVoisin = node.getNeighborNodeIterator();
-                    while (itérateurVoisin.hasNext()) {
-                        Node voisin = itérateurVoisin.next();
+                    iterateurVoisin = noeud.getNeighborNodeIterator();
+                    while (iterateurVoisin.hasNext()) {
+                        Node voisin = iterateurVoisin.next();
                         int v = carteIndiceNoeud.get(voisin);
                         if (tableauCouleurNoeud[v] == j) {
                             collisions++;
@@ -432,23 +441,26 @@ public class Graphe extends SingleGraph {
                     }
                 }
                 i = meilleurCouleur;
+                // Mise à jour des informations de couleurs pour les voisins
+                iterateurVoisin = noeud.getNeighborNodeIterator();
+                while (iterateurVoisin.hasNext()) {
+                    Node voisin = iterateurVoisin.next();
+                    int v = carteIndiceNoeud.get(voisin);
+                    if (tableauCouleurNoeud[v] != -1) {
+                        couleursVoisins[tableauCouleurNoeud[v]] = false;
+                    }
+                    if (tableauCouleurNoeud[v] == meilleurCouleur) {
+                        this.getNoeudsMemesNiveaux().gestionNiveauMaxAtteint(noeud, voisin);
+                    }
+                }
             }
 
             tableauCouleurNoeud[u] = i;
 
-            node.setAttribute("ui.style",
+            noeud.setAttribute("ui.style",
                     "fill-color:rgba(" + couleursVisuelles[i].getRed() + "," + couleursVisuelles[i].getGreen() + ","
                             + couleursVisuelles[i].getBlue() + ",200);");
 
-            // Mise à jour des informations de couleurs pour les voisins
-            itérateurVoisin = node.getNeighborNodeIterator();
-            while (itérateurVoisin.hasNext()) {
-                Node neighbor = itérateurVoisin.next();
-                int v = carteIndiceNoeud.get(neighbor);
-                if (tableauCouleurNoeud[v] != -1) {
-                    couleursVoisins[tableauCouleurNoeud[v]] = false;
-                }
-            }
         }
     }
     // #endregion
@@ -493,7 +505,7 @@ public class Graphe extends SingleGraph {
         int index = 0;
 
         // Réinitialiser la liste de vols en risque de collisions
-        this.getVolsMemesNiveaux().getVolsMemesNiveaux().clear();
+        this.getNoeudsMemesNiveaux().getNoeudsMemesNiveaux().clear();
 
         for (Node node : this) {
             tableauCouleurNoeud[index] = -1;
@@ -560,13 +572,13 @@ public class Graphe extends SingleGraph {
 
             if (currentColor >= kdonne) {
                 // Trouver la couleur avec le moins de collisions
-                for (Node node : nonAdjacentNodes) {
-                    int u = carteIndiceNoeud.get(node);
+                for (Node noeud : nonAdjacentNodes) {
+                    int u = carteIndiceNoeud.get(noeud);
                     int minCollisions = Integer.MAX_VALUE;
                     int meilleurCouleur = -1;
                     for (int j = 0; j < this.kdonne; j++) {
                         int collisions = 0;
-                        Iterator<Node> itérateurVoisin = node.getNeighborNodeIterator();
+                        Iterator<Node> itérateurVoisin = noeud.getNeighborNodeIterator();
                         while (itérateurVoisin.hasNext()) {
                             Node voisin = itérateurVoisin.next();
                             int v = carteIndiceNoeud.get(voisin);
@@ -580,23 +592,23 @@ public class Graphe extends SingleGraph {
                         }
                     }
                     tableauCouleurNoeud[u] = meilleurCouleur;
-                    node.setAttribute("ui.style",
+                    noeud.setAttribute("ui.style",
                             "fill-color:rgba(" + couleursVisuelles[meilleurCouleur].getRed() + ","
                                     + couleursVisuelles[meilleurCouleur].getGreen() + ","
                                     + couleursVisuelles[meilleurCouleur].getBlue() + ",200);");
 
                     // Ajoute les voisins ayant la même couleur à volsMemesNiveaux
-                    Iterator<Node> itérateurVoisin = node.getNeighborNodeIterator();
+                    Iterator<Node> itérateurVoisin = noeud.getNeighborNodeIterator();
                     while (itérateurVoisin.hasNext()) {
-                        Node neighbor = itérateurVoisin.next();
-                        int v = carteIndiceNoeud.get(neighbor);
+                        Node voisin = itérateurVoisin.next();
+                        int v = carteIndiceNoeud.get(voisin);
                         if (tableauCouleurNoeud[v] == meilleurCouleur) {
-                            Vol vol1 = this.getVolsMemesNiveaux().getVolDepuisNoeud(node,
-                                    this.getVolsMemesNiveaux().getListVol());
-                            Vol vol2 = this.getVolsMemesNiveaux().getVolDepuisNoeud(neighbor,
-                                    this.getVolsMemesNiveaux().getListVol());
+                            Vol vol1 = this.getNoeudsMemesNiveaux().getVolDepuisNoeud(noeud,
+                                    this.getNoeudsMemesNiveaux().getListVol());
+                            Vol vol2 = this.getNoeudsMemesNiveaux().getVolDepuisNoeud(voisin,
+                                    this.getNoeudsMemesNiveaux().getListVol());
                             if (vol1 != null && vol2 != null) {
-                                this.getVolsMemesNiveaux().gestionNiveauMaxAtteint(vol1, vol2);
+                                this.getNoeudsMemesNiveaux().gestionNiveauMaxAtteint(noeud, voisin);
                             }
                         }
                     }
@@ -607,20 +619,14 @@ public class Graphe extends SingleGraph {
 
         // Ajoute les voisins ayant la même couleur à volsMemesNiveaux pour les nœuds
         // déjà colorés
-        for (Node node : this) {
-            int u = carteIndiceNoeud.get(node);
-            Iterator<Node> itérateurVoisin = node.getNeighborNodeIterator();
+        for (Node noeud : this) {
+            int u = carteIndiceNoeud.get(noeud);
+            Iterator<Node> itérateurVoisin = noeud.getNeighborNodeIterator();
             while (itérateurVoisin.hasNext()) {
-                Node neighbor = itérateurVoisin.next();
-                int v = carteIndiceNoeud.get(neighbor);
+                Node voisin = itérateurVoisin.next();
+                int v = carteIndiceNoeud.get(voisin);
                 if (tableauCouleurNoeud[v] == tableauCouleurNoeud[u] && tableauCouleurNoeud[u] != -1) {
-                    Vol vol1 = this.getVolsMemesNiveaux().getVolDepuisNoeud(node,
-                            this.getVolsMemesNiveaux().getListVol());
-                    Vol vol2 = this.getVolsMemesNiveaux().getVolDepuisNoeud(neighbor,
-                            this.getVolsMemesNiveaux().getListVol());
-                    if (vol1 != null && vol2 != null) {
-                        this.getVolsMemesNiveaux().gestionNiveauMaxAtteint(vol1, vol2);
-                    }
+                        this.getNoeudsMemesNiveaux().gestionNiveauMaxAtteint(noeud, voisin);
                 }
             }
         }
@@ -628,7 +634,6 @@ public class Graphe extends SingleGraph {
     }
 
     // #endregion
-    
 
     public String getGrapheColore() {
         String graphInfo = "";
@@ -731,7 +736,7 @@ public class Graphe extends SingleGraph {
      */
     public void remplirAvecListeVol(ListeVol listeVol, int marge) {
         this.clear();
-        this.getVolsMemesNiveaux().setListVol(listeVol);
+        this.getNoeudsMemesNiveaux().setListVol(listeVol);
         ;
         // creation des noeuds
         for (Vol vol : listeVol) {
@@ -761,7 +766,7 @@ public class Graphe extends SingleGraph {
 
     public void remplirCarte(ListeAeroport listeAeroport, ListeVol listeVol) {
         this.clear();
-        this.getVolsMemesNiveaux().setListVol(listeVol);
+        this.getNoeudsMemesNiveaux().setListVol(listeVol);
         // creation des noeuds
         for (Aeroport aeroport : listeAeroport) {
             Node noeud = this.addNode(aeroport.getCode());

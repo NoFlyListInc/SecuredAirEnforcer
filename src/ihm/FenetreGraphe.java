@@ -504,8 +504,8 @@ public class FenetreGraphe extends FenetreSuperpose {
         info.append("nbr noeuds : ").append(this.graphe.getNodeCount()).append("<br>");
         info.append("nbr arêtes : ").append(this.graphe.getEdgeCount()).append("<br>");
         info.append("nbr couleurs : ").append(this.graphe.getKoptimal()).append("<br>");
-        if(this.graphe.getVolsMemesNiveaux().getVolsMemesNiveaux().size() > 0) {
-            info.append("nbr collisions : ").append(this.graphe.getVolsMemesNiveaux().getVolsMemesNiveaux().size()).append("<br>");
+        if(this.graphe.getNoeudsMemesNiveaux().getNoeudsMemesNiveaux().size() > 0) {
+            info.append("nbr collisions : ").append(this.graphe.getNoeudsMemesNiveaux().getNoeudsMemesNiveaux().size()).append("<br>");
         }
         info.append("</html>");
         return info.toString();
