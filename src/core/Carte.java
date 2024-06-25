@@ -149,7 +149,7 @@ public class Carte extends JXMapViewer
      * rajoute les aeroports, les vols et les collisions sur la carte
      * @param listeVol
      */
-    public void ajouterInformation(ListeAeroport listeAeroport, ListeVol listeVol, int marge, int kmax) {
+    public void ajouterInformation(ListeAeroport listeAeroport, ListeVol listeVol, int marge, int kmax, int hauteur) {
         //on met à jour les attributs
         this.listeVols = listeVol;
         this.listeAeroport = listeAeroport;
@@ -163,6 +163,12 @@ public class Carte extends JXMapViewer
         grapheCollision.remplirAvecListeVol(listeVol, marge);
         grapheCollision.setKdonne(kmax);
         grapheCollision.dSature();
+        ArrayList<String> colorList = new ArrayList<String>();
+        for (Node noeud : grapheCollision.getEachNode()) {
+            if (!colorList.contains(noeud.getAttribute("ui.style"))) {
+                colorList.add(noeud.getAttribute("ui.style"));
+            }
+        }
         // vide les listes de waypoint
         ListeAeroportWaypoint.clear();
         ListeCollisionWaypoint.clear();
@@ -179,6 +185,19 @@ public class Carte extends JXMapViewer
                 GeoPosition position = new GeoPosition(latitude, longitude);
                 DefaultWaypoint waypoint = new DefaultWaypoint(position);
                 ListeAeroportWaypoint.add(waypoint);
+            } 
+            else if (hauteur > 0) {
+                for(Edge arrete : noeud.getEachEdge()){
+                    Node noeudCollision = grapheCollision.getNode(arrete.getAttribute("ui.label"));
+                    if(noeudCollision.getAttribute("ui.style").equals(colorList.get(hauteur))){
+                        Double latitude=this.listeAeroport.getAeroportByCode(noeud.getId()).getLatitude().getDecimal();
+                        Double longitude=this.listeAeroport.getAeroportByCode(noeud.getId()).getLongitude().getDecimal();
+                        GeoPosition position = new GeoPosition(latitude, longitude);
+                        DefaultWaypoint waypoint = new DefaultWaypoint(position);
+                        ListeAeroportWaypoint.add(waypoint);
+                        break;
+                    }
+                }
             }
         }
 
@@ -190,6 +209,7 @@ public class Carte extends JXMapViewer
 
         //créer des droites pour les vols
         for (Edge arete : carteGraph.getEachEdge()) {
+            if(hauteur > 0 && grapheCollision.getNode(arete.getAttribute("ui.label")).getAttribute("ui.style").equals(colorList.get(hauteur))) {
                 Node noeud1 = arete.getNode0();
                 Node noeud2 = arete.getNode1();
                 Double latitude1=this.listeAeroport.getAeroportByCode(noeud1.getId()).getLatitude().getDecimal();
@@ -200,16 +220,19 @@ public class Carte extends JXMapViewer
                 GeoPosition position2 = new GeoPosition(latitude2, longitude2);
                 LineOverlayPainter ligne = new LineOverlayPainter(position1, position2);
                 peintres.add(ligne);
+            }
         }
 
         //créer les waypoint pour les collisions
         for (int i = 0; i < listeVol.size(); i++) {
             for (int j = i+1; j < listeVol.size(); j++) {
-                //si les vols i et j sont en collision et de meme couleur
-                GeoPosition pointDeCollision=(listeVol.get(i).collision(listeVol.get(j), marge));
-                if (pointDeCollision!=null && grapheCollision.getNode(listeVol.get(i).getCode()).getAttribute("ui.style").equals(grapheCollision.getNode(listeVol.get(j).getCode()).getAttribute("ui.style"))) {
-                    DefaultWaypoint waypoint = new DefaultWaypoint(pointDeCollision);
-                    ListeCollisionWaypoint.add(waypoint);
+                if (grapheCollision.getNode(listeVol.get(i).getCode()).getAttribute("ui.style").equals(colorList.get(hauteur)) && grapheCollision.getNode(listeVol.get(j).getCode()).getAttribute("ui.style").equals(colorList.get(hauteur))) {
+                    //si les vols i et j sont en collision et de meme couleur
+                    GeoPosition pointDeCollision=(listeVol.get(i).collision(listeVol.get(j), marge));
+                    if (pointDeCollision!=null) {
+                        DefaultWaypoint waypoint = new DefaultWaypoint(pointDeCollision);
+                        ListeCollisionWaypoint.add(waypoint);
+                    }
                 }
             }
         }

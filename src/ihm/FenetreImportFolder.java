@@ -162,14 +162,18 @@ public class FenetreImportFolder extends FenetreSuperpose {
                             //création du fichier reponse
                             BufferedWriter auteur = new BufferedWriter(new FileWriter(resultatPath+"/"+files.getName().replace("graph","colo")));
                             ArrayList<String> couleurList = new ArrayList<String>();
+                            int cpt=0;
                             for (Node noeud : graph.getEachNode()) {
                                 int couleur = couleurList.indexOf(noeud.getAttribute("ui.style"));
                                 if (couleur == -1) {
                                     couleur=couleurList.size();
                                     couleurList.add(noeud.getAttribute("ui.style"));
                                 }
-                                auteur.write(Integer.toString(noeud.getAttribute("ui.label"))+"; "+(couleur+1));
+                                auteur.write(Integer.toString(noeud.getAttribute("ui.label"))+" ; "+(couleur+1));
                                 auteur.newLine();
+                                if (cpt++%10==0) {
+                                    auteur.flush();
+                                }
                             }
                             auteur.close();
 
