@@ -127,7 +127,7 @@ public class FenetreCarte extends FenetreSuperpose
         this.spinnerNiveauPan.add(new JLabel("hauteur :"));
         this.spinnerNiveauPan.add(Box.createRigidArea(new Dimension(3,0)));
         //spinner
-        this.spinnerNiveau = new JSpinner(new SpinnerNumberModel(0, 0, 1, 1));                
+        this.spinnerNiveau = new JSpinner(new SpinnerNumberModel(0, 0, 0, 1));                
         this.spinnerNiveau.setOpaque(false);
         this.spinnerNiveau.setEnabled(false);
         this.spinnerNiveauPan.add(this.spinnerNiveau);
@@ -314,7 +314,7 @@ public class FenetreCarte extends FenetreSuperpose
             } else {
                 spinnerNiveau.setValue(0); 
             }
-            spinnerNiveau.setModel(new SpinnerNumberModel((Number)spinnerNiveau.getValue(), 0, sliderHauteur.getValue(), 1));
+            spinnerNiveau.setModel(new SpinnerNumberModel(0, 0, sliderHauteur.getValue(), 1));
             retour.doClick();
         });
         buttonPan.add(Box.createHorizontalGlue());
@@ -366,7 +366,7 @@ public class FenetreCarte extends FenetreSuperpose
                 button.setEnabled(true);
                 spinnerNiveauPan.setVisible(true);
                 spinnerNiveau.setEnabled(true);
-                spinnerNiveau.setModel(new SpinnerNumberModel((Number)spinnerNiveau.getValue(), 0, sliderHauteur.getValue(), 1));
+                spinnerNiveau.setModel(new SpinnerNumberModel(0, 0, 0, 1));
                 retour.doClick();
             } else {
                 

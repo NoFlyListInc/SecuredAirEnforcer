@@ -196,10 +196,10 @@ public class Carte extends JXMapViewer
         peintres.add(waypointAeoroportPainter);
 
         //si hauteur trop grand on affiche que les aeroports
-        if(kmax>1 && hauteur+1 > colorList.size()) {
+        if(hauteur > colorList.size()) {
             CompoundPainter<JXMapViewer> compositeur = new CompoundPainter<>(peintres);
             this.setOverlayPainter(compositeur);
-            return ;
+            return;
         }
 
 

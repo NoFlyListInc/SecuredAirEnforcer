@@ -171,7 +171,7 @@ public class FenetreImportFolder extends FenetreSuperpose {
                                 }
                                 auteur.write(Integer.toString(noeud.getAttribute("ui.label"))+" ; "+(couleur+1));
                                 auteur.newLine();
-                                if (cpt++%10==0) {
+                                if (cpt++%50==0) {
                                     auteur.flush();
                                 }
                             }
