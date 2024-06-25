@@ -134,18 +134,18 @@ public class FenetreImportFolder extends FenetreSuperpose {
                 int returnValue = fileChooser.showOpenDialog(null);
                 if (returnValue == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFiles().length > 0) {
                     try {
-                        //creation du dossier resultat
+                        //création du dossier resultat
                         String resultatPath = fileChooser.getSelectedFiles()[0].getParentFile().getAbsolutePath()+"/resulat";
                         Path dossier = Paths.get(resultatPath);
                         try {
                             Files.createDirectory(dossier);
                         } catch (FileAlreadyExistsException ex) {
-                            // si il existe deja on fait rien
+                            // s'il existe deja on fait rien
                         }
                         //fichier coloration-groupe
-                        BufferedWriter writerColorationFile = new BufferedWriter(new FileWriter(resultatPath+"/"+"coloration-groupeLacroixNouvelFernandes.csv"));
+                        BufferedWriter auteurColorationFile = new BufferedWriter(new FileWriter(resultatPath+"/"+"coloration-groupeLacroixNouvelFernandes.csv"));
 
-                        //on parcours chaque fichier
+                        //on parcourt chaque fichier
                         for (File files : fileChooser.getSelectedFiles()) {
                             //creation du graph
                             String Path = files.getAbsolutePath();
@@ -159,8 +159,8 @@ public class FenetreImportFolder extends FenetreSuperpose {
                             // coloration                            
                             graph.dSature();
 
-                            //creation du fichier reponse
-                            BufferedWriter writer = new BufferedWriter(new FileWriter(resultatPath+"/"+files.getName().replace("graph","colo")));
+                            //création du fichier reponse
+                            BufferedWriter auteur = new BufferedWriter(new FileWriter(resultatPath+"/"+files.getName().replace("graph","colo")));
                             ArrayList<String> couleurList = new ArrayList<String>();
                             for (Node noeud : graph.getEachNode()) {
                                 int couleur = couleurList.indexOf(noeud.getAttribute("ui.style"));
@@ -168,16 +168,16 @@ public class FenetreImportFolder extends FenetreSuperpose {
                                     couleur=couleurList.size();
                                     couleurList.add(noeud.getAttribute("ui.style"));
                                 }
-                                writer.write(Integer.toString(noeud.getAttribute("ui.label"))+" ; "+(couleur+1));
-                                writer.newLine();
+                                auteur.write(Integer.toString(noeud.getAttribute("ui.label"))+"; "+(couleur+1));
+                                auteur.newLine();
                             }
-                            writer.close();
+                            auteur.close();
 
                             //nouvelle ligne dans le fichier coloration-groupe
-                            writerColorationFile.write(files.getName().replace("graph","colo")+";"+graph.getVolsMemesNiveaux().taille());
-                            writerColorationFile.newLine();
+                            auteurColorationFile.write(files.getName().replace("graph","colo")+";"+graph.getVolsMemesNiveaux().taille());
+                            auteurColorationFile.newLine();
                         }
-                        writerColorationFile.close();
+                        auteurColorationFile.close();
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(FenetreImportFolder.this, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
                         return;

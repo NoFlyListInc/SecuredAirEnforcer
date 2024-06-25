@@ -109,7 +109,7 @@ public class FenetrePrincipale extends JFrame
         ouvrirCarte.setToolTipText("Ouvrir la carte de la France");
 
         ouvrirCarte.addActionListener(e -> {
-            FenetreMap fen = new FenetreMap();
+            FenetreCarte fen = new FenetreCarte();
             fen.setVisible(true);
             this.dispose();
         });

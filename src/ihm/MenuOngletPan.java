@@ -101,7 +101,7 @@ public class MenuOngletPan extends JPanel
         RoundedButton map = new RoundedButton(new ImageIcon(imageMap));
         map.setToolTipText("Ouvrir la carte de la France avec les vols");
         map.addActionListener((ActionListener) -> {
-            FenetreMap fenetre = new FenetreMap();
+            FenetreCarte fenetre = new FenetreCarte();
             fenetre.setVisible(true);
             fen.dispose();
         });

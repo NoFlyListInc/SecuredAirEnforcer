@@ -1,7 +1,10 @@
 package src.ihm;
 import javax.swing.JLayeredPane;
 import javax.swing.JFrame;
-
+/**
+ * <h3>Cette classe crée une fenêtre superposée.</h3>
+ * @author NOUVEL Armand
+ */
 public abstract class FenetreSuperpose extends JFrame
 {
     //#region attributes

@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JSlider;
 import javax.swing.JFileChooser;
@@ -38,7 +39,7 @@ import java.io.File;
  * @extends SuperposedFenetre
  * @autor NOUVEL Armand
  */
-public class FenetreMap extends FenetreSuperpose
+public class FenetreCarte extends FenetreSuperpose
 {
     //#region Attributes
     private JLabel infoLabel = new JLabel();
@@ -52,7 +53,7 @@ public class FenetreMap extends FenetreSuperpose
     /**
      * Constructeur de la classe FenetreMap
      */
-    public FenetreMap() {
+    public FenetreCarte() {
         this.constrFen();
     }
     //#endregion
@@ -106,6 +107,39 @@ public class FenetreMap extends FenetreSuperpose
         });
         settingPan.add(this.settingButton);
         settingPan.add(Box.createVerticalGlue());
+
+        //ajout de la fonctionnalité de chaque vol dans un niveau de vol
+        //slider Pan
+        JPanel sliderNiveauPan = new JPanel();
+        sliderNiveauPan.setMaximumSize(new Dimension(200, 50));
+        sliderNiveauPan.setOpaque(false);
+        sliderNiveauPan.setLayout(new BoxLayout(sliderNiveauPan, BoxLayout.LINE_AXIS));
+        //JLabel
+        sliderNiveauPan.add(Box.createHorizontalGlue());
+        sliderNiveauPan.add(new JLabel("Niveau de vol :"));
+        sliderNiveauPan.add(Box.createRigidArea(new Dimension(10,0)));
+        //slider
+        JSlider sliderNiveau = new JSlider(JSlider.HORIZONTAL, 1, 20, 1);
+        sliderNiveau.setEnabled(false);
+        sliderNiveauPan.add(sliderNiveau);
+        sliderNiveauPan.add(Box.createRigidArea(new Dimension(10,0)));
+        //JLabel int
+        JLabel HauteurIntLabel = new JLabel("1");
+        sliderNiveau.addChangeListener((ChangeEvent) -> {
+            HauteurIntLabel.setText(Integer.toString(sliderNiveau.getValue()));
+        });
+        //ajout du slider et du label dans le settingPopUp
+        sliderNiveauPan.add(HauteurIntLabel);
+        sliderNiveauPan.add(Box.createHorizontalGlue());
+        this.add(sliderNiveauPan);
+
+
+
+
+
+
+
+
         buttonPan.add(settingPan, BorderLayout.EAST);
 
         JPanel menuLabelPan = new JPanel();
@@ -115,11 +149,16 @@ public class FenetreMap extends FenetreSuperpose
         JPanel infoLabelPan = new JPanel();
         infoLabelPan.setOpaque(true);
         infoLabelPan.setLayout(new BoxLayout(infoLabelPan, BoxLayout.LINE_AXIS));
+        infoLabelPan.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Color.BLACK),
+            BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         this.infoLabel.setFont(new Font("Arial", Font.BOLD, 14));
         this.infoLabel.setBackground(Color.WHITE);
         infoLabelPan.add(this.infoLabel);
         infoLabelPan.add(Box.createHorizontalGlue());
-        //
+        
+
+        // button menu
         menuLabelPan.add(infoLabelPan);
         menuLabelPan.add(Box.createVerticalGlue());
         JPanel menuButtonPan = new JPanel();

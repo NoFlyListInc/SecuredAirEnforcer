@@ -158,7 +158,7 @@ public class Carte extends JXMapViewer
         Graphe carteGraph = new Graphe("graphMap");
         carteGraph.remplirCarte(listeAeroport, listeVol);
         carteGraph.cacherNoeudSeul();
-        //on créée le graph des collisions
+        //on crée le graph des collisions
         Graphe grapheCollision = new Graphe("graphCollision");
         grapheCollision.remplirAvecListeVol(listeVol, marge);
         grapheCollision.setKdonne(kmax);
