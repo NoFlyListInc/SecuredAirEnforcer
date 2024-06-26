@@ -2,10 +2,9 @@ package src.core;
 
 
 /**
- * Classe qui définit un Horaire
- * @attributs heure, minute
- * @methodes getEnMinute, ajouterMinutes
- * @autor NOUVEL Armand
+ * Cette classe définit un Horaire par une heure et des minutes.
+ * @author NOUVEL Armand
+ * @version 1.0
  */
 public class Horaire 
 {
@@ -96,7 +95,7 @@ public class Horaire
 
     /**
      * vérifie si deux horaires sont égaux
-     * @param autres
+     * @param autres Horaire
      * @return boolean
      */
     @Override

@@ -43,13 +43,11 @@ import java.util.List;
 //#endregion
 
 /**
- * <h3>Classe CARTES</h3>
- * <p>La classe Carte permet de créer une carte avec des aéroports, des vols et des collisions.</p>
- *  <p>La carte est une carte OpenStreetMap avec des aéroports représentés par des triangles et des collisions représentées par des points.</p>
- * @extends JXMapViewer
- * @attributs ListeAeroportWaypoint, ListeCollisionWaypoint, listeAeroport, listeVols, label
- * @methodes Map, ajouterInformation, getListeAeroport, getListeVols
- * @autor NOUVEL Armand
+ * Cette classe permet de créer une carte avec des aéroports, des vols et des collisions.
+ * Cette classe est un composant graphique.
+ * @see JXMapViewer
+ * @author NOUVEL Armand
+ * @version 1.0
  */
 public class Carte extends JXMapViewer
 {
@@ -69,8 +67,6 @@ public class Carte extends JXMapViewer
      * liste des aeroports
      */
     private ListeAeroport listeAeroport;
-
-
 
     /**
      * liste des vols
@@ -126,8 +122,8 @@ public class Carte extends JXMapViewer
     //#region accesseurs
 
     /**
-     * retourne la liste des aeroports
-     * @return listeAeroport
+     * Renvoie la liste des aeroports
+     * @return ListeAeroport
      */
     public ListeAeroport getListeAeroport() {
         return listeAeroport;
@@ -135,8 +131,8 @@ public class Carte extends JXMapViewer
     }
     
     /**
-     * retourne la liste des vols
-     * @return listeVols
+     * Renvoie la liste des vols
+     * @return ListeVol
      */
     public ListeVol getListeVols() {
         return listeVols;
@@ -147,8 +143,13 @@ public class Carte extends JXMapViewer
     //#region methodes
 
     /**
-     * rajoute les aeroports, les vols et les collisions sur la carte
-     * @param listeVol
+     * Rajoute les aeroports, les vols et les collisions sur la carte
+     * @param listeVol liste des vols
+     * @param listeAeroport liste des aeroports
+     * @param marge marge de collision
+     * @param kmax nombre de couleurs
+     * @param hauteur hauteur à afficher
+     * @param heure heure de vol
      */
     public void ajouterInformation(ListeAeroport listeAeroport, ListeVol listeVol, int marge, int kmax, int hauteur, Horaire heure) {
         //on met à jour les attributs

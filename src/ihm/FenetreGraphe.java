@@ -39,10 +39,10 @@ import java.io.File;
 
 
 /**
- * Class FenetreGraphe
- * Fenêtre pour afficher un Graph
- * @extends SuperposedFenetre
- * @autor NOUVEL Armand et FERNANDES Thomas
+ * Fenêtre pour afficher un Graphe
+ * @see FenetreSuperpose
+ * @author NOUVEL Armand et FERNANDES Thomas
+ * @version 1.0
  */
 public class FenetreGraphe extends FenetreSuperpose {
 

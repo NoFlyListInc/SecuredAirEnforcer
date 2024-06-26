@@ -4,13 +4,16 @@ import javax.swing.*;
 import java.awt.event.*;
 
 /**
- * <h3>Cette classe crée une fenêtre pour importer un graphe.</h3>
- * <p>La fenêtre contient deux panneaux: un pour charger une liste de vol et un pour charger une liste d'aéroports.</p>
- * <p>Chaque panneau contient un titre, une instruction et un bouton pour parcourir les fichiers.</p>
- * <p>Les fichiers doivent être en format .csv pour la liste de vol et en format .txt pour la liste d'aéroports.</p>
+ * Fenêtre pour importer un graphe
+ * @see FenetreSuperpose
  * @author FERNANDES Thomas & NOUVEL Armand
+ * @version 1.0
  */
 public class FenetreImportGraph extends FenetreSuperpose {
+
+    /**
+     * Constructeur de la fenêtre d'importation de graphes.
+     */
     public FenetreImportGraph() {
         // Base de la fenêtre
         this.setTitle("Import a graph");

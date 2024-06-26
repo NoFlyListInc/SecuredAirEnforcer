@@ -5,10 +5,11 @@ import org.jxmapviewer.viewer.GeoPosition;
 //#endregion
 
 /**
- * Class qui défini un Vol
- * @attributs code, depart, arrivee, heureDepart, duree
- * @methodes getHeureArrivee, collision, toString
- * @autor NOUVEL Armand
+ * Cette classe définit un Vol par son code, son aeroport de depart, son aeroport d'arrivee, son horaire de depart et sa duree.
+ * @see Aeroport
+ * @see Horaire
+ * @author NOUVEL Armand
+ * @version 1.0
  */
 public class Vol 
 {
@@ -44,7 +45,7 @@ public class Vol
     //#region constructeur
 
     /**
-     * Constructeur de la class Vol
+     * Constructeur de la classe Vol
      * @param code code du vol
      * @param depart aeroport de depart
      * @param arrivee aeroport d'arrivee
@@ -79,7 +80,7 @@ public class Vol
     }
 
     /**
-     * Constructeur de la class Vol
+     * Constructeur de la classe Vol
      * @param code code du vol
      * @param depart aeroport de depart
      * @param arrivee aeroport d'arrivee
@@ -96,7 +97,7 @@ public class Vol
     //#region accesseurs
 
     /**
-     * Retourne le code du vol
+     * Renvoie le code du vol
      * @return String
      */
     public String getCode() {
@@ -104,7 +105,7 @@ public class Vol
     }
 
     /**
-     * Retourne l'aeroport de depart
+     * Renvoie l'aeroport de depart
      * @return Aeroport
      */
     public Aeroport getDepart() {
@@ -112,7 +113,7 @@ public class Vol
     }
 
     /**
-     * Retourne l'aeroport d'arrivee
+     * Renvoie l'aeroport d'arrivee
      * @return Aeroport
      */
     public Aeroport getArrivee() {
@@ -120,7 +121,7 @@ public class Vol
     }
 
     /**
-     * Retourne l'horaire de depart
+     * Renvoie l'horaire de depart
      * @return Horaire
      */
     public Horaire getHeureDepart() {
@@ -128,7 +129,7 @@ public class Vol
     }
 
     /**
-     * Retourne la duree du vol
+     * Renvoie la duree du vol
      * @return int
      */
     public int getDuree() {
@@ -139,33 +140,38 @@ public class Vol
 
     //#region méthodes
 
+    /**
+     * Vérifie si le vol est en cours à un horaire donné
+     * @param heure Horaire
+     * @return boolean
+     */
     public boolean estEnVol(Horaire heure) {
         return this.heureDepart.getEnMinute() <= heure.getEnMinute() && this.getHeureArrivee().getEnMinute() >= heure.getEnMinute();
     }
 
     /**
-     * vérifie si deux vols sont égaux
-     * @param other
+     * Vérifie si deux vols sont égaux
+     * @param autre Vol
      * @return boolean
      */
     @Override
-    public boolean equals(Object other) {
-        if (this == other) return true;
-        if (other == null || getClass() != other.getClass()) return false;
-        Vol otherVol = (Vol) other;
-        if (this.code.equals(otherVol.code) && 
-            this.depart.equals(otherVol.depart) &&
-            this.arrivee.equals(otherVol.arrivee) &&
-            this.heureDepart.equals(otherVol.heureDepart) &&
-            this.duree == otherVol.duree) {
+    public boolean equals(Object autre) {
+        if (this == autre) return true;
+        if (autre == null || getClass() != autre.getClass()) return false;
+        Vol autreVol = (Vol) autre;
+        if (this.code.equals(autreVol.code) && 
+            this.depart.equals(autreVol.depart) &&
+            this.arrivee.equals(autreVol.arrivee) &&
+            this.heureDepart.equals(autreVol.heureDepart) &&
+            this.duree == autreVol.duree) {
             return true;
         }
         return false;
     }
 
     /**
-     * Retourne l'heure d'arrivée du vol
-     * @return un horaire
+     * Renvoie l'heure d'arrivée du vol
+     * @return Horaire
      */
     public Horaire getHeureArrivee() {
         try {
@@ -225,7 +231,7 @@ public class Vol
             }
         }
 
-        //*si le vol this arrive au depart de vol other
+        //*si le vol this arrive au depart de vol autre
 
         else if (this.arrivee==autre.depart) {
             if (Math.abs(this.getHeureArrivee().getEnMinute()-autre.heureDepart.getEnMinute()) <= ecart) {
@@ -234,7 +240,7 @@ public class Vol
             }
         }
 
-        //*si le vol this part de l'arrivee de vol other
+        //*si le vol this part de l'arrivee de vol autre
 
         else if (this.depart==autre.arrivee) {
             if (Math.abs(this.heureDepart.getEnMinute()-autre.getHeureArrivee().getEnMinute()) <= ecart) {
@@ -304,7 +310,7 @@ public class Vol
     //#region affichage
 
     /**
-     * Retourne une chaine de caractère représentant le vol
+     * Affiche le vol sous forme de chaine de caractère
      * @return String
      */
     public String toString() {

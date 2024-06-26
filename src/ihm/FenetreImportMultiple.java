@@ -52,20 +52,17 @@ import java.nio.file.FileAlreadyExistsException;
 //#endregion
 
 /**
- * <h3>Cette classe crée une fenêtre pour importer un dossier.</h3>
- * <p>La fenêtre contient un panneau pour charger un dossier contenant des fichiers .txt.</p>
- * <p>Le panneau contient un titre, une instruction et un bouton pour parcourir les fichiers.</p>
- * <p>Les fichiers doivent être en format .txt.</p>
- * @autor FERNANDES Thomas
+ * Fenetre pour importer plusieurs graphes pour les coloriers
+ * @see FenetreSuperpose
+ * @author FERNANDES Thomas et NOUVEL Armand
+ * @version 1.0
  */
-public class FenetreImportFolder extends FenetreSuperpose {
+public class FenetreImportMultiple extends FenetreSuperpose {
 
     /**
-     * Constructeur de la fenêtre d'importation de dossier.
-     * <p>Crée une fenêtre pour importer un dossier contenant des fichiers .txt.</p>
-     * <p>Le panneau contient un titre, une instruction et un bouton pour parcourir les fichiers.</p>
+     * Constructeur de la fenêtre d'importation multiple.
      */
-    public FenetreImportFolder() {
+    public FenetreImportMultiple() {
 
     //#region Fenetre
         // Base de la fenêtre
@@ -155,7 +152,7 @@ public class FenetreImportFolder extends FenetreSuperpose {
                                 graph.remplirAvecFichier(Path);
 
                             } catch (Exception ex) {
-                                JOptionPane.showMessageDialog(FenetreImportFolder.this, ex.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(FenetreImportMultiple.this, ex.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
                             }
                             // coloration                           
                             graph.rlf();
@@ -184,7 +181,7 @@ public class FenetreImportFolder extends FenetreSuperpose {
                         }
                         auteurColorationFile.close();
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(FenetreImportFolder.this, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(FenetreImportMultiple.this, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                     panFold.setBackground(new Color(21, 105, 19));

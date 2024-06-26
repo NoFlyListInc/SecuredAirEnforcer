@@ -12,7 +12,11 @@ import java.awt.geom.Point2D;
 //#endregion
 
 /**
- * Un waypoint painter en forme de triangle pour les aéroports         
+ * Un waypoint painter en forme de triangle pour les aéroports
+ * @see DefaultWaypoint
+ * @see WaypointRenderer
+ * @author NOUVEL Armand
+ * @version 1.0  
  */
 public class AeroportWaypointRenderer implements WaypointRenderer<DefaultWaypoint>
 {

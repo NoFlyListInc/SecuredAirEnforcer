@@ -29,13 +29,10 @@ import java.awt.Color;
 //#endregion
 
 /**
- * Classe qui défini un Graphe
- * 
- * @attributs kmax, koptimal, volsMemesNiveaux
- * @methodes getKmax, getKoptimal, getVolsMemesNiveaux, setKmax, setKoptimal,
- *           dSature, fillFile, fillVol, fillMap, hideSoloNode
- * @extends SingleGraph
+ * Cette classe définit un Graphe avec la possibilité de le colorier.
+ * @see SingleGraph
  * @author LACROIX Xavier et NOUVEL Armand
+ * @version 1.0
  */
 public class Graphe extends SingleGraph {
     // #region Attribut
@@ -66,7 +63,6 @@ public class Graphe extends SingleGraph {
 
     /**
      * Constructeur de la classe Graph
-     * 
      * @param id String, identifiant du graph
      */
     public Graphe(String id) {
@@ -82,8 +78,7 @@ public class Graphe extends SingleGraph {
     // #region Accesseurs
 
     /**
-     * Retourne le kmax
-     * 
+     * Renvoie le kmax
      * @return int
      */
     public int getKmax() {
@@ -91,8 +86,7 @@ public class Graphe extends SingleGraph {
     }
 
     /**
-     * Retourne le koptimal
-     * 
+     * Renvoie le koptimal
      * @return int
      */
     public int getKoptimal() {
@@ -100,8 +94,7 @@ public class Graphe extends SingleGraph {
     }
 
     /**
-     * Retourne le kdonne
-     * 
+     * Renvoie le kdonne
      * @return int
      */
     public int getKdonne() {
@@ -109,8 +102,7 @@ public class Graphe extends SingleGraph {
     }
 
     /**
-     * Retourne les vols de même niveaux
-     * 
+     * Renvoie les vols de même niveaux
      * @return VolsMemesNiveaux
      */
     public NoeudsMemesNiveaux getNoeudsMemesNiveaux() {
@@ -123,7 +115,6 @@ public class Graphe extends SingleGraph {
 
     /**
      * Modifie le kmax
-     * 
      * @param kmax int
      */
     public void setKmax(int kmax) {
@@ -132,7 +123,6 @@ public class Graphe extends SingleGraph {
 
     /**
      * Modifie le koptimal
-     * 
      * @param koptimal int
      */
     public void setKoptimal(int koptimal) {
@@ -141,7 +131,6 @@ public class Graphe extends SingleGraph {
 
     /**
      * Modifie le kdonne
-     * 
      * @param kdonne int
      */
     public void setKdonne(int kdonne) {
@@ -150,10 +139,10 @@ public class Graphe extends SingleGraph {
     // #endregion
 
     // #region Coloration
+
     /**
-     * La classe NodeInfo stocke des informations sur un nœud, sa saturation, son
-     * degré et le
-     * nœud lui-même.
+     * La classe NodeInfo stocke des informations sur un noeud, sa saturation, 
+     * son degré et le noeud lui-même.
      */
     private class InfoNoeud {
         int saturation;
@@ -181,15 +170,6 @@ public class Graphe extends SingleGraph {
         }
     }
     // #region DSature
-
-    /**
-     * Procédure vérifiant s'il les collisions entre les vols après la coloration.
-     * 
-     * @author Xavier LACROIX
-     */
-    public void verifierCollisions() {
-        // WIP
-    }
 
     /**
      * Procédure colorant le graphe selon l'algorithme de coloration dSature.
@@ -656,8 +636,10 @@ public class Graphe extends SingleGraph {
 
     /**
      * Rempli le graph depuis un fichier graph-testx.txt
-     * 
      * @param file adresse du fichier
+     * @throws ExceptionAnalyse si les données sont erronees
+     * @throws IOException si il y a un probleme pour acceder au fichier
+     * @author Armand NOUVEL
      */
 
     public void remplirAvecFichier(String file) throws ExceptionAnalyse, IOException {
@@ -731,8 +713,9 @@ public class Graphe extends SingleGraph {
 
     /**
      * Rempli le graph des collisions depuis une liste de vol
-     * 
-     * @param listeVol objet ListVol
+     * @param listeVol objet ListeVol
+     * @param marge marge de collision
+     * @autheur Armand NOUVEL
      */
     public void remplirAvecListeVol(ListeVol listeVol, int marge) {
         this.clear();
@@ -757,11 +740,10 @@ public class Graphe extends SingleGraph {
     }
 
     /**
-     * Rempli le graph des aeroports et des vols pour une représentation
-     * géographique
-     * 
+     * Rempli le graph des aeroports et des vols pour une représentation géographique
      * @param listeAeroport objet ListAeroport
      * @param listeVol      objet ListVol
+     * @author NOUVEL Armand
      */
 
     public void remplirCarte(ListeAeroport listeAeroport, ListeVol listeVol) {
@@ -786,7 +768,8 @@ public class Graphe extends SingleGraph {
     // #region Méthodes
 
     /**
-     * cache les noeud avec un degrée de 0
+     * Cache les noeud avec un degrée de 0
+     * @autheur Armand NOUVEL
      */
     public void cacherNoeudSeul() {
         // parcours de tous les noeuds

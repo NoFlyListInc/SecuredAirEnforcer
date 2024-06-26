@@ -16,19 +16,19 @@ import java.awt.BorderLayout;
 //#endregion
 
 /**
- * <h3>Cette classe crée un panneau pour les onglets du menu.</h3>
- * <p>Le panneau contient des boutons pour retourner au menu principal, afficher la carte, importer un graphe et construire un graphe.</p>
- * <p>Chaque bouton est représenté par une image et un texte.</p>
+ * Panneau du menu de navigation
+ * @see JPanel
  * @author NOUVEL Armand
+ * @version 1.0
  */
-public class MenuOngletPan extends JPanel
+public class MenuNavigationPan extends JPanel
 {
     //#region attributs
     private FenetreSuperpose fen;
     //#endregion
 
     //#region constructeur
-    public MenuOngletPan(FenetreSuperpose fen) {
+    public MenuNavigationPan(FenetreSuperpose fen) {
         super();
         this.fen=fen;
         this.constrPan();
@@ -137,7 +137,7 @@ public class MenuOngletPan extends JPanel
         RoundedButton entreeGraphe = new RoundedButton(new ImageIcon(imageColor));
         entreeGraphe.setToolTipText("Ouvrir le menu pour colorier plusieurs graphes");
         entreeGraphe.addActionListener((ActionListener) -> {
-            FenetreImportFolder fenetre = new FenetreImportFolder();
+            FenetreImportMultiple fenetre = new FenetreImportMultiple();
             fenetre.setVisible(true);
             fen.dispose();
         });

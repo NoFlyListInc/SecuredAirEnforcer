@@ -17,10 +17,10 @@ import java.awt.geom.RoundRectangle2D;
 //#endregion
 
 /**
- * <h3>Cette classe crée un bouton arrondi.</h3>
- * <p>Le bouton est de forme arrondie et contient un texte ou une image.</p>
- * <p>Le bouton est de taille 20x20 pixels.</p>
+ * Bouton arrondi, objet graphique
+ * @see JButton
  * @author NOUVEL Armand
+ * @version 1.0
  */
 public class RoundedButton extends JButton {
     private Shape shape;

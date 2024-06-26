@@ -16,6 +16,10 @@ import java.awt.geom.PathIterator;
 
 /**
  * Un waypoint painter en forme d'explosion pour les collisions
+ * @see DefaultWaypoint
+ * @see WaypointRenderer
+ * @author NOUVEL Armand
+ * @version 1.0
  */
 public class CollisionWaypointRenderer implements WaypointRenderer<DefaultWaypoint>
 {

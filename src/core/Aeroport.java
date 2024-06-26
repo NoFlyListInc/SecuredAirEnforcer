@@ -1,10 +1,10 @@
 package src.core;
 
 /**
- * <h3>Cette classe définit les aéroports.</h3>
- * @attributs code, ville, latitude, longitude
- * @methodes getx, gety, equals, toString
+ * Cette classe définit un aéroport par son code, sa ville, sa latitude et sa longitude.
+ * @see Coordonnee
  * @author NOUVEL Armand
+ * @version 1.0
  */
 public class Aeroport
 {
@@ -109,8 +109,8 @@ public class Aeroport
     //#region methodes
 
     /**
-     * vérifie si deux aéroports sont égaux
-     * @param autre
+     * Vérifie si deux aéroports sont égaux
+     * @param autre Vol
      * @return boolean
      */
     @Override
@@ -129,7 +129,7 @@ public class Aeroport
 
     /**
      * Renvoie la coordonnee x de l'aéroport
-     * @return double
+     * @return Double
      */
     public double getx()
     {
@@ -138,8 +138,8 @@ public class Aeroport
     }
 
     /**
-     * renvoie la coordonnee y de l'aéroport
-     * @return double
+     * Renvoie la coordonnee y de l'aéroport
+     * @return Double
      */
     public double gety()
     {
@@ -152,7 +152,7 @@ public class Aeroport
     //#region affichage
 
     /**
-     * renvoie une chaine de caractere representant les informations de l'aéroport
+     * Renvoie une chaine de caractere representant les informations de l'aéroport
      * @return String
      */
     public String toString()

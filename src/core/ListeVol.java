@@ -12,11 +12,10 @@ import java.io.IOException;
 //#endregion
 
 /**
- * Class ListVol
- * Permet de gérer une liste de vols
- * @attributs vols
- * @methodes addVol, removeVol, getVol, getVolByCode, fill, toString
- * @autor NOUVEL Armand
+ * Cette classe permet de gérer une liste de vols.
+ * @see Vol
+ * @author NOUVEL Armand
+ * @version 1.0
  */
 public class ListeVol extends ArrayList<Vol>
 {
@@ -35,7 +34,7 @@ public class ListeVol extends ArrayList<Vol>
     //#region methode
 
     /**
-     * renvoie le vol correspondant au code
+     * Renvoie un vol de la liste à partir de son code
      * @param String code
      */
     public Vol getVolByCode(String code) {
@@ -93,8 +92,8 @@ public class ListeVol extends ArrayList<Vol>
     //#region affichage
 
     /**
-     * Affiche la liste des vols
-     * @return Chaine de caractère
+     * Affiche la liste des vols sous forme de chaine de caractère
+     * @return String
      */
     public String toString() {
         //[affiche un vol] saut de ligne .....

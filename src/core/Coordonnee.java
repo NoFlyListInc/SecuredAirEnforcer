@@ -1,10 +1,9 @@
 package src.core;
 
 /**
- * <h3>Cette classe définit une coordonnée.</h3>
- * @attributs degree, minute, seconde, direction
- * @methodes getDecimal, getDecimalRadians, equals, toString
+ * Cette classe définit une coordonnée par son degré, sa minute, sa seconde et sa direction.
  * @author NOUVEL Armand
+ * @version 1.0
  */
 public class Coordonnee 
 {
@@ -90,9 +89,9 @@ public class Coordonnee
 
     /**
      * Constructructeur de Coordonnee
-     * @param degree Entier, 0 <= degree <= 180
-     * @param minute Entier, 0 <= minute <= 60
-     * @param seconde Entier, 0 <= seconde <= 60
+     * @param degree int, 0 <= degree <= 180
+     * @param minute int, 0 <= minute <= 60
+     * @param seconde int, 0 <= seconde <= 60
      * @param direction char, {'N', 'S', 'E', 'O'/'W'}
      * @throws IllegalArgumentException si les valeurs ne sont pas correctes
      */
@@ -105,8 +104,8 @@ public class Coordonnee
     //#region accesseurs
 
     /**
-     * renvoie le degré
-     * @return Entier
+     * Renvoie le degré
+     * @return int
      */
     public int getDegre()
     {
@@ -114,8 +113,8 @@ public class Coordonnee
     }
 
     /**
-     * renvoie la minute
-     * @return Entier
+     * Renvoie la minute
+     * @return int
      */
     public int getMinute()
     {
@@ -123,8 +122,8 @@ public class Coordonnee
     }
 
     /**
-     * renvoie la seconde
-     * @return Entier
+     * Renvoie la seconde
+     * @return int
      */
     public int getSeconde()
     {
@@ -146,7 +145,7 @@ public class Coordonnee
 
     /**
      * Vérifie si deux coordonnées sont égales
-     * @param autre
+     * @param autre Coordonnee
      * @return boolean
      */
     @Override
@@ -164,8 +163,8 @@ public class Coordonnee
     }
 
     /**
-     * Convertit la coordonnée en degrés décimaux
-     * @return double
+     * Converti la coordonnée en degrés décimaux
+     * @return Double
      */
     public double getDecimal()
     {
@@ -180,8 +179,8 @@ public class Coordonnee
     }
 
     /**
-     * Convertit la coordonnée en degrés décimaux radians
-     * @return double
+     * Converti la coordonnée en degrés décimaux radians
+     * @return Double
      */
     public double getDecimalRadians()
     {
@@ -193,7 +192,7 @@ public class Coordonnee
     //#region affichage
  
     /**
-     * Renvoie la coordonnée sous forme de chaine de caractères
+     * Renvoie la coordonnée sous forme de chaine de caracteres
      * @return String
      */
     public String toString()

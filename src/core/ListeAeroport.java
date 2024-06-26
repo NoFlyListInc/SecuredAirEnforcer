@@ -14,18 +14,17 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 
 /**
- * Class ListAeroport
- * Permet de gérer une liste d'aeroports
- * @attributs list
- * @methodes addAeroport, removeAeroport, getAeroport, getAeroportByCode, getAeroportByPosition, fill, toString
- * @autor NOUVEL Armand
+ * Cette classe permet de gérer une liste d'aeroports.
+ * @see Aeroport
+ * @author NOUVEL Armand
+ * @version 1.0
  */
 public class ListeAeroport extends ArrayList<Aeroport>
 {
     //#region constructeur
 
     /**
-     * Constructeur de ListAeroport
+     * Constructeur de ListeAeroport
      */
     public ListeAeroport() {
         super();
@@ -36,7 +35,7 @@ public class ListeAeroport extends ArrayList<Aeroport>
     //#region méthodes
 
     /**
-     * Retourne un aeroport de la liste à partir de son code
+     * Renvoie un aeroport de la liste à partir de son code
      * @param code code de l'aeroport
      * @return l'aeroport recherché si le code est valide, sinon null
      */
@@ -56,7 +55,7 @@ public class ListeAeroport extends ArrayList<Aeroport>
     }
 
     /**
-     * Retourne un aeroport de la liste à partir de sa position
+     * Renvoie un aeroport de la liste à partir de sa position
      * @param position position de l'aeroport
      * @return l'aeroport recherché si la position est valide, sinon null
      */
@@ -114,7 +113,7 @@ public class ListeAeroport extends ArrayList<Aeroport>
     //#region affichage
 
     /**
-     * Affiche la liste des aeroports
+     * Affiche la liste des aeroports sous forme de chaine de caractères
      * @return String
      */
     public String toString() {

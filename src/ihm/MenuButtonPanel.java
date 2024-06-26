@@ -9,8 +9,19 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLayeredPane;
 
+/**
+ * Panneau du bouton pour ouvrir le menu
+ * @see RoundedPanel
+ * @author NOUVEL Armand
+ * @version 1.0
+ */
 public class MenuButtonPanel extends RoundedPanel {
     
+    /**
+     * Constructeur de MenuButtonPanel
+     * @param radius int
+     * @param fen FenetreSuperpose
+     */
     public MenuButtonPanel(int radius, FenetreSuperpose fen) {
         super(radius);
         this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));

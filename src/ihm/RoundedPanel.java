@@ -6,11 +6,24 @@ import javax.swing.*;
 
 
 import java.awt.*;
+//#endregion
 
+/**
+ * Panneau arrondi, objet graphique
+ * @see JPanel
+ * @author NOUVEL Armand
+ * @version 1.0
+ */
 public class RoundedPanel extends JPanel {
     private Color backgroundColor;
     private int cornerRadius = 15;
 
+    /**
+     * Constructeur du panneau arrondi
+     * @param layout Layout du panneau
+     * @param radius Rayon des coins
+     * @param bgColor Couleur de fond
+     */
     public RoundedPanel(LayoutManager layout, int radius, Color bgColor) {
         super(layout);
         cornerRadius = radius;
@@ -18,12 +31,21 @@ public class RoundedPanel extends JPanel {
         setOpaque(false);
     }
 
+    /**
+     * Constructeur du panneau arrondi
+     * @param layout Layout du panneau
+     * @param radius Rayon des coins
+     */
     public RoundedPanel(LayoutManager layout, int radius) {
         super(layout);
         cornerRadius = radius;
         setOpaque(false);
     }
 
+    /** 
+     * Constructeur du panneau arrondi
+     * @param radius Rayon des coins
+    */
     public RoundedPanel(int radius) {
         super();
         cornerRadius = radius;

@@ -23,14 +23,9 @@ import java.io.File;
 //#endregion
 
 /**
- * <h3>Cette classe crée une fenêtre principale pour l'application Secured Air Enforcer.</h3>
- * <p>La fenêtre contient un panneau bleu à gauche et un panneau blanc à droite.</p>
- * <p>Le panneau bleu contient le titre de l'application et une image d'un avion.</p>
- * <p>Le panneau blanc contient trois boutons: "Afficher la carte", "Entrer un graphe préfait" et "Coloration à la chaîne".</p>
- * <p>Lorsque l'utilisateur clique sur le bouton "Afficher la carte", une carte de l'aéroport s'affiche.</p>
- * <p>Lorsque l'utilisateur clique sur le bouton "Entrer un graphe préfait", un graphe préfait s'affiche.</p>
- * <p>Lorsque l'utilisateur clique sur le bouton "Coloration à la chaîne", une fenêtre s'ouvre pour coloriser un graphe.</p>
- * <p>La fenêtre est de taille 800x600 pixels.</p>
+ * Fenetre principale de l'application
+ * @author FERNANDES Thomas et NOUVEL Armand
+ * @version 1.0
  */
 public class FenetrePrincipale extends JFrame
 {
@@ -39,7 +34,7 @@ public class FenetrePrincipale extends JFrame
      * <p>Crée une fenêtre principale avec un panneau bleu à gauche et un panneau blanc à droite.</p>
      * <p>Le panneau bleu contient le titre de l'application et une image d'un avion.</p>
      * <p>Le panneau blanc contient trois boutons: "Afficher la carte", "Entrer un graphe préfait" et "Coloration à la chaîne".</p>
-     * @autor FERNANDES Thomas
+     * @author FERNANDES Thomas
      */
     public FenetrePrincipale()
     {
@@ -167,7 +162,7 @@ public class FenetrePrincipale extends JFrame
         foldGraphe.setToolTipText("Coloration à la chaine de graphes");
 
         foldGraphe.addActionListener(e -> {
-            FenetreImportFolder fen = new FenetreImportFolder();
+            FenetreImportMultiple fen = new FenetreImportMultiple();
             fen.setVisible(true);
             this.dispose();
         });

@@ -5,35 +5,65 @@ import java.util.HashMap;
 
 import org.graphstream.graph.Node;
 
+/**
+ * Cette classe permet de représenter les noeuds qui sont sur le même niveau
+ * @see Graphe
+ * @author LACROIX Xavier
+ * @version 1.0
+ */
 public class NoeudsMemesNiveaux {
     private ArrayList<HashMap<Node, Node>> noeudsMemesNiveaux;
     private ListeVol listVol;
 
-   //Constructeur
+    /**
+     * Constructeur vide de NoeudsMemesNiveaux
+     */
     public NoeudsMemesNiveaux() {
         this.noeudsMemesNiveaux = new ArrayList<HashMap<Node, Node>> ();
         this.listVol = new ListeVol();
     }
 
+    /**
+     * Constructeur de NoeudsMemesNiveaux
+     * @param listVol ListeVol
+     */
     public NoeudsMemesNiveaux(ListeVol listVol) {
         this.noeudsMemesNiveaux = new ArrayList<HashMap<Node, Node>> ();
         this.listVol = listVol;
     }
 
-    //Getters
+    /**
+     * Renvoie la liste des noeuds qui sont sur le même niveau
+     * @return ArrayList<HashMap<Node, Node>>
+     */
     public ArrayList<HashMap<Node, Node>>  getNoeudsMemesNiveaux() {
         return this.noeudsMemesNiveaux;
     }
+
+    /**
+     * Renvoie la liste des vols
+     * @return ListeVol
+     */
     public ListeVol getListVol() {
         return this.listVol;
     }
 
     //Setters
+
+    /**
+     * Modifie la liste de vols
+     * @param listVol ListeVol
+     */
     public void setListVol(ListeVol listVol) {
         this.listVol = listVol;
     }
 
     //Méthodes
+
+    /**
+     * Affiche les vols aux meme niveau sous forme de chaine de caractère
+     * @return String
+     */
     public String toString() {
         String str = "";
         for (HashMap<Node, Node> paire : this.noeudsMemesNiveaux) {
@@ -61,6 +91,12 @@ public class NoeudsMemesNiveaux {
         }
     }
 
+    /**
+     * Renvoie le vol depuis un noeud
+     * @param node
+     * @param listVol
+     * @return Vol
+     */
     public Vol getVolDepuisNoeud(Node node, ListeVol listVol) {
         // parcours de la liste des vols
         for (Vol vol : listVol) {
@@ -73,8 +109,8 @@ public class NoeudsMemesNiveaux {
     }
 
     /**
-     * Retourne la taille de la liste des vols en risque de collision
-     * @return
+     * Renvoie la taille de la liste des vols en risque de collision
+     * @return int
      */
     public int taille() {
         return this.noeudsMemesNiveaux.size();
@@ -82,8 +118,8 @@ public class NoeudsMemesNiveaux {
 
     /**
      * Fonction qui indique si une paire de vol est déja dans la liste des vols en risque de collision
-     * @param vol1
-     * @param vol2
+     * @param vol1 Node
+     * @param vol2 Node
      * @return boolean
      */
     public boolean contient(Node vol1, Node vol2) {

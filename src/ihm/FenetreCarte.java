@@ -39,10 +39,10 @@ import java.io.File;
 //#endregion
 
 /**
- * Classe FenetreMap
- * Fenêtre pour afficher une map
- * @extends SuperposedFenetre
- * @autor NOUVEL Armand
+ * Fenêtre pour afficher la carte
+ * @see FenetreSuperpose
+ * @author NOUVEL Armand et FERNANDES Thomas
+ * @version 1.0
  */
 public class FenetreCarte extends FenetreSuperpose
 {
