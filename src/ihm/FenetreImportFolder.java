@@ -3,6 +3,7 @@ package src.ihm;
 //swing imports
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.Box;
@@ -156,8 +157,8 @@ public class FenetreImportFolder extends FenetreSuperpose {
                             } catch (Exception ex) {
                                 JOptionPane.showMessageDialog(FenetreImportFolder.this, ex.getMessage(), "Avertissement", JOptionPane.WARNING_MESSAGE);
                             }
-                            // coloration                            
-                            graph.dSature();
+                            // coloration                           
+                            graph.rlf();
 
                             //création du fichier reponse
                             BufferedWriter auteur = new BufferedWriter(new FileWriter(resultatPath+"/"+files.getName().replace("graph","colo")));
@@ -195,7 +196,6 @@ public class FenetreImportFolder extends FenetreSuperpose {
 
         // Ajouter les panneaux à la grille
         panneau.add(panFold, gbc);
-        this.add(panneau);
 
         
         // Ajouter le panneau à la fenêtre

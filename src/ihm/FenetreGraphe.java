@@ -444,6 +444,7 @@ public class FenetreGraphe extends FenetreSuperpose {
         //ajout du buouton dans le parametrePopUp
         parametrePopUp.add(dsaturePan);
         parametrePopUp.add(Box.createRigidArea(new Dimension(0,5)));
+
         // WelshPowell bouton
         JPanel welshPowellPan = new JPanel();
         welshPowellPan.setOpaque(false);
@@ -462,7 +463,7 @@ public class FenetreGraphe extends FenetreSuperpose {
         welshPowellPan.add(Box.createHorizontalGlue());
         //ajout du bouton dans le parametrePopUp
         parametrePopUp.add(welshPowellPan);
-        parametrePopUp.add(Box.createRigidArea(new Dimension(0,15)));
+        parametrePopUp.add(Box.createRigidArea(new Dimension(0,5)));
 
         //RLF bouton
         JPanel rlfPan = new JPanel();

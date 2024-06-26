@@ -3,6 +3,7 @@ package src.ihm;
 //#region import
 //swing imports
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,6 +17,9 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.Desktop;
+//io imports
+import java.io.File;
 //#endregion
 
 /**
@@ -53,10 +57,11 @@ public class FenetrePrincipale extends JFrame
         panneauBleu.setLayout(new BoxLayout(panneauBleu, BoxLayout.PAGE_AXIS));
         panneauBleu.add(Box.createVerticalGlue());
 
+
+        // Création du panneau titre
         JPanel panneauTitle = new JPanel();
         panneauTitle.setOpaque(false);
         panneauTitle.setLayout(new BoxLayout(panneauTitle, BoxLayout.LINE_AXIS));
-
         // Création du titre
         JLabel titre = new JLabel("<html><h1 style='font-size:24px'><font color='black'>S</font><font color='white'>ecured</font><br><font color='black'>A</font><font color='white'>ir</font><br><font color='black'>E</font><font color='white'>nforcer</font></h1></html>");
         titre.setHorizontalAlignment(SwingConstants.CENTER);
@@ -79,9 +84,38 @@ public class FenetrePrincipale extends JFrame
         JPanel panneauBleuBas = new JPanel();
         panneauBleuBas.setOpaque(false);
         panneauBleuBas.setLayout(new BoxLayout(panneauBleuBas, BoxLayout.LINE_AXIS));
+        // bouton editer aeroports.txt
+        RoundedButton editAeroport = new RoundedButton("Editer la liste des aéroports");
+        editAeroport.setToolTipText("Edite la liste des aéroports avec un éditeur de texte");
+        editAeroport.setBackground(Color.WHITE);
+        editAeroport.addActionListener((ActionListener) -> {
+                try {
+                    File file = new File("data/aeroports.txt");
+                    if (file.exists()) {
+                        if (Desktop.isDesktopSupported()) {
+                            Desktop.getDesktop().open(file);
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Une erreur est survenue lors de l'ouverture du ficher aeroports.txt", "Erreur", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        File fileCreation = new File("data/aeroports.txt");
+                        fileCreation.createNewFile();
+                        JOptionPane.showMessageDialog(this, "le fichier aeroports.txt n'existe pas, il a donc été créé", "Info", JOptionPane.INFORMATION_MESSAGE);
+                        if (Desktop.isDesktopSupported()) {
+                            Desktop.getDesktop().open(file);
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Une erreur est survenue lors de l'ouverture du ficher aeroports.txt", "Erreur", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "RunTimeError", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            });
+        panneauBleuBas.add(editAeroport);
         panneauBleuBas.add(Box.createHorizontalGlue());
         panneauBleuBas.add(new JLabel("Un projet de NFL Group, sous license Apache 2.0"));
         panneauBleu.add(panneauBleuBas);
+        panneauBleu.add(Box.createRigidArea(new Dimension(0, 1)));
 
         
         // Création du panneau blanc
